@@ -63,7 +63,8 @@ export default function HotelImageCarousel({ images }: Props) {
     [emblaApi]
   );
 
-  const withButtons = false;
+  const withButtons = true;
+  const withThumbnails = false;
 
   return (
     <div className="space-y-3">
@@ -87,7 +88,7 @@ export default function HotelImageCarousel({ images }: Props) {
           </div>
         </div>
         {withButtons && (
-          <div className="hidden lg:flex gap-1 absolute -top-12 right-0">
+          <div className="lg:flex gap-1 absolute -top-12 right-0">
             <button
               type="button"
               onClick={scrollPrev}
@@ -109,42 +110,30 @@ export default function HotelImageCarousel({ images }: Props) {
             </button>
           </div>
         )}
-        <div
-          ref={thumbnailsRef}
-          className={`flex gap-1 mt-2 md:mt-3 overflow-x-scroll asdfg ${
-            isOverflowing ? "justify-start" : "justify-center"
-          }`}
-        >
-          {images.map((image, index) => (
-            <Image
-              key={image.url}
-              src={image.url}
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              onClick={() => scrollTo(index)}
-              className={`h-12 md:h-18 w-auto max-w-none rounded-md object-cover cursor-pointer border-2 md:border-3 ${
-                index === selectedIndex
-                  ? "border-green-300"
-                  : "border-transparent"
-              }`}
-            />
-          ))}
-        </div>
-        {/* <div className="flex w-full items-center justify-center gap-2 mt-4">
-          {scrollSnaps.map((_, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => scrollTo(index)}
-              className={`h-3 w-3 rounded-full transition ${
-                index === selectedIndex ? "bg-black" : "bg-black/25"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-              aria-current={index === selectedIndex}
-            />
-          ))}
-        </div> */}
+        {withThumbnails && (
+          <div
+            ref={thumbnailsRef}
+            className={`flex gap-1 mt-2 md:mt-3 overflow-x-scroll asdfg ${
+              isOverflowing ? "justify-start" : "justify-center"
+            }`}
+          >
+            {images.map((image, index) => (
+              <Image
+                key={image.url}
+                src={image.url}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                onClick={() => scrollTo(index)}
+                className={`h-12 md:h-18 w-auto max-w-none rounded-md object-cover cursor-pointer border-2 md:border-3 ${
+                  index === selectedIndex
+                    ? "border-green-300"
+                    : "border-transparent"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
