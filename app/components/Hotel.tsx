@@ -4,6 +4,7 @@ import { FaLocationDot } from "react-icons/fa6";
 
 import type { HotelWithSection } from "../types/wordpress";
 import HotelImageCarousel from "./HotelImageCarousel";
+import Tags from "./Tags";
 
 export default function Hotel({ hotel }: { hotel: HotelWithSection }) {
   return (
@@ -29,16 +30,7 @@ export default function Hotel({ hotel }: { hotel: HotelWithSection }) {
           </p>
         </>
       )}
-      <ul className="flex flex-wrap gap-3 my-6">
-        {hotel.tags.map((tag) => (
-          <li
-            className="rounded-full border-2 py-1 px-4 text-sm font-medium"
-            key={tag.label}
-          >
-            {tag.label}
-          </li>
-        ))}
-      </ul>
+      <Tags tags={hotel.tags} />
       <p className="mb-4">{hotel.description}</p>
       <ul className="flex items-center gap-3 mb-4">
         <li className="flex items-center gap-1">
