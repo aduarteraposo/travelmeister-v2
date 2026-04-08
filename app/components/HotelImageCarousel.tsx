@@ -5,13 +5,17 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { WPImage } from "../types/wordpress";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import WheelGesturesPlugin from "embla-carousel-wheel-gestures";
 
 type Props = {
   images: WPImage[];
 };
 
 export default function HotelImageCarousel({ images }: Props) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { dragFree: true, loop: false },
+    [WheelGesturesPlugin()]
+  );
 
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
