@@ -1,22 +1,22 @@
 import Link from "next/link";
 import { getParentDestinations } from "../lib/wordpress";
-import { WPPost } from "../types/wordpress";
+import { Destination, NormalizedDestination, WPPost } from "../types/wordpress";
 
 type Breadcrumb = {
   label: string;
   href?: string;
-};
+} | null;
 
 type BreadcrumbsProps = {
-  post: WPPost;
-  destinationSlug: string;
+  post?: WPPost;
+  destination: Destination | NormalizedDestination;
 };
 
 export default async function Breadcrumbs({
   post,
-  destinationSlug,
+  destination,
 }: BreadcrumbsProps) {
-  const ancestorTree = await getParentDestinations(destinationSlug);
+  const ancestorTree = await getParentDestinations(destination);
 
   const breadcrumbs: Breadcrumb[] = [
     {
@@ -24,12 +24,14 @@ export default async function Breadcrumbs({
       href: "/",
     },
     ...ancestorTree.map((parent) => ({
-      label: parent.name,
+      label: parent.title.rendered,
       href: `/${parent.slug}`,
     })),
-    {
-      label: post.title.rendered,
-    },
+    post
+      ? {
+          label: post.title.rendered,
+        }
+      : null,
   ].filter(Boolean);
 
   return (
@@ -45,7 +47,12 @@ export default async function Breadcrumbs({
         >
           {index > 0 && <span className="text-gray-400">/</span>}
 
-          {item.href ? <Link href={item.href}>{item.label}</Link> : item.label}
+          {item &&
+            (item.href ? (
+              <Link href={item.href}>{item.label}</Link>
+            ) : (
+              item.label
+            ))}
         </li>
       ))}
     </ul>

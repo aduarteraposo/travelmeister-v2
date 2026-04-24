@@ -1,32 +1,32 @@
-import type { HotelWithSection } from "../types/wordpress";
+import type { PlaceWithSection } from "../types/wordpress";
 import Hotel from "./Hotel";
 
-type HotelSection = {
+type placesection = {
   section_title: string;
-  hotels: HotelWithSection[];
+  places: PlaceWithSection[];
 };
 
-export default function HotelList({ hotels }: { hotels: HotelWithSection[] }) {
+export default function HotelList({ places }: { places: PlaceWithSection[] }) {
   const sectionTitles = [
-    ...new Set(hotels.map((hotel) => hotel.section_title)),
+    ...new Set(places.map((place) => place.section_title)),
   ];
-  const hotelSections: HotelSection[] = sectionTitles.map((title) => {
+  const placesections: placesection[] = sectionTitles.map((title) => {
     const section = {
       section_title: title,
-      hotels: hotels.filter((hotel) => hotel.section_title === title),
+      places: places.filter((hotel) => hotel.section_title === title),
     };
 
     return section;
   });
 
-  return hotelSections.map((list) => (
+  return placesections.map((list) => (
     <div key={list.section_title}>
       {list.section_title.length > 0 && (
         <h2 className="mb-4 md:mb-8 text-3xl">{list.section_title}</h2>
       )}
       <ul>
-        {list.hotels.map((hotel) => (
-          <Hotel key={hotel.name} hotel={hotel} />
+        {list.places.map((place, index) => (
+          <Hotel key={`${place.slug}-${index}`} hotel={place} />
         ))}
       </ul>
     </div>

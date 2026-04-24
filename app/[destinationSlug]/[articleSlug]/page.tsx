@@ -1,9 +1,13 @@
 import Breadcrumbs from "@/app/components/Breadcrumbs";
 import FilterContainer from "@/app/components/FilterContainer";
 import QuickPicks from "@/app/components/QuickPicks";
-import { getArticleBySlug, getDestinationBySlug } from "@/app/lib/wordpress";
-import { mapHotelsById } from "@/app/lib/wordpress-utils";
-import { HotelWithSection } from "@/app/types/wordpress";
+import {
+  getArticleBySlug,
+  getDestinationBySlug,
+  getPlacesByIds,
+} from "@/app/lib/wordpress";
+import { mapPlacesById, mapPostWithPlaces } from "@/app/lib/wordpress-utils";
+import { NormalizedPost, PlaceWithSection } from "@/app/types/wordpress";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -19,20 +23,27 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const canonicalDestination = await getDestinationBySlug(destinationSlug);
   const post = await getArticleBySlug(articleSlug);
   const heroImage = post._embedded?.["wp:featuredmedia"]?.[0];
-  const hotelSections = post.acf.hotel_sections;
+  const listSections = post.acf.list_sections;
 
-  if (canonicalDestination.id !== post.acf.primary_destination) {
+  if (canonicalDestination.id !== post.acf.primary_destination.ID) {
     notFound();
   }
 
-  const allHotels: HotelWithSection[] = hotelSections.flatMap((section) =>
-    section.hotels.map((hotel) => ({
-      ...hotel,
-      section_title: section.section_title,
-    }))
+  const placesIds = listSections.flatMap((section) =>
+    section.places.map((place) => place.ID)
   );
 
-  const hotelsById = mapHotelsById(allHotels);
+  const places = await getPlacesByIds(placesIds);
+  const placesById = mapPlacesById(places);
+  const normalizedPost: NormalizedPost = mapPostWithPlaces(post, placesById);
+
+  const allHotels: PlaceWithSection[] =
+    normalizedPost.acf.list_sections.flatMap((section) =>
+      section.places.map((hotel) => ({
+        ...hotel,
+        section_title: section.section_title,
+      }))
+    );
 
   return (
     <>
@@ -46,7 +57,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             height={heroImage.media_details.height}
           />
         )}
-        <Breadcrumbs post={post} destinationSlug={destinationSlug} />
+        <Breadcrumbs post={post} destination={canonicalDestination} />
       </header>
       <div className="mx-auto px-4 md:px-0">
         <div className="mb-20">
@@ -62,19 +73,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           className="prose mb-16"
           dangerouslySetInnerHTML={{ __html: post.content.rendered }}
         ></div>
-        <div className="w-full lg:flex gap-8">
-          <div className="basis-1 max-w-full lg:basis-2/3 lg:max-w-2/3">
-            <QuickPicks
-              hotelsById={hotelsById}
-              quickPicks={post.acf.quick_picks}
-            />
-            <FilterContainer hotels={allHotels} />
-          </div>
-          <div className="basis-1/3 hidden lg:block">
-            <h3 className="text-2xl font-bold mb-4">Related Articles</h3>
-            <div className="bg-gray-300 w-full h-48"></div>
-          </div>
-        </div>
+        <QuickPicks quickPicks={normalizedPost.acf.quick_picks} />
+        <FilterContainer places={allHotels} />
       </div>
     </>
   );

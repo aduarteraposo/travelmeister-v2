@@ -1,21 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { getHotelAttributesArray } from "../lib/wordpress-utils";
-import type { WPHotel } from "../types/wordpress";
+import { getPlaceAttributesArray } from "../lib/wordpress-utils";
+import type { NormalizedPlace } from "../types/wordpress";
 import { useRef, useState } from "react";
 
 export default function HotelComparisonTable({
-  hotels,
+  places,
 }: {
-  hotels: WPHotel[];
+  places: NormalizedPlace[];
 }) {
-  const hotelNameArray = hotels.map((hotel) => hotel.name);
-  const hotelAttributesArray = getHotelAttributesArray(hotels);
-
+  const placesNameArray = places.map((place) => place.title.rendered);
+  const placeAttributesArray = getPlaceAttributesArray(places);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftScrollFade, setShowLeftScrollFade] = useState(false);
-  const [showRightScrollFade, setShowRightScrollFade] = useState(true);
+  const [showRightScrollFade, setShowRightScrollFade] = useState(false);
 
   function handleScroll() {
     const scrollContainerEl = scrollContainerRef.current;
@@ -46,7 +45,7 @@ export default function HotelComparisonTable({
   }
 
   return (
-    <div className="relative">
+    <div className="relative mt-28">
       <div
         onScroll={handleScroll}
         ref={scrollContainerRef}
@@ -56,8 +55,8 @@ export default function HotelComparisonTable({
         <table className=" w-full min-w-max">
           <thead className="bg-black text-white">
             <tr>
-              <th className="bg-white sticky left-0 w-20"></th>
-              {hotelNameArray.map((name, index) => (
+              <th className="bg-white sticky left-0 w-24 max-w-24"></th>
+              {placesNameArray.map((name, index) => (
                 <th
                   key={`${name}_${index}`}
                   className="p-2 pr-8 w-70 max-w-70 truncate"
@@ -68,9 +67,9 @@ export default function HotelComparisonTable({
             </tr>
           </thead>
           <tbody>
-            {hotelAttributesArray.map((attribute, index) => (
-              <tr key={`${attribute[0]}_${index}`}>
-                <td className="sticky p-2 bg-white left-0 w-20">
+            {placeAttributesArray.map((attribute, index) => (
+              <tr key={`${attribute[0]}_${index}`} className="group">
+                <td className="sticky p-2 bg-black text-white border-b border-white left-0 w-24 max-w-24 text-center group-last:bg-white">
                   {attribute[0]}
                 </td>
                 {attribute[1].map((item, index) =>
@@ -103,7 +102,7 @@ export default function HotelComparisonTable({
         </table>
       </div>
       {showLeftScrollFade && (
-        <div className="pointer-events-none absolute left-19.75 top-0 h-full w-8 bg-linear-to-r from-white to-transparent" />
+        <div className="pointer-events-none absolute left-24 top-0 h-full w-8 bg-linear-to-r from-white to-transparent" />
       )}
       {showRightScrollFade && (
         <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-linear-to-l from-white to-transparent" />

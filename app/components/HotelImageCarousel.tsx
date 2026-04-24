@@ -97,7 +97,7 @@ export default function HotelImageCarousel({ images }: Props) {
               type="button"
               onClick={scrollPrev}
               disabled={!canScrollPrev}
-              className="relative rounded-full bg-black text-white w-9 h-9 shadow disabled:opacity-20"
+              className="relative rounded-full bg-black text-white w-9 h-9 shadow disabled:opacity-20 disabled:cursor-auto cursor-pointer"
               aria-label="Previous image"
             >
               <IoIosArrowBack className="absolute top-1/2 left-1/2 -translate-y-1/2 translate-x-[calc(-50%-1px)]" />
@@ -107,7 +107,7 @@ export default function HotelImageCarousel({ images }: Props) {
               type="button"
               onClick={scrollNext}
               disabled={!canScrollNext}
-              className="relative rounded-full bg-black text-white w-9 h-9 shadow disabled:opacity-20"
+              className="relative rounded-full bg-black text-white w-9 h-9 shadow disabled:opacity-20 cursor-pointer"
               aria-label="Next image"
             >
               <IoIosArrowForward className="absolute top-1/2 left-1/2 -translate-y-1/2 translate-x-[calc(-50%+1px)]" />
