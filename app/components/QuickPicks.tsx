@@ -8,7 +8,7 @@ export default function QuickPicks({
   quickPicks: QuickPick[];
 }) {
   return (
-    <ul className="bg-green-300 rounded-md p-4 mb-32 flex flex-col gap-4">
+    <ul className="border rounded-xl p-4 mb-32 flex flex-col gap-4">
       {quickPicks.map((pick, index) => (
         <li
           className="flex gap-4 items-center"
@@ -39,7 +39,7 @@ export default function QuickPicks({
             <p>{pick.reason}</p>
           </div>
           <Link
-            className="bg-black text-white rounded-full py-2 px-4 min-w-30 text-center font-medium ml-auto mr-8"
+            className="bg-green-300 rounded-full py-2 px-4 min-w-30 text-center font-medium ml-auto mr-8"
             href={pick.place.acf.cta_links[0].url}
           >
             {pick.cta_text}

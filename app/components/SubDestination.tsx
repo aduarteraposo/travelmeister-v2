@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { Destination, NormalizedPlace } from "../types/wordpress";
-import Tags from "./Tags";
+import { Destination } from "../types/wordpress";
 
 export default function SubDestination({
   parentDestinationType,
@@ -28,7 +27,6 @@ export default function SubDestination({
           parentDestinationType === "city" && (
             <p>{destination.acf.card_description}</p>
           )}
-        {/* <Tags tags={destination.acf.hero_tags} /> */}
       </div>
     </div>
   );

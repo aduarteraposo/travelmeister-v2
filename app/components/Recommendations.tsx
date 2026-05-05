@@ -22,7 +22,7 @@ export default function Recommendations({
             {hotels.map((hotel) => (
               <li key={hotel.place.slug} className="w-60 mb-6">
                 <div className="rounded-xl border border-gray-300">
-                  <div className="aspect-16/9 mb-1">
+                  <div className="aspect-video mb-1">
                     <Image
                       className="rounded-t-xl h-full object-cover"
                       src={hotel.place.acf.images[0].url}
