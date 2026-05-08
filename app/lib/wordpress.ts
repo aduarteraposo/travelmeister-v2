@@ -96,3 +96,27 @@ export async function getArticlesByIds(ids: number[]): Promise<WPPost[]> {
 
   return data;
 }
+
+export async function getArticlesByCategoryAndDestination(
+  categoryId: number,
+  destinationId: number,
+  limit: number,
+  exclude: string,
+  offset: number
+): Promise<{ articles: WPPost[]; total: number }> {
+  const endpoint = `/posts?destination=${destinationId}&article_category=${categoryId}&limit=${limit}&offset=${offset}${exclude}&_embed`;
+
+  const res = await fetch(`${baseUrl}${endpoint}`);
+
+  if (!res.ok) {
+    notFound();
+  }
+
+  const data = await res.json();
+  const total = Number(res.headers.get("X-WP-Total"));
+
+  return {
+    articles: data,
+    total,
+  };
+}

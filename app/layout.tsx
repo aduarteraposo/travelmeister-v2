@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans, Geist_Mono, Instrument_Sans } from "next/font/google";
 import "./globals.css";
+import Providers from "./providers";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -35,7 +36,9 @@ export default function RootLayout({
       <body
         className={`${notoSans.variable} ${geistMono.variable} ${instrumentSans.variable} antialiased`}
       >
-        <main className="max-w-6xl px4 py-10 mx-auto">{children}</main>
+        <main className="max-w-6xl px-4 py-10 mx-auto">
+          <Providers>{children}</Providers>
+        </main>
       </body>
     </html>
   );

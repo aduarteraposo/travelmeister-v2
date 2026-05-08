@@ -2,7 +2,6 @@ import Image from "next/image";
 import { WPPost } from "../types/wordpress";
 
 export default function SmallArticleCard({ post }: { post: WPPost }) {
-  console.log("Full Post: ", post);
   return (
     <article className="bg-gray-200 rounded-xl p-4 w-72">
       {post._embedded["wp:featuredmedia"] && (

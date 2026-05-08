@@ -19,8 +19,8 @@ export default function Recommendations({
         <div>
           <h3 className="text-lg font-semibold text-stone-800 mb-2">Stay</h3>
           <ul>
-            {hotels.map((hotel) => (
-              <li key={hotel.place.slug} className="w-60 mb-6">
+            {hotels.map((hotel, index) => (
+              <li key={`${hotel.place.slug}_${index}`} className="w-60 mb-6">
                 <div className="rounded-xl border border-gray-300">
                   <div className="aspect-video mb-1">
                     <Image
@@ -50,8 +50,8 @@ export default function Recommendations({
             Experiences
           </h3>
           <ul>
-            {tours.map((tour) => (
-              <li key={tour.place.slug}>
+            {tours.map((tour, index) => (
+              <li key={`${tour.place.slug}_${index}`}>
                 <div className="space-y-2">
                   <div className="aspect-3/2">
                     <Image

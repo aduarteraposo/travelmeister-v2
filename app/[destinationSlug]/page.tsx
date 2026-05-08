@@ -7,6 +7,7 @@ import {
 import type { NormalizedDestination } from "../types/wordpress";
 import Image from "next/image";
 import {
+  getTravelStylePlaceIDs,
   mapDestinationsById,
   mapDestinationWithPlacesAndSubDestinationsAndPosts,
   mapPlacesById,
@@ -18,6 +19,7 @@ import SubDestinations from "../components/SubDestinations";
 import PracticalInfo from "../components/PracticalInfo";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Recommendations from "../components/Recommendations";
+import ArticleSections from "../components/ArticleSections";
 
 type DestinationProps = {
   params: Promise<{
@@ -28,17 +30,7 @@ type DestinationProps = {
 export default async function DestinationPage({ params }: DestinationProps) {
   const { destinationSlug } = await params;
   const destination = await getDestinationBySlug(destinationSlug);
-  const travelStylePlaceIDs = destination.acf.travel_styles.flatMap((style) => [
-    ...(style.where_to_stay.primary_place
-      ? [style.where_to_stay.primary_place.ID]
-      : []),
-    ...(style.where_to_stay.alternative_places
-      ? style.where_to_stay.alternative_places.map((place) => place.ID)
-      : []),
-    ...(style.featured_experiences
-      ? style.featured_experiences.map((place) => place.ID)
-      : []),
-  ]);
+  const travelStylePlaceIDs = getTravelStylePlaceIDs(destination);
 
   const placesIds: number[] = [
     ...travelStylePlaceIDs,
@@ -66,11 +58,22 @@ export default async function DestinationPage({ params }: DestinationProps) {
       : []),
   ];
 
-  const postIds: number[] = destination.acf.travel_styles.flatMap((style) => [
-    ...(style.related_articles
-      ? style.related_articles.map((article) => article.ID)
+  const postIds: number[] = [
+    ...(destination.acf.travel_styles
+      ? destination.acf.travel_styles.flatMap((style) => [
+          ...(style.related_articles
+            ? style.related_articles.map((article) => article.ID)
+            : []),
+        ])
       : []),
-  ]);
+    ...(destination.acf.article_sections
+      ? destination.acf.article_sections.flatMap((section) => [
+          ...(section.manual_articles
+            ? section.manual_articles.map((article) => article.ID)
+            : []),
+        ])
+      : []),
+  ];
 
   const uniquePlacesIds = Array.from(new Set(placesIds));
   const uniqueSubdestinationsIds = Array.from(new Set(subdestinationsIds));
@@ -130,6 +133,10 @@ export default async function DestinationPage({ params }: DestinationProps) {
           restaurants={normalizedDestination.acf.featured_restaurants}
           tours={normalizedDestination.acf.featured_tours}
           sights={normalizedDestination.acf.featured_sights}
+        />
+        <ArticleSections
+          sections={normalizedDestination.acf.article_sections}
+          destinationId={normalizedDestination.id}
         />
       </main>
     </>

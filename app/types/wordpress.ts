@@ -11,14 +11,14 @@ export type WPPost = {
     rendered: string;
   };
   acf: {
-    primary_destination: { ID: number };
+    primary_destination: { ID: number; post_name: string };
     hero_image: number;
     article_type: string;
     list_sections: RawPlaceList[];
     quick_picks: RawQuickPick[];
   };
   _embedded: {
-    "wp:featuredmedia"?: WPFeaturedMedia[];
+    "wp:featuredmedia"?: WPFeaturedMedia[] | undefined;
   };
 };
 
@@ -26,6 +26,7 @@ export type RawWPPost = {
   ID: number;
   post_name: string;
   post_title: string;
+  post_excerpt: string;
 };
 
 export type NormalizedPost = {
@@ -186,7 +187,22 @@ export type Destination = {
     featured_restaurants: RawFeaturedPlace[];
     featured_tours: RawFeaturedPlace[];
     featured_sights: RawFeaturedPlace[];
+    article_sections: ArticleSection[];
   };
+};
+
+export type ArticleSection = {
+  title: string;
+  category: Category;
+  manual_articles: RawWPPost[];
+  initial_items_count: number;
+};
+
+export type NormalizedArticleSection = {
+  title: string;
+  category: Category;
+  manual_articles: WPPost[];
+  initial_items_count: number;
 };
 
 export type RawFeaturedPlace = {
@@ -197,6 +213,12 @@ export type RawFeaturedPlace = {
 export type FeaturedPlace = {
   label: string;
   place: NormalizedPlace;
+};
+
+export type Category = {
+  term_id: number;
+  name: string;
+  slug: string;
 };
 
 export type NormalizedDestination = {
@@ -217,6 +239,7 @@ export type NormalizedDestination = {
     featured_restaurants: FeaturedPlace[];
     featured_tours: FeaturedPlace[];
     featured_sights: FeaturedPlace[];
+    article_sections: NormalizedArticleSection[];
   };
 };
 

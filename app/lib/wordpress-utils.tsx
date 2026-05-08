@@ -5,6 +5,7 @@ import {
   WPPost,
   Destination,
   NormalizedDestination,
+  RawDestination,
 } from "../types/wordpress";
 
 export function slugify(str: string) {
@@ -223,8 +224,30 @@ export function mapDestinationWithPlacesAndSubDestinationsAndPosts(
             place: placesById[sight.place.ID],
           }))
         : [],
+      article_sections: Array.isArray(destination.acf.article_sections)
+        ? destination.acf.article_sections.map((section) => ({
+            ...section,
+            manual_articles: section.manual_articles
+              ? section.manual_articles.map((article) => postsByIds[article.ID])
+              : [],
+          }))
+        : [],
     },
   };
 
   return normalizedDestination;
+}
+
+export function getTravelStylePlaceIDs(destination: Destination) {
+  return destination.acf.travel_styles.flatMap((style) => [
+    ...(style.where_to_stay.primary_place
+      ? [style.where_to_stay.primary_place.ID]
+      : []),
+    ...(style.where_to_stay.alternative_places
+      ? style.where_to_stay.alternative_places.map((place) => place.ID)
+      : []),
+    ...(style.featured_experiences
+      ? style.featured_experiences.map((place) => place.ID)
+      : []),
+  ]);
 }
