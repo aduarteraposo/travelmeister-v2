@@ -109,7 +109,7 @@ export type Place = {
 export type NormalizedPlace = {
   id: number;
   slug: string;
-  title: { rendered: string };
+  title: string;
   acf: {
     badge: string;
     images: WPImage[];
@@ -129,7 +129,7 @@ export type NormalizedPlace = {
   };
 };
 
-type Filter = {
+export type Filter = {
   name: string;
   slug: string;
 };
@@ -196,6 +196,7 @@ export type ArticleSection = {
   category: Category;
   manual_articles: RawWPPost[];
   initial_items_count: number;
+  load_more_count: number;
 };
 
 export type NormalizedArticleSection = {
@@ -203,6 +204,7 @@ export type NormalizedArticleSection = {
   category: Category;
   manual_articles: WPPost[];
   initial_items_count: number;
+  load_more_count: number;
 };
 
 export type RawFeaturedPlace = {
@@ -285,4 +287,9 @@ export type WPParent = {
   id: number;
   slug: string;
   name: string;
+};
+
+export type PaginatedArticlesResponse = {
+  articles: WPPost[];
+  total: number;
 };

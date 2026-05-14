@@ -96,6 +96,8 @@ export default function FilterContainer({
               rightColumnAbsolute ? "absolute" : ""
             }`}
           >
+            {/* Temporary placeholders */}
+
             <h3 className="text-2xl font-bold mb-4">Related Articles</h3>
             <div className="bg-gray-300 w-full h-48 mb-8"></div>
             <div className="bg-gray-300 w-full h-48 mb-8"></div>

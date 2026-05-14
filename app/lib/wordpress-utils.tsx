@@ -5,69 +5,51 @@ import {
   WPPost,
   Destination,
   NormalizedDestination,
-  RawDestination,
 } from "../types/wordpress";
 
 export function slugify(str: string) {
   return str.toLowerCase().replace(/\s+/g, "-");
 }
 
-export function mapPlacesById(
-  places: Place[]
-): Record<number, NormalizedPlace> {
-  const placesById = Object.fromEntries(
-    places.map((place) => [
-      place.id,
-      {
-        ...place,
-        acf: {
-          ...place.acf,
-          hotel_filters: Array.isArray(place.acf.hotel_filters)
-            ? place.acf.hotel_filters.map((filter) => filter.slug)
-            : [],
-          restaurant_filters: Array.isArray(place.acf.restaurant_filters)
-            ? place.acf.hotel_filters.map((filter) => filter.slug)
-            : [],
-          tour_filters: Array.isArray(place.acf.tour_filters)
-            ? place.acf.hotel_filters.map((filter) => filter.slug)
-            : [],
-          sight_filters: Array.isArray(place.acf.sight_filters)
-            ? place.acf.hotel_filters.map((filter) => filter.slug)
-            : [],
-        },
-      },
-    ])
-  );
+export function normalizePlace(place: Place): NormalizedPlace {
+  const acf = place.acf ?? {};
 
-  return placesById;
+  const normalizedPlace = {
+    ...place,
+    title: place.title ? place.title.rendered : "",
+    acf: {
+      ...acf,
+      hotel_filters: Array.isArray(acf.hotel_filters)
+        ? acf.hotel_filters.map((filter) => filter.slug)
+        : [],
+      restaurant_filters: Array.isArray(acf.restaurant_filters)
+        ? acf.restaurant_filters.map((filter) => filter.slug)
+        : [],
+      tour_filters: Array.isArray(acf.tour_filters)
+        ? acf.tour_filters.map((filter) => filter.slug)
+        : [],
+      sight_filters: Array.isArray(acf.sight_filters)
+        ? acf.sight_filters.map((filter) => filter.slug)
+        : [],
+    },
+  };
+
+  return normalizedPlace;
 }
 
-export function mapDestinationsById(
-  destinations: Destination[]
-): Record<number, Destination> {
-  const destinationsById = Object.fromEntries(
-    destinations.map((destination) => [
-      destination.id,
+export function mapById<T extends { id: number }>(
+  items: T[]
+): Record<number, T> {
+  const itemsById = Object.fromEntries(
+    items.map((item) => [
+      item.id,
       {
-        ...destination,
+        ...item,
       },
     ])
   );
 
-  return destinationsById;
-}
-
-export function mapPostsById(posts: WPPost[]): Record<number, WPPost> {
-  const postsById = Object.fromEntries(
-    posts.map((post) => [
-      post.id,
-      {
-        ...post,
-      },
-    ])
-  );
-
-  return postsById;
+  return itemsById;
 }
 
 function getPlaceHighlightsFromTags(

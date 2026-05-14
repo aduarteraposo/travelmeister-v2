@@ -14,7 +14,7 @@ export default function Recommendations({
 }) {
   return (
     <section>
-      <h2 className="text-2xl font-semibold mb-4">Our picks</h2>
+      <h2 className="text-6xl mb-4 font-outdoor">Our picks</h2>
       <div className="md:flex">
         <div>
           <h3 className="text-lg font-semibold text-stone-800 mb-2">Stay</h3>

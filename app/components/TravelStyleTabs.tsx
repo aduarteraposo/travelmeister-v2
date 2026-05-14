@@ -36,7 +36,7 @@ export default function TravelStyleTabs({
 
   return (
     <section className="border border-gray-300 rounded-xl flex flex-col">
-      <div className="flex gap-1 justify-center relative py-2 bg-black text-white rounded-t-xl">
+      <div className="flex gap-1 justify-center relative py-2 bg-black text-white rounded-t-xl -mx-px">
         {travelStyles.map((style, index) => (
           <button
             className={`p-1 md:px-4 cursor-pointer lg:text-lg`}

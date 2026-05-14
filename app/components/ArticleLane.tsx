@@ -1,14 +1,15 @@
 "use client";
 
-import { WPPost } from "../types/wordpress";
+import { getNextArticlesOffset } from "../lib/pagination/getNextArticleOffset";
+import { PaginatedArticlesResponse, WPPost } from "../types/wordpress";
 import ArticleTeaser from "./ArticleTeaser";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 
 type ArticleLaneProps = {
   title: string;
   categoryId: number;
   destinationId: number;
-  manualArticlesIds: number[];
+  manualArticleIds: number[];
   perPage: number;
   initialFetchedArticles: WPPost[];
   manualArticles: WPPost[];
@@ -19,18 +20,24 @@ export default function ArticleLane({
   title,
   categoryId,
   destinationId,
-  manualArticlesIds,
+  manualArticleIds,
   perPage,
   initialFetchedArticles,
   manualArticles,
   initialTotal,
 }: ArticleLaneProps) {
-  const query = useInfiniteQuery({
+  const query = useInfiniteQuery<
+    PaginatedArticlesResponse,
+    Error,
+    InfiniteData<PaginatedArticlesResponse, number>,
+    readonly unknown[],
+    number
+  >({
     queryKey: [
       "articles",
       categoryId,
       destinationId,
-      manualArticlesIds,
+      manualArticleIds.join(","),
       perPage,
     ],
     initialPageParam: 0,
@@ -50,27 +57,20 @@ export default function ArticleLane({
         destinationId: String(destinationId),
         perPage: String(perPage),
         offset: String(pageParam),
-        exclude: String(manualArticlesIds.join(",")),
+        exclude: String(manualArticleIds.join(",")),
       });
 
       const res = await fetch(`/api/articles?${params.toString()}`);
 
       if (!res.ok) {
         throw new Error("Failed to fetch articles");
-        return;
       }
 
-      return res.json();
+      return res.json() as Promise<PaginatedArticlesResponse>;
     },
 
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      const nextOffset = lastPageParam + lastPage.articles.length;
-
-      if (nextOffset >= lastPage.total) {
-        return undefined;
-      }
-
-      return nextOffset;
+      return getNextArticlesOffset(lastPage, lastPageParam);
     },
   });
 
@@ -85,11 +85,9 @@ export default function ArticleLane({
       <ul className="w-full overflow-x-auto flex gap-6 pb-6 mb-4">
         {allArticles.map((article) => {
           return (
-            <>
-              <li key={article.slug}>
-                <ArticleTeaser article={article} />
-              </li>
-            </>
+            <li key={article.slug}>
+              <ArticleTeaser article={article} />
+            </li>
           );
         })}
       </ul>

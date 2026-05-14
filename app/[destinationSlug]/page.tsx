@@ -8,10 +8,9 @@ import type { NormalizedDestination } from "../types/wordpress";
 import Image from "next/image";
 import {
   getTravelStylePlaceIDs,
-  mapDestinationsById,
+  mapById,
   mapDestinationWithPlacesAndSubDestinationsAndPosts,
-  mapPlacesById,
-  mapPostsById,
+  normalizePlace,
 } from "../lib/wordpress-utils";
 import Tags from "../components/Tags";
 import TravelStyleTabs from "../components/TravelStyleTabs";
@@ -19,7 +18,7 @@ import SubDestinations from "../components/SubDestinations";
 import PracticalInfo from "../components/PracticalInfo";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Recommendations from "../components/Recommendations";
-import ArticleSections from "../components/ArticleSections";
+import ArticleSections from "../components/RelatedArticleSections";
 
 type DestinationProps = {
   params: Promise<{
@@ -83,9 +82,11 @@ export default async function DestinationPage({ params }: DestinationProps) {
   const places = await getPlacesByIds(uniquePlacesIds);
   const posts = await getArticlesByIds(uniquePostIds);
 
-  const subdestinationsById = mapDestinationsById(subDestinations);
-  const placesById = mapPlacesById(places);
-  const postsById = mapPostsById(posts);
+  const normalizedPlaces = places.map(normalizePlace);
+
+  const subdestinationsById = mapById(subDestinations);
+  const placesById = mapById(normalizedPlaces);
+  const postsById = mapById(posts);
 
   const normalizedDestination: NormalizedDestination =
     mapDestinationWithPlacesAndSubDestinationsAndPosts(
@@ -107,38 +108,35 @@ export default async function DestinationPage({ params }: DestinationProps) {
         />
         <Breadcrumbs destination={normalizedDestination} />
         <div className="text-center mb-8 mx-auto w-10/12">
-          <h1 className="mb-4 text-4xl text-center font-semibold">
+          <h1 className="mb-4 text-7xl text-center font-outdoor">
             {normalizedDestination.title.rendered}
           </h1>
           <p>{normalizedDestination.acf.hero_intro}</p>
           <Tags tags={normalizedDestination.acf.hero_tags} center />
         </div>
       </header>
-      <main className="px-4 mt-16">
-        <div className="lg:flex flex-row-reverse gap-4">
-          <div className="rounded-xl px-8 py-6 bg-green-300 lg:max-w-56 mb-8 lg:mb-0">
-            <PracticalInfo info={normalizedDestination.acf.practical_info} />
-          </div>
-          <TravelStyleTabs
-            travelStyles={normalizedDestination.acf.travel_styles}
-          />
-        </div>
-        <SubDestinations
-          parentDestination={normalizedDestination}
-          subdestinations={normalizedDestination.acf.featured_subdestinations}
+      <h2 className="font-outdoor text-6xl mb-4">Choose your style</h2>
+      <div className="lg:flex flex-row-reverse gap-4">
+        <PracticalInfo info={normalizedDestination.acf.practical_info} />
+        <TravelStyleTabs
+          travelStyles={normalizedDestination.acf.travel_styles}
         />
+      </div>
+      <SubDestinations
+        parentDestination={normalizedDestination}
+        subdestinations={normalizedDestination.acf.featured_subdestinations}
+      />
 
-        <Recommendations
-          hotels={normalizedDestination.acf.featured_hotels}
-          restaurants={normalizedDestination.acf.featured_restaurants}
-          tours={normalizedDestination.acf.featured_tours}
-          sights={normalizedDestination.acf.featured_sights}
-        />
-        <ArticleSections
-          sections={normalizedDestination.acf.article_sections}
-          destinationId={normalizedDestination.id}
-        />
-      </main>
+      <Recommendations
+        hotels={normalizedDestination.acf.featured_hotels}
+        restaurants={normalizedDestination.acf.featured_restaurants}
+        tours={normalizedDestination.acf.featured_tours}
+        sights={normalizedDestination.acf.featured_sights}
+      />
+      <ArticleSections
+        sections={normalizedDestination.acf.article_sections}
+        destinationId={normalizedDestination.id}
+      />
     </>
   );
 }

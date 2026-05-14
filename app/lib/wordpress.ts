@@ -4,6 +4,7 @@ import {
   Destination,
   Place,
   NormalizedDestination,
+  PaginatedArticlesResponse,
 } from "../types/wordpress";
 
 export const baseUrl = process.env.WORDPRESS_API_URL;
@@ -46,6 +47,29 @@ async function wordpressFetch<T>(endpoint: string): Promise<T> {
   const data = await res.json();
 
   return data;
+}
+
+type PaginatedResponse<T> = {
+  items: T[];
+  total: number;
+};
+
+async function wordpressFetchWithTotal<T>(
+  endpoint: string
+): Promise<PaginatedResponse<T>> {
+  const res = await fetch(`${baseUrl}${endpoint}`);
+
+  if (!res.ok) {
+    notFound();
+  }
+
+  const data = (await res.json()) as T[];
+  const total = Number(res.headers.get("X-WP-Total") ?? 0);
+
+  return {
+    items: data,
+    total,
+  };
 }
 
 export async function getParentDestinations(
@@ -100,23 +124,16 @@ export async function getArticlesByIds(ids: number[]): Promise<WPPost[]> {
 export async function getArticlesByCategoryAndDestination(
   categoryId: number,
   destinationId: number,
-  limit: number,
+  perPage: number,
   exclude: string,
   offset: number
-): Promise<{ articles: WPPost[]; total: number }> {
-  const endpoint = `/posts?destination=${destinationId}&article_category=${categoryId}&limit=${limit}&offset=${offset}${exclude}&_embed`;
+): Promise<PaginatedArticlesResponse> {
+  const endpoint = `/posts?destination=${destinationId}&article_category=${categoryId}&per_page=${perPage}&offset=${offset}${exclude}&_embed`;
 
-  const res = await fetch(`${baseUrl}${endpoint}`);
-
-  if (!res.ok) {
-    notFound();
-  }
-
-  const data = await res.json();
-  const total = Number(res.headers.get("X-WP-Total"));
+  const response = await wordpressFetchWithTotal<WPPost>(endpoint);
 
   return {
-    articles: data,
-    total,
+    articles: response.items,
+    total: response.total,
   };
 }

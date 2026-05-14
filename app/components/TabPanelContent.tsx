@@ -71,11 +71,11 @@ export default function TabPanelContent({
             Suggested plan
           </h4>
           <dl>
-            <dt className="font-medium text-gray-800">Day: 1</dt>
+            <dt className="font-semibold text-gray-800">Day: 1</dt>
             <dd>Eiffel Tower, Seine walk, dinner in Saint-Germain</dd>
-            <dt className="font-medium text-gray-800">Day: 2</dt>
+            <dt className="font-semibold text-gray-800">Day: 2</dt>
             <dd>Louvre, Le Marais, sunset in Montmartre</dd>
-            <dt className="font-medium text-gray-800">Day: 3</dt>
+            <dt className="font-semibold text-gray-800">Day: 3</dt>
             <dd>Latin Quarter, Notre-Dame, relaxed café hopping</dd>
           </dl>
         </div>

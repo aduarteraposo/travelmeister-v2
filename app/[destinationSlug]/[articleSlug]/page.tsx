@@ -61,7 +61,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </header>
       <div className="mx-auto px-4 md:px-0">
         <div className="mb-20">
-          <h1 className="text-center text-3xl :text-4xl font-bold mb-4">
+          <h1 className="text-center text-3xl md:text-4xl font-bold mb-4">
             {post.title.rendered}
           </h1>
           <div

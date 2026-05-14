@@ -1,6 +1,6 @@
 import { getArticlesByCategoryAndDestination } from "../lib/wordpress";
 import { NormalizedArticleSection } from "../types/wordpress";
-import ArticleLane from "./ArticlesLane";
+import ArticleLane from "./ArticleLane";
 
 export default async function ArticleSections({
   sections,
@@ -44,8 +44,8 @@ export default async function ArticleSections({
           title={section.title}
           categoryId={section.category.term_id}
           destinationId={destinationId}
-          manualArticlesIds={manualIds}
-          perPage={section.initial_items_count}
+          manualArticleIds={manualIds}
+          perPage={section.load_more_count}
           initialTotal={fetchedCategoryData.total}
         />
       );
@@ -54,7 +54,7 @@ export default async function ArticleSections({
 
   return (
     <section className="my-8">
-      <h2 className="font-semibold text-2xl">Related Articles</h2>
+      <h2 className="text-6xl font-outdoor mb-4">Related Articles</h2>
       {lanes}
     </section>
   );
