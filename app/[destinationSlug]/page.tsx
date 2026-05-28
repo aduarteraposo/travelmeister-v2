@@ -1,4 +1,5 @@
 import {
+  getAllDestinationRouteParams,
   getArticlesByIds,
   getDestinationBySlug,
   getDestinationsByIds,
@@ -19,6 +20,7 @@ import PracticalInfo from "../components/PracticalInfo";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Recommendations from "../components/Recommendations";
 import ArticleSections from "../components/RelatedArticleSections";
+import { notFound } from "next/navigation";
 
 type DestinationProps = {
   params: Promise<{
@@ -26,9 +28,18 @@ type DestinationProps = {
   }>;
 };
 
+export async function generateStaticParams() {
+  return getAllDestinationRouteParams();
+}
+
 export default async function DestinationPage({ params }: DestinationProps) {
   const { destinationSlug } = await params;
+
   const destination = await getDestinationBySlug(destinationSlug);
+  if (!destination) {
+    notFound();
+  }
+
   const travelStylePlaceIDs = getTravelStylePlaceIDs(destination);
 
   const placesIds: number[] = [
@@ -108,14 +119,16 @@ export default async function DestinationPage({ params }: DestinationProps) {
         />
         <Breadcrumbs destination={normalizedDestination} />
         <div className="text-center mb-8 mx-auto w-10/12">
-          <h1 className="mb-4 text-7xl text-center font-outdoor">
+          <h1 className="mb-6 text-7xl text-center font-outdoor">
             {normalizedDestination.title.rendered}
           </h1>
           <p>{normalizedDestination.acf.hero_intro}</p>
           <Tags tags={normalizedDestination.acf.hero_tags} center />
         </div>
       </header>
-      <h2 className="font-outdoor text-6xl mb-4">Choose your style</h2>
+      <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
+        Choose your style
+      </h2>
       <div className="lg:flex flex-row-reverse gap-4">
         <PracticalInfo info={normalizedDestination.acf.practical_info} />
         <TravelStyleTabs

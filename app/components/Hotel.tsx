@@ -10,7 +10,7 @@ export default function Hotel({ hotel }: { hotel: PlaceWithSection }) {
   return (
     <li key={hotel.slug} className="mb-28 last:mb-0">
       <h3 className="flex flex-col-reverse gap-1 lg:gap-4 items-start lg:items-center lg:flex-row text-2xl font-bold mb-3">
-        {hotel.title.rendered}
+        {hotel.title}
         {hotel.acf.badge && (
           <span className="bg-green-300 py-1 px-3 rounded-full text-sm md:text-base flex-nowrap italic font-medium">
             {hotel.acf.badge}

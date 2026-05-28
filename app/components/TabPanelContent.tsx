@@ -24,13 +24,13 @@ export default function TabPanelContent({
             <dl className="md:flex gap-2">
               <dt className="font-medium">Recommended Hotel:</dt>
               {style.where_to_stay.primary_place && (
-                <dd>{style.where_to_stay.primary_place.title.rendered}</dd>
+                <dd>{style.where_to_stay.primary_place.title}</dd>
               )}
             </dl>
             <dl className="md:flex gap-2">
               <dt className="font-medium">Alternatives:</dt>
               {style.where_to_stay.alternative_places.map((place, index) => (
-                <dd key={place.slug}>{`${place.title.rendered}${
+                <dd key={place.slug}>{`${place.title}${
                   index === style.where_to_stay.alternative_places.length - 1
                     ? ""
                     : ", "
@@ -55,7 +55,7 @@ export default function TabPanelContent({
               <dd>
                 <ul className="flex gap-1">
                   {style.featured_experiences.map((place, index) => (
-                    <li key={place.slug}>{`${place.title.rendered}${
+                    <li key={place.slug}>{`${place.title}${
                       index === style.featured_experiences.length - 1
                         ? ""
                         : ", "

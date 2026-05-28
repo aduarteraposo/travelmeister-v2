@@ -4,14 +4,29 @@ import Link from "next/link";
 import { getPlaceAttributesArray } from "../lib/wordpress-utils";
 import type { NormalizedPlace } from "../types/wordpress";
 import { useRef, useState } from "react";
+import useHotelComparison from "../hooks/useHotelComparison";
 
 export default function HotelComparisonTable({
-  places,
+  eligiblePlaces,
+  allPlaces,
 }: {
-  places: NormalizedPlace[];
+  eligiblePlaces: NormalizedPlace[];
+  allPlaces: NormalizedPlace[];
 }) {
-  const placesNameArray = places.map((place) => place.title.rendered);
-  const placeAttributesArray = getPlaceAttributesArray(places);
+  const {
+    selectedPlaceIds,
+    visibleComparisonPlaces,
+    selectAllPlaces,
+    clearAllPlaces,
+    handleCheckboxChange,
+    isEligible,
+  } = useHotelComparison({
+    allPlaces,
+    eligiblePlaces,
+  });
+
+  const placeNameArray = visibleComparisonPlaces.map((place) => place.title);
+  const placeAttributesArray = getPlaceAttributesArray(visibleComparisonPlaces);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftScrollFade, setShowLeftScrollFade] = useState(false);
   const [showRightScrollFade, setShowRightScrollFade] = useState(false);
@@ -45,72 +60,110 @@ export default function HotelComparisonTable({
   }
 
   return (
-    <div className="relative mt-28">
-      <div
-        onScroll={handleScroll}
-        ref={scrollContainerRef}
-        className="overflow-x-scroll my-16 max-w-full no-scrollbar no-bouncing"
-        id="scroll-container"
-      >
-        <table className=" w-full min-w-max">
-          <thead className="bg-black text-white">
-            <tr>
-              <th className="bg-white sticky left-0 w-24 max-w-24"></th>
-              {placesNameArray.map((name, index) => (
-                <th
-                  key={`${name}_${index}`}
-                  className="p-2 pr-8 w-70 max-w-70 truncate"
-                >
-                  {name}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {placeAttributesArray.map((attribute, index) => (
-              <tr key={`${attribute[0]}_${index}`} className="group">
-                <td className="sticky p-2 bg-black text-white border-b border-white left-0 w-24 max-w-24 text-center group-last:bg-white">
-                  {attribute[0]}
-                </td>
-                {attribute[1].map((item, index) =>
-                  typeof item === "string" ? (
-                    <td
-                      className="p-2 pr-8 border-b border-gray-300 text-center"
-                      key={`${item}_${index}`}
-                    >
-                      {item}
-                    </td>
-                  ) : (
-                    <td
-                      className="py-4 pr-8 text-center"
-                      key={`${item.url}_${index}`}
-                    >
-                      {item.url && (
-                        <Link
-                          className="rounded-full py-2 px-4 bg-green-300 font-medium"
-                          href={item.url}
-                        >
-                          {item.label}
-                        </Link>
-                      )}
-                    </td>
-                  )
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <>
+      <div>
+        <button
+          type="button"
+          onClick={selectAllPlaces}
+          className="rounded-full px-3 py-1 bg-black text-white mr-4 mb-4 text-sm"
+        >
+          Select All
+        </button>
+        <button
+          type="button"
+          onClick={clearAllPlaces}
+          className="rounded-full px-3 py-1 bg-black text-white text-sm"
+        >
+          Clear All
+        </button>
+        <ul className="flex flex-wrap gap-4">
+          {allPlaces.map((place) => (
+            <li key={place.slug} className="flex gap-2 items-center">
+              <label htmlFor={place.slug}>
+                <input
+                  className="mr-2"
+                  type="checkbox"
+                  name={place.title}
+                  id={place.slug}
+                  checked={selectedPlaceIds.includes(place.id)}
+                  onChange={(e) =>
+                    handleCheckboxChange(place.id, e.currentTarget.checked)
+                  }
+                  disabled={!isEligible(place)}
+                />
+                {place.title}
+              </label>
+            </li>
+          ))}
+        </ul>
       </div>
-      {showLeftScrollFade && (
-        <div className="pointer-events-none absolute left-24 top-0 h-full w-8 bg-linear-to-r from-white to-transparent" />
-      )}
-      {showRightScrollFade && (
-        <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-linear-to-l from-white to-transparent" />
-      )}
-    </div>
+      <div className="relative my-8">
+        <div
+          onScroll={handleScroll}
+          ref={scrollContainerRef}
+          className="overflow-x-scroll max-w-full no-scrollbar no-bouncing"
+          id="scroll-container"
+        >
+          <table className=" w-full min-w-max">
+            <thead className="bg-black text-white">
+              <tr>
+                <th className="bg-white sticky left-0 w-24 max-w-24"></th>
+                {placeNameArray.map((name, index) => (
+                  <th
+                    key={`${name}_${index}`}
+                    className="p-2 pr-8 w-70 max-w-70 truncate"
+                  >
+                    {name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {placeAttributesArray.map((attribute, index) => (
+                <tr key={`${attribute[0]}_${index}`} className="group">
+                  <td className="sticky p-2 bg-black text-white border-b border-white left-0 w-24 max-w-24 text-center group-last:bg-white">
+                    {attribute[0]}
+                  </td>
+                  {attribute[1].map((item, index) =>
+                    typeof item === "string" ? (
+                      <td
+                        className="p-2 pr-8 border-b border-gray-300 text-center"
+                        key={`${item}_${index}`}
+                      >
+                        {item}
+                      </td>
+                    ) : (
+                      <td
+                        className="py-4 pr-8 text-center"
+                        key={`${item.url}_${index}`}
+                      >
+                        {item.url && (
+                          <Link
+                            className="rounded-full py-2 px-4 bg-green-300 font-medium"
+                            href={item.url}
+                          >
+                            {item.label}
+                          </Link>
+                        )}
+                      </td>
+                    )
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {showLeftScrollFade && (
+          <div className="pointer-events-none absolute left-24 top-0 h-full w-8 bg-linear-to-r from-white to-transparent" />
+        )}
+        {showRightScrollFade && (
+          <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-linear-to-l from-white to-transparent" />
+        )}
+      </div>
+    </>
   );
 }
-
+// Vertical Scroll Comparison Table
 {
   /* <div className="max-w-full overflow-scroll mt-16">
   <table className="table-auto border-collapse border border-gray-400 rounded-sm">

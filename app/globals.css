@@ -12,6 +12,12 @@
   --font-sans: var(--font-noto-sans);
   --font-mono: var(--font-geist-mono);
   --font-outdoor: var(--font-outdoor-inks);
+  --font-dusklight: var(--font-dusklight);
+  --font-nature: var(--font-nature-hiking);
+  --font-sugarhare: var(--font-sugarhare);
+  --font-thistails: var(--font-thistails);
+  --font-wander: var(--font-wander-ventura);
+  --font-everyday: var(--font-everyday-motion);
 }
 
 body {

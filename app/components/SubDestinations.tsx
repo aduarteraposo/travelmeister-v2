@@ -11,7 +11,7 @@ export default function SubDestinations({
   return (
     <section className="my-10">
       {parentDestination.acf.destination_type === "city" && (
-        <h2 className="text-gray-800 mb-2 md:mb-3 font-outdoor text-6xl">
+        <h2 className="text-gray-800 mb-2 font-outdoor text-[3.375rem]/14">
           Neighborhoods
         </h2>
       )}

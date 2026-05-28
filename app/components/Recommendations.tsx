@@ -14,7 +14,9 @@ export default function Recommendations({
 }) {
   return (
     <section>
-      <h2 className="text-6xl mb-4 font-outdoor">Our picks</h2>
+      <h2 className="text-[3.375rem]/14 mb-4 font-outdoor text-gray-800">
+        Our picks
+      </h2>
       <div className="md:flex">
         <div>
           <h3 className="text-lg font-semibold text-stone-800 mb-2">Stay</h3>
@@ -34,7 +36,7 @@ export default function Recommendations({
 
                   <div className="px-3 pb-2">
                     <h4 className="font-semibold text-base mb-1">
-                      {hotel.place.title.rendered}
+                      {hotel.place.title}
                     </h4>
                     <p className="text-sm text-gray-700">
                       Elegant • Iconic • Pool

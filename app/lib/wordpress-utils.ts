@@ -221,15 +221,17 @@ export function mapDestinationWithPlacesAndSubDestinationsAndPosts(
 }
 
 export function getTravelStylePlaceIDs(destination: Destination) {
-  return destination.acf.travel_styles.flatMap((style) => [
-    ...(style.where_to_stay.primary_place
-      ? [style.where_to_stay.primary_place.ID]
-      : []),
-    ...(style.where_to_stay.alternative_places
-      ? style.where_to_stay.alternative_places.map((place) => place.ID)
-      : []),
-    ...(style.featured_experiences
-      ? style.featured_experiences.map((place) => place.ID)
-      : []),
-  ]);
+  return Array.isArray(destination.acf.travel_styles)
+    ? destination.acf.travel_styles.flatMap((style) => [
+        ...(style.where_to_stay.primary_place
+          ? [style.where_to_stay.primary_place.ID]
+          : []),
+        ...(style.where_to_stay.alternative_places
+          ? style.where_to_stay.alternative_places.map((place) => place.ID)
+          : []),
+        ...(style.featured_experiences
+          ? style.featured_experiences.map((place) => place.ID)
+          : []),
+      ])
+    : [];
 }

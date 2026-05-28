@@ -3,8 +3,8 @@ import {
   capitalizeFirstLetter,
   mapById,
   normalizePlace,
-} from "../wordpress-utils";
-import { WPImage, Filter, Place } from "@/app/types/wordpress";
+} from "./wordpress-utils";
+import { Place } from "@/app/types/wordpress";
 
 describe("capitalizeFirstLetter", () => {
   it("capitalizes a lowercase word", () => {

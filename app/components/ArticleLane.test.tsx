@@ -1,9 +1,15 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import ArticleLane from "./ArticleLane";
 import { WPPost } from "../types/wordpress";
 import "@testing-library/jest-dom";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+}));
 
 function renderWithQueryClient(ui: React.ReactNode) {
   const queryClient = new QueryClient();

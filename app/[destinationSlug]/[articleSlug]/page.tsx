@@ -2,11 +2,16 @@ import Breadcrumbs from "@/app/components/Breadcrumbs";
 import FilterContainer from "@/app/components/FilterContainer";
 import QuickPicks from "@/app/components/QuickPicks";
 import {
+  getAllArticleRouteParams,
   getArticleBySlug,
   getDestinationBySlug,
   getPlacesByIds,
 } from "@/app/lib/wordpress";
-import { mapPlacesById, mapPostWithPlaces } from "@/app/lib/wordpress-utils";
+import {
+  mapById,
+  mapPostWithPlaces,
+  normalizePlace,
+} from "@/app/lib/wordpress-utils";
 import { NormalizedPost, PlaceWithSection } from "@/app/types/wordpress";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -17,6 +22,10 @@ type ArticlePageProps = {
     articleSlug: string;
   }>;
 };
+
+export async function generateStaticParams() {
+  return await getAllArticleRouteParams();
+}
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { destinationSlug, articleSlug } = await params;
@@ -29,12 +38,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound();
   }
 
-  const placesIds = listSections.flatMap((section) =>
-    section.places.map((place) => place.ID)
-  );
+  const placesIds = Array.isArray(listSections)
+    ? listSections.flatMap((section) => section.places.map((place) => place.ID))
+    : [];
 
   const places = await getPlacesByIds(placesIds);
-  const placesById = mapPlacesById(places);
+  const normalizedPlaces = places.map(normalizePlace);
+  const placesById = mapById(normalizedPlaces);
   const normalizedPost: NormalizedPost = mapPostWithPlaces(post, placesById);
 
   const allHotels: PlaceWithSection[] =

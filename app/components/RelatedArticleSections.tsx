@@ -54,7 +54,9 @@ export default async function ArticleSections({
 
   return (
     <section className="my-8">
-      <h2 className="text-6xl font-outdoor mb-4">Related Articles</h2>
+      <h2 className="text-[3.375rem]/14 text-gray-800 font-outdoor mb-4">
+        Related Articles
+      </h2>
       {lanes}
     </section>
   );

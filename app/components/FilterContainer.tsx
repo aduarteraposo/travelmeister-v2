@@ -3,14 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { PlaceWithSection } from "../types/wordpress";
 import HotelComparisonTable from "./HotelComparisonTable";
 import HotelList from "./HotelList";
-import { capitalizeFirstLetter } from "../lib/wordpress-utils";
+import Filters from "./Filters";
 
 export default function FilterContainer({
   places,
 }: {
   places: PlaceWithSection[];
 }) {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState<string>("all");
   const filteredPlaces =
     activeFilter === "all"
       ? places
@@ -22,10 +22,6 @@ export default function FilterContainer({
     "all",
     ...new Set(places.flatMap((place) => place.acf.hotel_filters)),
   ];
-
-  function handleFilterClick(filter: string) {
-    setActiveFilter(filter);
-  }
 
   const leftColumnRef = useRef<HTMLDivElement | null>(null);
   const rightColumnRef = useRef<HTMLDivElement | null>(null);
@@ -68,20 +64,12 @@ export default function FilterContainer({
       >
         <div className="basis-1 lg:basis-3/4 lg:max-w-3/4 shrink-0">
           <div>
-            <ul className="flex gap-3 mb-12">
-              {availableFilters.map((filter) => (
-                <li key={filter}>
-                  <button
-                    onClick={() => handleFilterClick(filter)}
-                    className={`rounded-full py-1 px-4 text-sm cursor-pointer font-medium ${
-                      activeFilter === filter ? "bg-green-300" : "bg-gray-300"
-                    }`}
-                  >
-                    {capitalizeFirstLetter(filter)}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <Filters
+              filters={availableFilters}
+              setFilter={setActiveFilter}
+              activeFilter={activeFilter}
+              fixed={true}
+            />
             <HotelList places={filteredPlaces} />
           </div>
         </div>
@@ -113,7 +101,17 @@ export default function FilterContainer({
           </div>
         </div>
       </div>
-      <HotelComparisonTable places={filteredPlaces} />
+      <div className="mt-40">
+        <Filters
+          filters={availableFilters}
+          setFilter={setActiveFilter}
+          activeFilter={activeFilter}
+        />
+        <HotelComparisonTable
+          eligiblePlaces={filteredPlaces}
+          allPlaces={places}
+        />
+      </div>
     </>
   );
 }

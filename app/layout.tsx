@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${notoSans.variable} ${geistMono.variable} ${instrumentSans.variable} ${outdoorInks.variable} antialiased`}
+        className={`${notoSans.variable} ${geistMono.variable} ${instrumentSans.variable} ${outdoorInks.variable}  antialiased`}
       >
         <main className="max-w-6xl px-4 py-10 mx-auto">
           <Providers>{children}</Providers>

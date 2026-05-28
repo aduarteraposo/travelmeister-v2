@@ -1,11 +1,20 @@
 import Image from "next/image";
 import { WPPost } from "../types/wordpress";
+import { useRouter } from "next/navigation";
 
 export default function ArticleTeaser({ article }: { article: WPPost }) {
   const featuredImage = article._embedded?.["wp:featuredmedia"]?.[0];
 
+  const router = useRouter();
+
+  function goToPost() {
+    router.push(
+      `/${article.acf.primary_destination.post_name}/${article.slug}`
+    );
+  }
+
   return (
-    <article className="w-60">
+    <article className="w-60 cursor-pointer" onClick={goToPost}>
       <div className="aspect-video flex justify-center overflow-hidden mb-2">
         {featuredImage ? (
           <Image

@@ -20,11 +20,7 @@ export default function QuickPicks({
                 className="aspect-3/2"
                 loading="eager"
                 src={pick.place.acf.images[0].url}
-                alt={
-                  pick.place.acf.images[0].alt ||
-                  pick.place.title.rendered ||
-                  ""
-                }
+                alt={pick.place.acf.images[0].alt || pick.place.title || ""}
                 width={pick.place.acf.images[0].width}
                 height={pick.place.acf.images[0].height}
               />
@@ -34,7 +30,7 @@ export default function QuickPicks({
           <div className="basis-3/5">
             <p className="flex gap-2">
               <span className="font-bold">{pick.pick_label}:</span>{" "}
-              {pick.place.title.rendered}
+              {pick.place.title}
             </p>
             <p>{pick.reason}</p>
           </div>
