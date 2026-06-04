@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { Destination } from "../types/wordpress";
+import { WPDestination } from "../types/wordpress/destination";
 
 export default function SubDestination({
   parentDestinationType,
   destination,
 }: {
   parentDestinationType: string;
-  destination: Destination;
+  destination: WPDestination;
 }) {
   return (
     <div className="w-72 lg:w-80 shrink-0 mb-4 rounded-xl border border-gray-300 text-center flex flex-col">

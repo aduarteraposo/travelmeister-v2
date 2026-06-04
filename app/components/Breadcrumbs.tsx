@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { getParentDestinations } from "../lib/wordpress";
-import { Destination, NormalizedDestination, WPPost } from "../types/wordpress";
+import { getParentDestinations } from "../lib/wordpress/destination";
+import { WPDestination } from "../types/wordpress/destination";
+import { Destination } from "../types/app/destination";
+import { Article } from "../types/app/article";
 
 type Breadcrumb = {
   label: string;
@@ -8,12 +10,12 @@ type Breadcrumb = {
 } | null;
 
 type BreadcrumbsProps = {
-  post?: WPPost;
-  destination: Destination | NormalizedDestination;
+  article?: Article;
+  destination: WPDestination | Destination;
 };
 
 export default async function Breadcrumbs({
-  post,
+  article,
   destination,
 }: BreadcrumbsProps) {
   const ancestorTree = await getParentDestinations(destination);
@@ -27,9 +29,9 @@ export default async function Breadcrumbs({
       label: parent.title.rendered,
       href: `/${parent.slug}`,
     })),
-    post
+    article
       ? {
-          label: post.title.rendered,
+          label: article.title,
         }
       : null,
   ].filter(Boolean);

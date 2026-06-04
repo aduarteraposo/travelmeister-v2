@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { WPPost } from "../types/wordpress";
+import { WPPost } from "../types/wordpress/post";
 import { useRouter } from "next/navigation";
 
 export default function ArticleTeaser({ article }: { article: WPPost }) {

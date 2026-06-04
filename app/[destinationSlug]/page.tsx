@@ -1,18 +1,5 @@
-import {
-  getAllDestinationRouteParams,
-  getArticlesByIds,
-  getDestinationBySlug,
-  getDestinationsByIds,
-  getPlacesByIds,
-} from "@/app/lib/wordpress";
-import type { NormalizedDestination } from "../types/wordpress";
+import { getAllDestinationRouteParams } from "@/app/lib/wordpress/routes";
 import Image from "next/image";
-import {
-  getTravelStylePlaceIDs,
-  mapById,
-  mapDestinationWithPlacesAndSubDestinationsAndPosts,
-  normalizePlace,
-} from "../lib/wordpress-utils";
 import Tags from "../components/Tags";
 import TravelStyleTabs from "../components/TravelStyleTabs";
 import SubDestinations from "../components/SubDestinations";
@@ -20,7 +7,7 @@ import PracticalInfo from "../components/PracticalInfo";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Recommendations from "../components/Recommendations";
 import ArticleSections from "../components/RelatedArticleSections";
-import { notFound } from "next/navigation";
+import { getDestinationPageData } from "../lib/page-data/destination-page";
 
 type DestinationProps = {
   params: Promise<{
@@ -34,121 +21,48 @@ export async function generateStaticParams() {
 
 export default async function DestinationPage({ params }: DestinationProps) {
   const { destinationSlug } = await params;
-
-  const destination = await getDestinationBySlug(destinationSlug);
-  if (!destination) {
-    notFound();
-  }
-
-  const travelStylePlaceIDs = getTravelStylePlaceIDs(destination);
-
-  const placesIds: number[] = [
-    ...travelStylePlaceIDs,
-    ...(destination.acf.featured_hotels
-      ? destination.acf.featured_hotels.map((hotel) => hotel.place.ID)
-      : []),
-    ...(destination.acf.featured_restaurants
-      ? destination.acf.featured_restaurants.map(
-          (restaurant) => restaurant.place.ID
-        )
-      : []),
-    ...(destination.acf.featured_tours
-      ? destination.acf.featured_tours.map((tour) => tour.place.ID)
-      : []),
-    ...(destination.acf.featured_sights
-      ? destination.acf.featured_sights.map((sight) => sight.place.ID)
-      : []),
-  ];
-
-  const subdestinationsIds: number[] = [
-    ...(Array.isArray(destination.acf.featured_subdestinations)
-      ? destination.acf.featured_subdestinations.map(
-          (subDestination) => subDestination.ID
-        )
-      : []),
-  ];
-
-  const postIds: number[] = [
-    ...(destination.acf.travel_styles
-      ? destination.acf.travel_styles.flatMap((style) => [
-          ...(style.related_articles
-            ? style.related_articles.map((article) => article.ID)
-            : []),
-        ])
-      : []),
-    ...(destination.acf.article_sections
-      ? destination.acf.article_sections.flatMap((section) => [
-          ...(section.manual_articles
-            ? section.manual_articles.map((article) => article.ID)
-            : []),
-        ])
-      : []),
-  ];
-
-  const uniquePlacesIds = Array.from(new Set(placesIds));
-  const uniqueSubdestinationsIds = Array.from(new Set(subdestinationsIds));
-  const uniquePostIds = Array.from(new Set(postIds));
-
-  const subDestinations = await getDestinationsByIds(uniqueSubdestinationsIds);
-  const places = await getPlacesByIds(uniquePlacesIds);
-  const posts = await getArticlesByIds(uniquePostIds);
-
-  const normalizedPlaces = places.map(normalizePlace);
-
-  const subdestinationsById = mapById(subDestinations);
-  const placesById = mapById(normalizedPlaces);
-  const postsById = mapById(posts);
-
-  const normalizedDestination: NormalizedDestination =
-    mapDestinationWithPlacesAndSubDestinationsAndPosts(
-      destination,
-      placesById,
-      subdestinationsById,
-      postsById
-    );
+  const destination = await getDestinationPageData(destinationSlug);
 
   return (
     <>
       <header>
         <Image
           loading="eager"
-          alt={normalizedDestination.acf.hero_image.alt}
-          src={normalizedDestination.acf.hero_image.url}
-          width={normalizedDestination.acf.hero_image.width}
-          height={normalizedDestination.acf.hero_image.height}
+          alt={destination.acf.hero_image.alt}
+          src={destination.acf.hero_image.url}
+          width={destination.acf.hero_image.width}
+          height={destination.acf.hero_image.height}
         />
-        <Breadcrumbs destination={normalizedDestination} />
+        <Breadcrumbs destination={destination} />
         <div className="text-center mb-8 mx-auto w-10/12">
           <h1 className="mb-6 text-7xl text-center font-outdoor">
-            {normalizedDestination.title.rendered}
+            {destination.title.rendered}
           </h1>
-          <p>{normalizedDestination.acf.hero_intro}</p>
-          <Tags tags={normalizedDestination.acf.hero_tags} center />
+          <p>{destination.acf.hero_intro}</p>
+          <Tags tags={destination.acf.hero_tags} center />
         </div>
       </header>
       <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
         Choose your style
       </h2>
       <div className="lg:flex flex-row-reverse gap-4">
-        <PracticalInfo info={normalizedDestination.acf.practical_info} />
-        <TravelStyleTabs
-          travelStyles={normalizedDestination.acf.travel_styles}
-        />
+        <PracticalInfo info={destination.acf.practical_info} />
+        <TravelStyleTabs travelStyles={destination.acf.travel_styles} />
       </div>
       <SubDestinations
-        parentDestination={normalizedDestination}
-        subdestinations={normalizedDestination.acf.featured_subdestinations}
+        parentDestination={destination}
+        subdestinations={destination.acf.featured_subdestinations}
       />
 
       <Recommendations
-        hotels={normalizedDestination.acf.featured_hotels}
-        restaurants={normalizedDestination.acf.featured_restaurants}
-        tours={normalizedDestination.acf.featured_tours}
-        sights={normalizedDestination.acf.featured_sights}
+        hotels={destination.acf.featured_hotels}
+        restaurants={destination.acf.featured_restaurants}
+        tours={destination.acf.featured_tours}
+        sights={destination.acf.featured_sights}
       />
       <ArticleSections
-        sections={normalizedDestination.acf.article_sections}
-        destinationId={normalizedDestination.id}
+        sections={destination.acf.article_sections}
+        destinationId={destination.id}
       />
     </>
   );

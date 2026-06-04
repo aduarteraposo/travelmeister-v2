@@ -1,19 +1,19 @@
-import type { PlaceWithSection } from "../types/wordpress";
-import Hotel from "./Hotel";
+import type { PlaceWithSection } from "../types/app/place";
+import PlaceCard from "./PlaceCard";
 
 type placesection = {
   section_title: string;
   places: PlaceWithSection[];
 };
 
-export default function HotelList({ places }: { places: PlaceWithSection[] }) {
+export default function PlaceList({ places }: { places: PlaceWithSection[] }) {
   const sectionTitles = [
     ...new Set(places.map((place) => place.section_title)),
   ];
   const placesections: placesection[] = sectionTitles.map((title) => {
     const section = {
       section_title: title,
-      places: places.filter((hotel) => hotel.section_title === title),
+      places: places.filter((place) => place.section_title === title),
     };
 
     return section;
@@ -26,7 +26,7 @@ export default function HotelList({ places }: { places: PlaceWithSection[] }) {
       )}
       <ul>
         {list.places.map((place, index) => (
-          <Hotel key={`${place.slug}-${index}`} hotel={place} />
+          <PlaceCard key={`${place.slug}-${index}`} place={place} />
         ))}
       </ul>
     </div>

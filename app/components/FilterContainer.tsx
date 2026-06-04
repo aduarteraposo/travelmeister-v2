@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { PlaceWithSection } from "../types/wordpress";
-import HotelComparisonTable from "./HotelComparisonTable";
-import HotelList from "./HotelList";
+import { Suspense, useEffect, useRef, useState } from "react";
+import PlaceComparisonTable from "./PlaceComparisonTable";
+import PlaceList from "./PlaceList";
 import Filters from "./Filters";
+import { PlaceWithSection } from "../types/app/place";
 
 export default function FilterContainer({
   places,
@@ -68,9 +68,8 @@ export default function FilterContainer({
               filters={availableFilters}
               setFilter={setActiveFilter}
               activeFilter={activeFilter}
-              fixed={true}
             />
-            <HotelList places={filteredPlaces} />
+            <PlaceList places={filteredPlaces} />
           </div>
         </div>
         <div
@@ -106,11 +105,14 @@ export default function FilterContainer({
           filters={availableFilters}
           setFilter={setActiveFilter}
           activeFilter={activeFilter}
+          fixed={true}
         />
-        <HotelComparisonTable
-          eligiblePlaces={filteredPlaces}
-          allPlaces={places}
-        />
+        <Suspense fallback={null}>
+          <PlaceComparisonTable
+            eligiblePlaces={filteredPlaces}
+            allPlaces={places}
+          />
+        </Suspense>
       </div>
     </>
   );

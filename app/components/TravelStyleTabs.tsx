@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { NormalizedTravelStyle } from "./../types/wordpress";
+import { TravelStyle } from "./../types/app/destination";
 import TabPanelContent from "./TabPanelContent";
 
 export default function TravelStyleTabs({
   travelStyles,
 }: {
-  travelStyles: NormalizedTravelStyle[];
+  travelStyles: TravelStyle[];
 }) {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);

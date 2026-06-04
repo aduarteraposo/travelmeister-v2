@@ -1,12 +1,12 @@
-import { getArticlesByCategoryAndDestination } from "../lib/wordpress";
-import { NormalizedArticleSection } from "../types/wordpress";
+import { getPostsByCategoryAndDestination } from "../lib/wordpress/post";
+import { ArticleSection } from "../types/app/destination";
 import ArticleLane from "./ArticleLane";
 
 export default async function ArticleSections({
   sections,
   destinationId,
 }: {
-  sections: NormalizedArticleSection[];
+  sections: ArticleSection[];
   destinationId: number;
 }) {
   const lanes = await Promise.all(
@@ -25,7 +25,7 @@ export default async function ArticleSections({
         ? `&exclude=${manualIds.join(",")}`
         : "";
 
-      const fetchedCategoryData = await getArticlesByCategoryAndDestination(
+      const fetchedCategoryData = await getPostsByCategoryAndDestination(
         section.category.term_id,
         destinationId,
         fetchLimit,

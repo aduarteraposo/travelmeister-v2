@@ -1,17 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { getPlaceAttributesArray } from "../lib/wordpress-utils";
-import type { NormalizedPlace } from "../types/wordpress";
+import { slugify } from "../lib/utils";
+import { getPlaceAttributesArray } from "../lib/place/place-comparison";
+import type { Place } from "../types/app/place";
 import { useRef, useState } from "react";
-import useHotelComparison from "../hooks/useHotelComparison";
+import usePlaceComparison from "../hooks/usePlaceComparison";
 
-export default function HotelComparisonTable({
+export default function PlaceComparisonTable({
   eligiblePlaces,
   allPlaces,
 }: {
-  eligiblePlaces: NormalizedPlace[];
-  allPlaces: NormalizedPlace[];
+  eligiblePlaces: Place[];
+  allPlaces: Place[];
 }) {
   const {
     selectedPlaceIds,
@@ -20,7 +21,7 @@ export default function HotelComparisonTable({
     clearAllPlaces,
     handleCheckboxChange,
     isEligible,
-  } = useHotelComparison({
+  } = usePlaceComparison({
     allPlaces,
     eligiblePlaces,
   });
@@ -160,6 +161,44 @@ export default function HotelComparisonTable({
           <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-linear-to-l from-white to-transparent" />
         )}
       </div>
+      <div className="max-w-full overflow-scroll mt-16">
+        <table className="table-auto border-collapse border border-gray-400 rounded-sm">
+          <thead className="bg-black text-white">
+            <tr className="text-left">
+              <th className="p-2 border border-gray-600">place</th>
+              <th className="p-2 border border-gray-600">Best for</th>
+              <th className="p-2 border border-gray-600">Area</th>
+              <th className="p-2 border border-gray-600">Price</th>
+              <th className="p-2 border border-gray-600">Highlights</th>
+              <th className="p-2 border border-gray-600">Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visibleComparisonPlaces.map((place) =>
+              place.acf.show_in_table ? (
+                <tr className="" key={slugify(place.title)}>
+                  <td className="p-2 border border-gray-300">{place.title}</td>
+                  <td className="p-2 border border-gray-300">
+                    {place.acf.best_if}
+                  </td>
+                  <td className="p-2 border border-gray-300">
+                    {place.acf.location}
+                  </td>
+                  <td className="p-2 border border-gray-300 text-center">
+                    {place.acf.budget}
+                  </td>
+                  <td className="p-2 border border-gray-300">{`${place.acf.editor_tags[0].label}, ${place.acf.editor_tags[1]?.label}, ${place.acf.editor_tags[2]?.label}`}</td>
+                  <td className="p-2 border border-gray-300">
+                    <Link href={place.acf.cta_links[0].url}>
+                      {place.acf.cta_links[0].label}
+                    </Link>
+                  </td>
+                </tr>
+              ) : null
+            )}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }
@@ -169,7 +208,7 @@ export default function HotelComparisonTable({
   <table className="table-auto border-collapse border border-gray-400 rounded-sm">
     <thead className="bg-black text-white">
       <tr className="text-left">
-        <th className="p-2 border border-gray-600">Hotel</th>
+        <th className="p-2 border border-gray-600">place</th>
         <th className="p-2 border border-gray-600">Best for</th>
         <th className="p-2 border border-gray-600">Area</th>
         <th className="p-2 border border-gray-600">Price</th>
@@ -178,18 +217,18 @@ export default function HotelComparisonTable({
       </tr>
     </thead>
     <tbody>
-      {hotels.map((hotel) =>
-        hotel.comparison.show_in_table ? (
-          <tr className="" key={slugify(hotel.name)}>
-            <td className="p-2 border border-gray-300">{hotel.name}</td>
-            <td className="p-2 border border-gray-300">{hotel.best_if}</td>
-            <td className="p-2 border border-gray-300">{hotel.area}</td>
+      {places.map((place) =>
+        place.comparison.show_in_table ? (
+          <tr className="" key={slugify(place.name)}>
+            <td className="p-2 border border-gray-300">{place.name}</td>
+            <td className="p-2 border border-gray-300">{place.best_if}</td>
+            <td className="p-2 border border-gray-300">{place.area}</td>
             <td className="p-2 border border-gray-300 text-center">
-              {hotel.price_level}
+              {place.price_level}
             </td>
-            <td className="p-2 border border-gray-300">{`${hotel.tags[0].label}, ${hotel.tags[1]?.label}, ${hotel.tags[2]?.label}`}</td>
+            <td className="p-2 border border-gray-300">{`${place.tags[0].label}, ${place.tags[1]?.label}, ${place.tags[2]?.label}`}</td>
             <td className="p-2 border border-gray-300">
-              <Link href={hotel.booking_links[0].link.url}>See details</Link>
+              <Link href={place.booking_links[0].link.url}>See details</Link>
             </td>
           </tr>
         ) : null

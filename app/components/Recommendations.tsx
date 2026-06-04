@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { FeaturedPlace } from "../types/wordpress";
+import { LabeledPlace } from "../types/app/place";
 
 export default function Recommendations({
   hotels,
@@ -7,10 +7,10 @@ export default function Recommendations({
   tours,
   sights,
 }: {
-  hotels: FeaturedPlace[];
-  restaurants: FeaturedPlace[];
-  tours: FeaturedPlace[];
-  sights: FeaturedPlace[];
+  hotels: LabeledPlace[];
+  restaurants: LabeledPlace[];
+  tours: LabeledPlace[];
+  sights: LabeledPlace[];
 }) {
   return (
     <section>

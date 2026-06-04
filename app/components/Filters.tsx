@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { capitalizeFirstLetter } from "../lib/wordpress-utils";
+import { capitalizeFirstLetter } from "../lib/utils";
 
 export default function Filters({
   setFilter,
@@ -19,17 +19,19 @@ export default function Filters({
 
     setFilter(filter);
 
-    requestAnimationFrame(() => {
-      const after = comparisonRef.current?.getBoundingClientRect().top;
+    if (fixed) {
+      requestAnimationFrame(() => {
+        const after = comparisonRef.current?.getBoundingClientRect().top;
 
-      if (before == null || after == null) {
-        return;
-      }
+        if (before == null || after == null) {
+          return;
+        }
 
-      window.scrollBy({
-        top: after - before,
+        window.scrollBy({
+          top: after - before,
+        });
       });
-    });
+    }
   }
 
   return (

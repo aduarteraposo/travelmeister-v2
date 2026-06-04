@@ -1,13 +1,9 @@
-import { NormalizedTravelStyle } from "../types/wordpress";
+import { TravelStyle } from "../types/app/destination";
 
-export default function TabPanelContent({
-  style,
-}: {
-  style: NormalizedTravelStyle;
-}) {
+export default function TabPanelContent({ style }: { style: TravelStyle }) {
   return (
     <>
-      <p className="mb-10 md:text-lg leading-relaxed text-gray-700">
+      <p className="mb-10 md:text-lg leading-relaxed text-gray-800">
         {style.summary}
       </p>
       <div className="md:flex">

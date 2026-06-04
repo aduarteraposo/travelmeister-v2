@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import ArticleLane from "./ArticleLane";
-import { WPPost } from "../types/wordpress";
+import { WPPost } from "../types/wordpress/post";
 import "@testing-library/jest-dom";
 
 vi.mock("next/navigation", () => ({

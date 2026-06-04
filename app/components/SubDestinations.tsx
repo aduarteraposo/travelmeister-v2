@@ -1,12 +1,13 @@
-import { Destination, NormalizedDestination } from "../types/wordpress";
+import { Destination } from "../types/app/destination";
+import { WPDestination } from "../types/wordpress/destination";
 import SubDestination from "./SubDestination";
 
 export default function SubDestinations({
   parentDestination,
   subdestinations,
 }: {
-  parentDestination: NormalizedDestination;
-  subdestinations: Destination[];
+  parentDestination: Destination;
+  subdestinations: WPDestination[];
 }) {
   return (
     <section className="my-10">

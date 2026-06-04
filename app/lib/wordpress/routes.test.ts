@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
+import { REVALIDATE } from "./client";
 import {
   getAllArticleRouteParams,
   getAllDestinationRouteParams,
-  REVALIDATE,
-} from "./wordpress";
-import { Destination, WPPost } from "../types/wordpress";
+} from "./routes";
+import { WPPost } from "../../types/wordpress/post";
+import { WPDestination } from "../../types/wordpress/destination";
 
 describe("getAllArticleRouteParams", () => {
   it("maps WP articles into route params", async () => {
@@ -61,7 +62,7 @@ describe("getAllDestinationRouteParams", () => {
           {
             slug: "destination-2",
           },
-        ] as Destination[],
+        ] as WPDestination[],
     } as Response);
     // act
     const result = await getAllDestinationRouteParams();

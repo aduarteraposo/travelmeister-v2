@@ -1,4 +1,4 @@
-import type { PracticalInfo } from "../types/wordpress";
+import type { PracticalInfo } from "../types/app/destination";
 import InfoPiece from "./InfoPiece";
 
 type InfoKey =

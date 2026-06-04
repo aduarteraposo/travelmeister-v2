@@ -1,30 +1,27 @@
 import { NextResponse } from "next/server";
-import { getArticlesByCategoryAndDestination } from "@/app/lib/wordpress";
+import { getPostsByCategoryAndDestination } from "@/app/lib/wordpress/post";
+import { parseArticlesQueryParams } from "@/app/lib/api/articles-query-params";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const categoryId = Number(searchParams.get("categoryId"));
-  const destinationId = Number(searchParams.get("destinationId"));
-  const perPage = Number(searchParams.get("perPage"));
-  const offset = Number(searchParams.get("offset"));
-  const exclude = searchParams.get("exclude") ?? "";
+  const params = parseArticlesQueryParams(searchParams);
 
-  if (!categoryId || !destinationId || !perPage || Number.isNaN(offset)) {
+  if (!params) {
     return NextResponse.json(
       { error: "Missing required params" },
       { status: 400 }
     );
   }
 
-  const excludeParam = exclude ? `&exclude=${exclude}` : "";
+  const excludeParam = params.exclude ? `&exclude=${params.exclude}` : "";
 
-  const data = await getArticlesByCategoryAndDestination(
-    categoryId,
-    destinationId,
-    perPage,
+  const data = await getPostsByCategoryAndDestination(
+    params.categoryId,
+    params.destinationId,
+    params.perPage,
     excludeParam,
-    offset
+    params.offset
   );
 
   return NextResponse.json(data);

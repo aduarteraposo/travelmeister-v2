@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-import { WPImage } from "../types/wordpress";
+import { WPImage } from "../types/wordpress/media";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import WheelGesturesPlugin from "embla-carousel-wheel-gestures";
 
@@ -11,7 +11,7 @@ type Props = {
   images: WPImage[];
 };
 
-export default function HotelImageCarousel({ images }: Props) {
+export default function PlaceImageCarousel({ images }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { dragFree: true, loop: false },
     [WheelGesturesPlugin()]

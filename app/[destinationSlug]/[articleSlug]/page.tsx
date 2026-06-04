@@ -1,20 +1,10 @@
 import Breadcrumbs from "@/app/components/Breadcrumbs";
 import FilterContainer from "@/app/components/FilterContainer";
 import QuickPicks from "@/app/components/QuickPicks";
-import {
-  getAllArticleRouteParams,
-  getArticleBySlug,
-  getDestinationBySlug,
-  getPlacesByIds,
-} from "@/app/lib/wordpress";
-import {
-  mapById,
-  mapPostWithPlaces,
-  normalizePlace,
-} from "@/app/lib/wordpress-utils";
-import { NormalizedPost, PlaceWithSection } from "@/app/types/wordpress";
+import { getAllArticleRouteParams } from "@/app/lib/wordpress/routes";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { getArticlePageData } from "@/app/lib/page-data/article-page";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -29,31 +19,8 @@ export async function generateStaticParams() {
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { destinationSlug, articleSlug } = await params;
-  const canonicalDestination = await getDestinationBySlug(destinationSlug);
-  const post = await getArticleBySlug(articleSlug);
-  const heroImage = post._embedded?.["wp:featuredmedia"]?.[0];
-  const listSections = post.acf.list_sections;
-
-  if (canonicalDestination.id !== post.acf.primary_destination.ID) {
-    notFound();
-  }
-
-  const placesIds = Array.isArray(listSections)
-    ? listSections.flatMap((section) => section.places.map((place) => place.ID))
-    : [];
-
-  const places = await getPlacesByIds(placesIds);
-  const normalizedPlaces = places.map(normalizePlace);
-  const placesById = mapById(normalizedPlaces);
-  const normalizedPost: NormalizedPost = mapPostWithPlaces(post, placesById);
-
-  const allHotels: PlaceWithSection[] =
-    normalizedPost.acf.list_sections.flatMap((section) =>
-      section.places.map((hotel) => ({
-        ...hotel,
-        section_title: section.section_title,
-      }))
-    );
+  const { canonicalDestination, article, heroImage, allPlacesWithSections } =
+    await getArticlePageData(destinationSlug, articleSlug);
 
   return (
     <>
@@ -62,29 +29,29 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <Image
             loading="eager"
             src={heroImage.source_url}
-            alt={heroImage.alt_text || post.title.rendered || ""}
+            alt={heroImage.alt_text || article.title || ""}
             width={heroImage.media_details.width}
             height={heroImage.media_details.height}
           />
         )}
-        <Breadcrumbs post={post} destination={canonicalDestination} />
+        <Breadcrumbs article={article} destination={canonicalDestination} />
       </header>
       <div className="mx-auto px-4 md:px-0">
         <div className="mb-20">
           <h1 className="text-center text-3xl md:text-4xl font-bold mb-4">
-            {post.title.rendered}
+            {article.title}
           </h1>
           <div
             className="md:max-w-3/4 mx-auto text-center"
-            dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+            dangerouslySetInnerHTML={{ __html: article.excerpt }}
           />
         </div>
         <div
           className="prose mb-16"
-          dangerouslySetInnerHTML={{ __html: post.content.rendered }}
+          dangerouslySetInnerHTML={{ __html: article.content }}
         ></div>
-        <QuickPicks quickPicks={normalizedPost.acf.quick_picks} />
-        <FilterContainer places={allHotels} />
+        <QuickPicks quickPicks={article.acf.quick_picks} />
+        <FilterContainer places={allPlacesWithSections} />
       </div>
     </>
   );

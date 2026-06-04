@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { getNextArticlesOffset } from "./getNextArticleOffset";
-import { PaginatedArticlesResponse } from "@/app/types/wordpress";
+import { PaginatedArticlesResponse } from "@/app/types/api/pagination";
 
 describe("getNextArticleOffset", () => {
   it("returns the next offset when more articles are available", () => {

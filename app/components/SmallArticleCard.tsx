@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { WPPost } from "../types/wordpress";
+import { WPPost } from "../types/wordpress/post";
 
 export default function SmallArticleCard({ post }: { post: WPPost }) {
   return (

@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { GET } from "./route";
-import * as wordpress from "../../lib/wordpress";
+import * as wordpress from "../../lib/wordpress/post";
 import { vi } from "vitest";
-import { PaginatedArticlesResponse } from "@/app/types/wordpress";
+import { PaginatedArticlesResponse } from "@/app/types/api/pagination";
 
-vi.mock("../../lib/wordpress");
+vi.mock("../../lib/wordpress/post");
 
 describe("GET /api/articles", () => {
   it("returns 400 when required params are missing", async () => {
@@ -24,7 +24,7 @@ describe("GET /api/articles", () => {
 describe("GET /api/articles", () => {
   it("returns 200 and data if all params are passed", async () => {
     // arrange
-    vi.mocked(wordpress.getArticlesByCategoryAndDestination).mockResolvedValue({
+    vi.mocked(wordpress.getPostsByCategoryAndDestination).mockResolvedValue({
       articles: [{ id: 1, slug: "test-article" }],
       total: 1,
     } as PaginatedArticlesResponse);
@@ -39,7 +39,7 @@ describe("GET /api/articles", () => {
     // assert
     expect(response.status).toBe(200);
     expect(body.total).toBe(1);
-    expect(wordpress.getArticlesByCategoryAndDestination).toHaveBeenCalledWith(
+    expect(wordpress.getPostsByCategoryAndDestination).toHaveBeenCalledWith(
       1,
       2,
       3,
@@ -52,7 +52,7 @@ describe("GET /api/articles", () => {
 describe("GET /api/articles", () => {
   it("is called with correct exclude params if param is passed", async () => {
     // arrange
-    vi.mocked(wordpress.getArticlesByCategoryAndDestination).mockResolvedValue({
+    vi.mocked(wordpress.getPostsByCategoryAndDestination).mockResolvedValue({
       articles: [{ id: 1, slug: "test-article" }],
       total: 1,
     } as PaginatedArticlesResponse);
@@ -67,7 +67,7 @@ describe("GET /api/articles", () => {
     // assert
     expect(response.status).toBe(200);
     expect(body.total).toBe(1);
-    expect(wordpress.getArticlesByCategoryAndDestination).toHaveBeenCalledWith(
+    expect(wordpress.getPostsByCategoryAndDestination).toHaveBeenCalledWith(
       1,
       2,
       3,

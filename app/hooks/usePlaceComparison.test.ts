@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { NormalizedPlace } from "../types/wordpress";
-import useHotelComparison from "./useHotelComparison";
+import { Place } from "../types/app/place";
+import usePlaceComparison from "./usePlaceComparison";
 
 vi.mock("next/navigation", () => ({
   useSearchParams: vi.fn(),
@@ -11,9 +11,9 @@ vi.mock("next/navigation", () => ({
 
 import * as navigation from "next/navigation";
 
-const eligiblePlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as NormalizedPlace[];
+const eligiblePlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as Place[];
 
-const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as NormalizedPlace[];
+const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as Place[];
 
 function setupNavigationMocks({
   pathname = "/paris",
@@ -46,14 +46,14 @@ function setupNavigationMocks({
   };
 }
 
-describe("useHotelComparison", () => {
+describe("usePlaceComparison", () => {
   it("initially selects all places when url param absent", () => {
     // arrange
     setupNavigationMocks();
 
     // act
     const { result } = renderHook(() =>
-      useHotelComparison({
+      usePlaceComparison({
         allPlaces,
         eligiblePlaces,
       })
@@ -69,7 +69,7 @@ describe("useHotelComparison", () => {
 
     // act
     const { result } = renderHook(() =>
-      useHotelComparison({
+      usePlaceComparison({
         allPlaces,
         eligiblePlaces,
       })
@@ -89,7 +89,7 @@ describe("useHotelComparison", () => {
 
     // act
     const { result } = renderHook(() =>
-      useHotelComparison({
+      usePlaceComparison({
         allPlaces,
         eligiblePlaces,
       })
@@ -109,7 +109,7 @@ describe("useHotelComparison", () => {
 
     // act
     const { result } = renderHook(() =>
-      useHotelComparison({
+      usePlaceComparison({
         allPlaces,
         eligiblePlaces,
       })
@@ -137,7 +137,7 @@ describe("useHotelComparison", () => {
 
     // act
     const { result } = renderHook(() =>
-      useHotelComparison({
+      usePlaceComparison({
         allPlaces,
         eligiblePlaces,
       })
@@ -149,18 +149,14 @@ describe("useHotelComparison", () => {
 
   it("updates URLParams correctly", async () => {
     // arrange
-    const eligiblePlaces = [
-      { id: 1 },
-      { id: 2 },
-      { id: 3 },
-    ] as NormalizedPlace[];
-    const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as NormalizedPlace[];
+    const eligiblePlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as Place[];
+    const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as Place[];
 
     const { replace } = setupNavigationMocks();
 
     // act
     const { result } = renderHook(() =>
-      useHotelComparison({
+      usePlaceComparison({
         allPlaces,
         eligiblePlaces,
       })
@@ -185,7 +181,7 @@ describe("useHotelComparison", () => {
 
     // act
     const { result } = renderHook(() =>
-      useHotelComparison({
+      usePlaceComparison({
         allPlaces,
         eligiblePlaces,
       })
@@ -212,7 +208,7 @@ describe("useHotelComparison", () => {
 
     // act
     const { result } = renderHook(() =>
-      useHotelComparison({
+      usePlaceComparison({
         allPlaces,
         eligiblePlaces,
       })

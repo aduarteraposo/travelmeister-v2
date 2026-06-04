@@ -1,4 +1,4 @@
-import { PaginatedArticlesResponse } from "@/app/types/wordpress";
+import { PaginatedArticlesResponse } from "@/app/types/api/pagination";
 
 export function getNextArticlesOffset(
   lastPage: PaginatedArticlesResponse,

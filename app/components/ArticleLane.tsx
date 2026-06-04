@@ -1,7 +1,8 @@
 "use client";
 
 import { getNextArticlesOffset } from "../lib/pagination/getNextArticleOffset";
-import { PaginatedArticlesResponse, WPPost } from "../types/wordpress";
+import { PaginatedArticlesResponse } from "../types/api/pagination";
+import { WPPost } from "../types/wordpress/post";
 import ArticleTeaser from "./ArticleTeaser";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 

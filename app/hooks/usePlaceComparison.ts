@@ -1,30 +1,30 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { NormalizedPlace } from "../types/wordpress";
+import { useEffect, useMemo, useState } from "react";
+import { Place } from "../types/app/place";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export default function useHotelComparison({
+export default function usePlaceComparison({
   eligiblePlaces,
   allPlaces,
 }: {
-  eligiblePlaces: NormalizedPlace[];
-  allPlaces: NormalizedPlace[];
+  eligiblePlaces: Place[];
+  allPlaces: Place[];
 }): {
-  visibleComparisonPlaces: NormalizedPlace[];
+  visibleComparisonPlaces: Place[];
   selectedPlaceIds: number[];
   clearAllPlaces: () => void;
   selectAllPlaces: () => void;
   handleCheckboxChange: (id: number, isChecked: boolean) => void;
-  isEligible: (place: NormalizedPlace) => boolean;
+  isEligible: (place: Place) => boolean;
 } {
   const searchParams = useSearchParams();
-  const URLHotelIds = searchParams.get("compare");
+  const URLPlaceIds = searchParams.get("compare");
   const router = useRouter();
   const pathname = usePathname();
-  const initialSelectedHotelIds: number[] = URLHotelIds
-    ? URLHotelIds.split(",").map(Number).filter(Number.isFinite)
+  const initialSelectedPlaceIds: number[] = URLPlaceIds
+    ? URLPlaceIds.split(",").map(Number).filter(Number.isFinite)
     : allPlaces.map((place) => place.id);
   const [selectedPlaceIds, setSelectedPlaceIds] = useState(
-    initialSelectedHotelIds
+    initialSelectedPlaceIds
   );
   const visibleComparisonPlaces = eligiblePlaces.filter((place) =>
     selectedPlaceIds.includes(place.id)
@@ -32,7 +32,7 @@ export default function useHotelComparison({
   const eligiblePlaceIds = new Set(eligiblePlaces.map((place) => place.id));
   const allPlacesIds = useMemo(() => allPlaces.map((p) => p.id), [allPlaces]);
 
-  function isEligible(place: NormalizedPlace) {
+  function isEligible(place: Place) {
     return eligiblePlaceIds.has(place.id);
   }
 
@@ -60,9 +60,9 @@ export default function useHotelComparison({
 
   useEffect(() => {
     function setURLParams(ids: number[]) {
-      const allHotelsSelected = ids.length === allPlacesIds.length;
+      const allPlacesSelected = ids.length === allPlacesIds.length;
 
-      if (ids.length > 0 && !allHotelsSelected) {
+      if (ids.length > 0 && !allPlacesSelected) {
         router.replace(`${pathname}?compare=${ids.join(",")}`, {
           scroll: false,
         });
