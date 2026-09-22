@@ -102,13 +102,13 @@ export default function PlaceComparisonTable({
         <div
           onScroll={handleScroll}
           ref={scrollContainerRef}
-          className="overflow-x-scroll max-w-full no-scrollbar no-bouncing"
+          className="overflow-x-auto overscroll-x-none max-w-full no-scrollbar"
           id="scroll-container"
         >
-          <table className=" w-full min-w-max">
+          <table className="text-sm w-full min-w-max">
             <thead className="bg-black text-white">
               <tr>
-                <th className="bg-white sticky left-0 w-24 max-w-24"></th>
+                <th className="bg-white sticky left-0 w-20 max-w-20"></th>
                 {placeNameArray.map((name, index) => (
                   <th
                     key={`${name}_${index}`}
@@ -122,7 +122,7 @@ export default function PlaceComparisonTable({
             <tbody>
               {placeAttributesArray.map((attribute, index) => (
                 <tr key={`${attribute[0]}_${index}`} className="group">
-                  <td className="sticky p-2 bg-black text-white border-b border-white left-0 w-24 max-w-24 text-center group-last:bg-white">
+                  <td className="sticky p-2 bg-black text-white border-b border-white left-0 w-20 max-w-20 text-center group-last:bg-white">
                     {attribute[0]}
                   </td>
                   {attribute[1].map((item, index) =>
@@ -155,7 +155,7 @@ export default function PlaceComparisonTable({
           </table>
         </div>
         {showLeftScrollFade && (
-          <div className="pointer-events-none absolute left-24 top-0 h-full w-8 bg-linear-to-r from-white to-transparent" />
+          <div className="pointer-events-none absolute left-20 top-0 h-full w-8 bg-linear-to-r from-white to-transparent" />
         )}
         {showRightScrollFade && (
           <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-linear-to-l from-white to-transparent" />
@@ -187,11 +187,17 @@ export default function PlaceComparisonTable({
                   <td className="p-2 border border-gray-300 text-center">
                     {place.acf.budget}
                   </td>
-                  <td className="p-2 border border-gray-300">{`${place.acf.editor_tags[0].label}, ${place.acf.editor_tags[1]?.label}, ${place.acf.editor_tags[2]?.label}`}</td>
                   <td className="p-2 border border-gray-300">
-                    <Link href={place.acf.cta_links[0].url}>
-                      {place.acf.cta_links[0].label}
-                    </Link>
+                    {place.acf.editor_tags
+                      ? place.acf.editor_tags.map((tag) => tag.label).join(", ")
+                      : ""}
+                  </td>
+                  <td className="p-2 border border-gray-300">
+                    {place.acf.cta_links && (
+                      <Link href={place.acf.cta_links[0].url}>
+                        {place.acf.cta_links[0].label}
+                      </Link>
+                    )}
                   </td>
                 </tr>
               ) : null

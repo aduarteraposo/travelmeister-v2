@@ -29,7 +29,7 @@ describe("GET /api/articles", () => {
       total: 1,
     } as PaginatedArticlesResponse);
     const request = new Request(
-      "http://localhost/api/articles?categoryId=1&destinationId=2&perPage=3&offset=0"
+      "http://localhost/api/articles?categoryId=1&destinationId=2&perPage=3&offset=0&exclude=1"
     );
 
     // act
@@ -39,13 +39,13 @@ describe("GET /api/articles", () => {
     // assert
     expect(response.status).toBe(200);
     expect(body.total).toBe(1);
-    expect(wordpress.getPostsByCategoryAndDestination).toHaveBeenCalledWith(
-      1,
-      2,
-      3,
-      "",
-      0
-    );
+    expect(wordpress.getPostsByCategoryAndDestination).toHaveBeenCalledWith({
+      destinationId: 2,
+      categoryId: 1,
+      perPage: 3,
+      exclude: [1],
+      offset: 0,
+    });
   });
 });
 
@@ -67,12 +67,12 @@ describe("GET /api/articles", () => {
     // assert
     expect(response.status).toBe(200);
     expect(body.total).toBe(1);
-    expect(wordpress.getPostsByCategoryAndDestination).toHaveBeenCalledWith(
-      1,
-      2,
-      3,
-      "&exclude=1,2,3",
-      0
-    );
+    expect(wordpress.getPostsByCategoryAndDestination).toHaveBeenCalledWith({
+      destinationId: 2,
+      categoryId: 1,
+      perPage: 3,
+      exclude: [1, 2, 3],
+      offset: 0,
+    });
   });
 });

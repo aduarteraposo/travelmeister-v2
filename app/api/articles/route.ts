@@ -14,15 +14,17 @@ export async function GET(request: Request) {
     );
   }
 
-  const excludeParam = params.exclude ? `&exclude=${params.exclude}` : "";
+  const { categoryId, destinationId, perPage, offset } = params;
 
-  const data = await getPostsByCategoryAndDestination(
-    params.categoryId,
-    params.destinationId,
-    params.perPage,
-    excludeParam,
-    params.offset
-  );
+  const excludeIds = params.exclude.split(",").filter(Boolean).map(Number);
+
+  const data = await getPostsByCategoryAndDestination({
+    categoryId,
+    destinationId,
+    perPage,
+    offset,
+    exclude: excludeIds,
+  });
 
   return NextResponse.json(data);
 }

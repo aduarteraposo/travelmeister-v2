@@ -20,6 +20,7 @@ export type WPPost = {
   content: {
     rendered: string;
   };
+  article_category: number[];
   acf: {
     primary_destination: { ID: number; post_name: string };
     hero_image: number;

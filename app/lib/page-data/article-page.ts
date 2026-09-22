@@ -3,10 +3,19 @@ import { getArticlePlaceIds, normalizeArticle } from "../normalizers/article";
 import { mapById } from "../utils";
 import { getDestinationBySlug } from "../wordpress/destination";
 import { getPlacesByIds } from "../wordpress/place";
-import { getPostBySlug } from "../wordpress/post";
+import {
+  getPostBySlug,
+  getPostsByCategory,
+  getPostsByCategoryAndDestination,
+  getPostsByDestination,
+} from "../wordpress/post";
 import { normalizePlace } from "../normalizers/place";
 import { PlaceWithSection } from "@/app/types/app/place";
 import { notFound } from "next/navigation";
+import { WPPost } from "@/app/types/wordpress/post";
+import { PaginatedArticlesResponse } from "@/app/types/api/pagination";
+
+const NUMBER_OF_RELATED_ARTICLES = 10;
 
 export async function getArticlePageData(
   destinationSlug: string,
@@ -34,5 +43,93 @@ export async function getArticlePageData(
       }))
     );
 
-  return { canonicalDestination, article, allPlacesWithSections, heroImage };
+  const relatedArticles = await getRelatedArticles(post);
+
+  return {
+    canonicalDestination,
+    article,
+    allPlacesWithSections,
+    heroImage,
+    relatedArticles,
+  };
+}
+
+async function getRelatedArticles(post: WPPost): Promise<WPPost[]> {
+  const destinationId = post.acf.primary_destination.ID;
+  const categoryId = post.article_category[0];
+  const strategies: RelatedStrategy[] = [];
+
+  if (categoryId !== undefined) {
+    strategies.push((excludeIds, perPage) =>
+      getPostsByCategoryAndDestination({
+        destinationId,
+        categoryId,
+        perPage,
+        offset: 0,
+        exclude: excludeIds,
+      })
+    );
+  }
+
+  strategies.push((excludeIds, perPage) =>
+    getPostsByDestination({
+      destinationId,
+      perPage,
+      offset: 0,
+      exclude: excludeIds,
+    })
+  );
+
+  if (categoryId !== undefined) {
+    strategies.push((excludeIds, perPage) =>
+      getPostsByCategory({
+        categoryId,
+        perPage,
+        offset: 0,
+        exclude: excludeIds,
+      })
+    );
+  }
+
+  try {
+    return await collectRelatedArticles(
+      strategies,
+      post.id,
+      NUMBER_OF_RELATED_ARTICLES
+    );
+  } catch (error) {
+    console.warn(
+      `Failed to load related articles for post "${post.slug}" (id: ${post.id}):`,
+      error
+    );
+    return [];
+  }
+}
+
+type RelatedStrategy = (
+  excludeIds: number[],
+  perPage: number
+) => Promise<PaginatedArticlesResponse>;
+
+async function collectRelatedArticles(
+  strategies: RelatedStrategy[],
+  excludeSelf: number,
+  target: number
+) {
+  let collected: WPPost[] = [];
+  const excludeIds = [excludeSelf];
+
+  for (const strategy of strategies) {
+    const remaining = target - collected.length;
+
+    if (remaining <= 0) {
+      break;
+    }
+
+    const { articles } = await strategy(excludeIds, remaining);
+    collected = collected.concat(articles);
+    excludeIds.push(...articles.map((a) => a.id));
+  }
+
+  return collected;
 }

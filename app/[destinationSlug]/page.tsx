@@ -35,7 +35,7 @@ export default async function DestinationPage({ params }: DestinationProps) {
         />
         <Breadcrumbs destination={destination} />
         <div className="text-center mb-8 mx-auto w-10/12">
-          <h1 className="mb-6 text-7xl text-center font-outdoor">
+          <h1 className="my-1 md:mb-6 text-7xl text-center font-outdoor">
             {destination.title.rendered}
           </h1>
           <p>{destination.acf.hero_intro}</p>

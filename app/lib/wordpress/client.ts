@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 export const baseUrl = process.env.WORDPRESS_API_URL;
 export const REVALIDATE = {
-  day: 60 * 60 * 24,
+  day: 1,
 };
 
 type WordPressFetchOptions = {

@@ -1,7 +1,7 @@
 import { WPImage } from "./media";
 import { WPPlaceReference } from "./place";
 import { WPPostReference } from "./post";
-import { WPCategory } from "./taxonomy";
+import { WPArticleCategory } from "./taxonomy";
 
 export type WPDestinationReference = {
   ID: number;
@@ -51,7 +51,7 @@ export type WPLabeledPlace = {
 
 export type WPPostSection = {
   title: string;
-  category: WPCategory;
+  category: WPArticleCategory;
   manual_articles: WPPostReference[];
   initial_items_count: number;
   load_more_count: number;

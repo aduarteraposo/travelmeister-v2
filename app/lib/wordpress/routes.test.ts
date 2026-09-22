@@ -48,6 +48,42 @@ describe("getAllArticleRouteParams", () => {
   });
 });
 
+describe("getAllArticleRouteParams", () => {
+  it("skips articles with a missing or falsy primary_destination", async () => {
+    // arrange
+    global.fetch = vi.fn();
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () =>
+        [
+          {
+            id: 1,
+            slug: "article-1",
+            acf: {
+              primary_destination: {
+                post_name: "destination-1",
+              },
+            },
+          },
+          {
+            id: 2,
+            slug: "article-2",
+            acf: {
+              primary_destination: false,
+            },
+          },
+        ] as unknown as WPPost[],
+    } as Response);
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    // act
+    const result = await getAllArticleRouteParams();
+    // assert
+    expect(result).toEqual([
+      { destinationSlug: "destination-1", articleSlug: "article-1" },
+    ]);
+  });
+});
+
 describe("getAllDestinationRouteParams", () => {
   it("maps WP destinations into route params", async () => {
     // arrange

@@ -4,7 +4,7 @@ import {
 } from "../wordpress/destination";
 import { WPImage } from "../wordpress/media";
 import { WPPost } from "../wordpress/post";
-import { WPCategory } from "../wordpress/taxonomy";
+import { WPArticleCategory } from "../wordpress/taxonomy";
 import { LabeledPlace, Place } from "./place";
 
 export type Destination = {
@@ -54,7 +54,7 @@ export type TravelStyle = {
 
 export type ArticleSection = {
   title: string;
-  category: WPCategory;
+  category: WPArticleCategory;
   manual_articles: WPPost[];
   initial_items_count: number;
   load_more_count: number;

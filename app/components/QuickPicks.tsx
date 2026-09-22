@@ -13,7 +13,7 @@ export default function QuickPicks({
       <ul className="border-3 border-green-300 rounded-xl p-4 mb-32 flex flex-col gap-4">
         {quickPicks.map((pick, index) => (
           <li
-            className="flex gap-4 items-center"
+            className="flex flex-col md:flex-row gap-4 items-center"
             key={`${pick.place.slug}-${index}`}
           >
             <div className="basis-1/5 shrink-0 min-w-32 min-h-24">

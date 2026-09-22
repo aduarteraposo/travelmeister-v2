@@ -26,12 +26,14 @@ describe("ArticleLane", () => {
       {
         slug: "manual_article",
         title: { rendered: "Manual Article" },
+        acf: { primary_destination: { post_name: "test-destination" } },
       } as WPPost,
     ];
     const fetchedArticles = [
       {
         slug: "fetched_article",
         title: { rendered: "Fetched Article" },
+        acf: { primary_destination: { post_name: "test-destination" } },
       } as WPPost,
     ];
 
@@ -59,13 +61,33 @@ describe("ArticleLane", () => {
   it("renders the load more button when more articles are available", () => {
     // arrange
     const manualArticles = [
-      { slug: "manual_article_1", title: { rendered: "Manual Article 1" } },
-      { slug: "manual_article_2", title: { rendered: "Manual Article 2" } },
+      {
+        slug: "manual_article_1",
+        title: { rendered: "Manual Article 1" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
+      {
+        slug: "manual_article_2",
+        title: { rendered: "Manual Article 2" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
     ] as WPPost[];
     const fetchedArticles = [
-      { slug: "fetched_article_1", title: { rendered: "Fetched Article 1" } },
-      { slug: "fetched_article_2", title: { rendered: "Fetched Article 2" } },
-      { slug: "fetched_article_3", title: { rendered: "Fetched Article 3" } },
+      {
+        slug: "fetched_article_1",
+        title: { rendered: "Fetched Article 1" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
+      {
+        slug: "fetched_article_2",
+        title: { rendered: "Fetched Article 2" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
+      {
+        slug: "fetched_article_3",
+        title: { rendered: "Fetched Article 3" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
     ] as WPPost[];
 
     // act
@@ -93,13 +115,33 @@ describe("ArticleLane", () => {
   it("does not render the load more button when no more articles are available", () => {
     // arrange
     const manualArticles = [
-      { slug: "manual_article_1", title: { rendered: "Manual Article 1" } },
-      { slug: "manual_article_2", title: { rendered: "Manual Article 2" } },
+      {
+        slug: "manual_article_1",
+        title: { rendered: "Manual Article 1" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
+      {
+        slug: "manual_article_2",
+        title: { rendered: "Manual Article 2" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
     ] as WPPost[];
     const fetchedArticles = [
-      { slug: "fetched_article_1", title: { rendered: "Fetched Article 1" } },
-      { slug: "fetched_article_2", title: { rendered: "Fetched Article 2" } },
-      { slug: "fetched_article_3", title: { rendered: "Fetched Article 3" } },
+      {
+        slug: "fetched_article_1",
+        title: { rendered: "Fetched Article 1" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
+      {
+        slug: "fetched_article_2",
+        title: { rendered: "Fetched Article 2" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
+      {
+        slug: "fetched_article_3",
+        title: { rendered: "Fetched Article 3" },
+        acf: { primary_destination: { post_name: "test-destination" } },
+      },
     ] as WPPost[];
 
     // act

@@ -21,17 +21,13 @@ export default async function ArticleSections({
 
       const fetchLimit = remainingSlots > 0 ? remainingSlots : 1;
 
-      const excludeParam = manualIds.length
-        ? `&exclude=${manualIds.join(",")}`
-        : "";
-
-      const fetchedCategoryData = await getPostsByCategoryAndDestination(
-        section.category.term_id,
+      const fetchedCategoryData = await getPostsByCategoryAndDestination({
+        categoryId: section.category.term_id,
         destinationId,
-        fetchLimit,
-        excludeParam,
-        0
-      );
+        perPage: fetchLimit,
+        offset: 0,
+        exclude: manualIds,
+      });
 
       const initialFetchedArticles =
         remainingSlots > 0 ? fetchedCategoryData.articles : [];

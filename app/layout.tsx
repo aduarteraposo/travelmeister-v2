@@ -3,6 +3,7 @@ import { Noto_Sans, Geist_Mono, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import localFont from "next/font/local";
+import Navbar from "./components/Navbar";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body
         className={`${notoSans.variable} ${geistMono.variable} ${instrumentSans.variable} ${outdoorInks.variable}  antialiased`}
       >
+        <Navbar />
         <main className="max-w-6xl px-4 py-10 mx-auto">
           <Providers>{children}</Providers>
         </main>

@@ -1,22 +1,27 @@
 "use client";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import PlaceComparisonTable from "./PlaceComparisonTable";
 import PlaceList from "./PlaceList";
 import Filters from "./Filters";
 import { PlaceWithSection } from "../types/app/place";
+import { WPPost } from "../types/wordpress/post";
+import ArticleTeaser from "./ArticleTeaser";
 
 export default function FilterContainer({
   places,
+  relatedArticles,
 }: {
   places: PlaceWithSection[];
+  relatedArticles: WPPost[];
 }) {
   const [activeFilter, setActiveFilter] = useState<string>("all");
-  const filteredPlaces =
-    activeFilter === "all"
+  const filteredPlaces = useMemo(() => {
+    return activeFilter === "all"
       ? places
       : places.filter((place) =>
           place.acf.hotel_filters.includes(activeFilter)
         );
+  }, [activeFilter, places]);
 
   const availableFilters = [
     "all",
@@ -74,7 +79,7 @@ export default function FilterContainer({
         </div>
         <div
           ref={rightColumnRef}
-          className={`basis-1/4 top-8 ${
+          className={`basis-1/4 top-20 ${
             rightColumnAbsolute ? "relative" : "sticky"
           }`}
         >
@@ -83,20 +88,10 @@ export default function FilterContainer({
               rightColumnAbsolute ? "absolute" : ""
             }`}
           >
-            {/* Temporary placeholders */}
-
-            <h3 className="text-2xl font-bold mb-4">Related Articles</h3>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
-            <div className="bg-gray-300 w-full h-48 mb-8"></div>
+            <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
+            {relatedArticles.map((article) => (
+              <ArticleTeaser key={article.slug} article={article} />
+            ))}
           </div>
         </div>
       </div>

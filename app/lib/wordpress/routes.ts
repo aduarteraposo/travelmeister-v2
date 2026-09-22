@@ -37,10 +37,20 @@ export async function getAllArticleRouteParams(): Promise<
     }
   );
 
-  const routeParams = articles.map((article) => ({
-    destinationSlug: article.acf.primary_destination.post_name,
-    articleSlug: article.slug,
-  }));
+  const routeParams: ArticleRouteParams[] = [];
+
+  for (const article of articles) {
+    const destinationSlug = article.acf.primary_destination?.post_name;
+
+    if (!destinationSlug) {
+      console.warn(
+        `Skipping article "${article.slug}" (id: ${article.id}): missing or invalid acf.primary_destination.`
+      );
+      continue;
+    }
+
+    routeParams.push({ destinationSlug, articleSlug: article.slug });
+  }
 
   return routeParams;
 }

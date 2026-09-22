@@ -56,15 +56,16 @@ export default function PlaceCard({ place }: { place: PlaceWithSection }) {
         {place.acf.not_ideal_if}
       </p>
       <div className="mt-8 flex flex-wrap gap-3 md:gap-4">
-        {place.acf.cta_links.map((item) => (
-          <Link
-            className="bg-black text-white font-medium rounded-full py-2.5 px-6 w-full md:w-auto"
-            key={item.label}
-            href={item.url}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {place.acf.cta_links &&
+          place.acf.cta_links.map((item) => (
+            <Link
+              className="bg-black text-white font-medium rounded-full py-2.5 px-6 w-full md:w-auto"
+              key={item.label}
+              href={item.url}
+            >
+              {item.label}
+            </Link>
+          ))}
       </div>
     </li>
   );

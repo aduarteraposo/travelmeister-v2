@@ -18,10 +18,14 @@ function getPlaceHighlightsFromTags(
   tags: { label: string }[],
   amount: number = tags.length
 ) {
-  return tags
-    .slice(0, amount)
-    .map((tag) => tag.label)
-    .join(", ");
+  const preparedTags =
+    tags.length > 0
+      ? tags
+          .slice(0, amount)
+          .map((tag) => tag.label)
+          .join(", ")
+      : "";
+  return preparedTags;
 }
 
 function getPlaceCTA(place: Place) {
@@ -32,7 +36,10 @@ function getPlaceCTA(place: Place) {
 }
 
 function getPlaceHighlights(place: Place) {
-  return getPlaceHighlightsFromTags(place.acf.editor_tags, 3);
+  return getPlaceHighlightsFromTags(
+    place.acf.editor_tags ? place.acf.editor_tags : [],
+    3
+  );
 }
 
 export function getPlaceAttributesArray(places: Place[]) {

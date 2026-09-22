@@ -1,4 +1,4 @@
-export type WPCategory = {
+export type WPArticleCategory = {
   term_id: number;
   name: string;
   slug: string;

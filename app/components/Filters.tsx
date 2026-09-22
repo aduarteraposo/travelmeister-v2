@@ -35,12 +35,12 @@ export default function Filters({
   }
 
   return (
-    <ul className="flex gap-3 mb-12" ref={comparisonRef}>
+    <ul className="flex gap-3 mb-12 overflow-scroll" ref={comparisonRef}>
       {filters.map((filter) => (
         <li key={filter}>
           <button
             onClick={() => handleFilterClick(filter)}
-            className={`rounded-full py-1 px-4 text-sm cursor-pointer font-medium ${
+            className={`rounded-full py-1 px-4 text-sm cursor-pointer font-medium whitespace-nowrap ${
               activeFilter === filter ? "bg-green-300" : "bg-gray-300"
             }`}
           >
