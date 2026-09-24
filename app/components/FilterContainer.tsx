@@ -28,46 +28,10 @@ export default function FilterContainer({
     ...new Set(places.flatMap((place) => place.acf.hotel_filters)),
   ];
 
-  const leftColumnRef = useRef<HTMLDivElement | null>(null);
-  const rightColumnRef = useRef<HTMLDivElement | null>(null);
-  const [rightColumnAbsolute, setRightColumnAbsolute] = useState(false);
-
-  useEffect(() => {
-    const leftCol = leftColumnRef.current;
-    const rightCol = rightColumnRef.current;
-
-    if (!leftCol || !rightCol) return;
-
-    const updateSticky = () => {
-      if (leftCol.clientHeight <= rightCol.clientHeight) {
-        setRightColumnAbsolute(true);
-      }
-    };
-
-    updateSticky();
-
-    const resizeObserver = new ResizeObserver(() => {
-      updateSticky();
-    });
-
-    resizeObserver.observe(leftCol);
-    window.addEventListener("resize", updateSticky);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", updateSticky);
-    };
-  }, []);
-
   return (
     <>
-      <div
-        className={`w-full lg:flex gap-12 relative ${
-          rightColumnAbsolute ? "items-stretch" : "items-start"
-        }`}
-        ref={leftColumnRef}
-      >
-        <div className="basis-1 lg:basis-3/4 lg:max-w-3/4 shrink-0">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-12 items-start">
+        <div className="lg:col-span-3">
           <div>
             <Filters
               filters={availableFilters}
@@ -77,25 +41,23 @@ export default function FilterContainer({
             <PlaceList places={filteredPlaces} />
           </div>
         </div>
-        <div
-          ref={rightColumnRef}
-          className={`basis-1/4 top-20 ${
-            rightColumnAbsolute ? "relative" : "sticky"
-          }`}
-        >
-          <div
-            className={`h-full right-0 top 0 max-h-full min-h-full w-full overflow-y-auto ${
-              rightColumnAbsolute ? "absolute" : ""
-            }`}
-          >
-            <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
+        <div className="hidden lg:block lg:col-span-1 sticky top-20 h-[calc(100dvh-130px)]">
+          <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
+          <div className="h-full overflow-y-auto">
             {relatedArticles.map((article) => (
               <ArticleTeaser key={article.slug} article={article} />
             ))}
           </div>
         </div>
       </div>
-      <div className="mt-40">
+      <div className="lg:col-span-4 mt-12 lg:mt-40">
+        <h2 className="font-outdoor text-5xl md:text-6xl mb-1">
+          Compare your favorites
+        </h2>
+        <p className="mb-8">
+          Select all or check the boxes of the stays you want to see
+          side-by-side.
+        </p>
         <Filters
           filters={availableFilters}
           setFilter={setActiveFilter}
@@ -108,6 +70,14 @@ export default function FilterContainer({
             allPlaces={places}
           />
         </Suspense>
+      </div>
+      <div className="lg:hidden mt-12">
+        <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
+        <div className="h-full overflow-y-auto">
+          {relatedArticles.map((article) => (
+            <ArticleTeaser key={article.slug} article={article} />
+          ))}
+        </div>
       </div>
     </>
   );
