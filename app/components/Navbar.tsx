@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavbarItem from "./NavbarItem";
 
 const NAV_LINKS = [
@@ -16,6 +16,23 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [prevPathname, setPrevPathname] = useState(pathname);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
@@ -25,11 +42,17 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 py-3 bg-white shadow transition-all duration-300 ease-out">
       <div className="max-w-6xl flex flex-col items-end md:items-center relative mx-auto px-4">
-        <Link href="/" className="absolute left-4 top-[2px] md:-top-2">
+        <Link
+          href="/"
+          className={`
+            ${isScrolled ? "-top-3" : " top-[2px] md:-top-2"} absolute left-4`}
+        >
           <img
-            src="/logo.svg"
+            src={isScrolled ? "/logo_small.svg" : "/logo.svg"}
             alt="Travelmeister - Home"
-            className="w-16 md:w-24"
+            className={`${
+              isScrolled ? "w-12 md:w-12" : "w-16 md:w-24"
+            } transition-all duration-200`}
           />
         </Link>
         <button
