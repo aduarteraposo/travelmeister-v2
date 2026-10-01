@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Noto_Sans, Geist_Mono, Instrument_Sans } from "next/font/google";
+import { Noto_Sans, Geist_Mono, Instrument_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import localFont from "next/font/local";
 import Navbar from "./components/Navbar";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -40,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", inter.variable)}>
       <body
         className={`${notoSans.variable} ${geistMono.variable} ${instrumentSans.variable} ${outdoorInks.variable}  antialiased`}
       >
