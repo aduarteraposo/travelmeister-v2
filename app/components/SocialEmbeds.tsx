@@ -26,7 +26,7 @@ export default function SocialEmbeds({
         without a professional lens.
       </p>
       {inView ? (
-        <div className="flex gap-8 items-start overflow-x-auto">
+        <div className="flex gap-8 items-start overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <div className="max-w-[calc(100dvw-2rem)] min-w-[calc(100dvw-2rem)] md:min-w-auto min-h-137.5 md:min-h-auto md:max-w-auto shrink-0 border-gray-300 border rounded-xl">
             <h3 className="text-lg font-bold px-6 py-4 bg-black text-white text-center rounded-t-xl">
               Motto Hotel Chelsea New York

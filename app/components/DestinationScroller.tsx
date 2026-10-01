@@ -6,5 +6,9 @@ export default function DestinationScroller({
 }: {
   children: ReactNode;
 }) {
-  return <ul className="flex  gap-4 overflow-auto">{children}</ul>;
+  return (
+    <ul className="flex  gap-4 overflow-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      {children}
+    </ul>
+  );
 }

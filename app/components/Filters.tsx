@@ -35,7 +35,10 @@ export default function Filters({
   }
 
   return (
-    <ul className="flex gap-3 mb-12 overflow-scroll" ref={comparisonRef}>
+    <ul
+      className="flex gap-3 mb-12 overflow-scroll [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      ref={comparisonRef}
+    >
       {filters.map((filter) => (
         <li key={filter}>
           <button

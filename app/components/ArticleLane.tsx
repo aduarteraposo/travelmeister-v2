@@ -83,7 +83,7 @@ export default function ArticleLane({
   return (
     <>
       <h3 className="text-lg font-semibold mb-3">{title}</h3>
-      <ul className="w-full overflow-x-auto flex gap-6 pb-6 mb-4">
+      <ul className="w-full overflow-x-auto flex gap-6 pb-6 mb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {allArticles.map((article) => {
           return (
             <li key={article.slug}>
