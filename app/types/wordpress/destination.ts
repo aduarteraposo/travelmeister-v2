@@ -12,8 +12,8 @@ export type WPDestination = {
   slug: string;
   title: { rendered: string };
   acf: {
-    destination_type: string;
-    parent_destination: WPDestinationReference | false;
+    destination_type: { term_id: number; slug: string };
+    parent_destination: WPDestinationReference[] | "";
     hero_image: WPImage;
     hero_intro: string;
     card_description: string;
@@ -63,4 +63,9 @@ export type WPPracticalInfo = {
   budget_note: string;
   transport_note: string;
   food_tip: string;
+};
+
+export type WPDestinationType = {
+  id: number;
+  slug: string;
 };

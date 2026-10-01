@@ -82,7 +82,7 @@ export default function ArticleLane({
 
   return (
     <>
-      <h3 className="text-lg font-semibold mb-4">{title}</h3>
+      <h3 className="text-lg font-semibold mb-3">{title}</h3>
       <ul className="w-full overflow-x-auto flex gap-6 pb-6 mb-4">
         {allArticles.map((article) => {
           return (

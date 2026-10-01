@@ -12,8 +12,8 @@ export type Destination = {
   slug: string;
   title: { rendered: string };
   acf: {
-    destination_type: string;
-    parent_destination: WPDestinationReference | false;
+    destination_type: { term_id: number; slug: string };
+    parent_destination: WPDestinationReference[] | "";
     hero_image: WPImage;
     hero_intro: string;
     card_description: string;

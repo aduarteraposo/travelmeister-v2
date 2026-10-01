@@ -1,4 +1,7 @@
-import { WPDestination } from "@/app/types/wordpress/destination";
+import {
+  WPDestination,
+  WPDestinationType,
+} from "@/app/types/wordpress/destination";
 import { REVALIDATE, wordpressFetch } from "./client";
 import { Destination } from "@/app/types/app/destination";
 
@@ -26,24 +29,23 @@ export async function getDestinationById(id: number) {
   return data;
 }
 
+function getParentDestinationId(
+  destination: WPDestination | Destination
+): number | undefined {
+  const parent = destination.acf.parent_destination;
+  return parent ? parent[0]?.ID : undefined;
+}
+
 export async function getParentDestinations(
   destination: WPDestination | Destination
 ): Promise<(WPDestination | Destination)[]> {
-  if (!destination.acf.parent_destination) {
-    return [destination];
-  }
+  let ancestorTree: (WPDestination | Destination)[] = [destination];
+  let parentId = getParentDestinationId(destination);
 
-  const parentDestination = await getDestinationById(
-    destination.acf.parent_destination.ID
-  );
-
-  let ancestorTree = [parentDestination, destination];
-
-  while (ancestorTree[0] && ancestorTree[0].acf.parent_destination) {
-    const directParent = await getDestinationById(
-      ancestorTree[0].acf.parent_destination?.ID
-    );
+  while (parentId) {
+    const directParent = await getDestinationById(parentId);
     ancestorTree = [directParent, ...ancestorTree];
+    parentId = getParentDestinationId(directParent);
   }
 
   return ancestorTree;
@@ -60,6 +62,22 @@ export async function getDestinationsByIds(
       revalidate: REVALIDATE.day,
       tags: [`destinations:ids:${ids.join(",")}`, "destinations"],
     }
+  );
+
+  return data;
+}
+
+export async function getDestinationTypeBySlug(slug: string) {
+  const data = await wordpressFetch<WPDestinationType[]>(
+    `/destination_type?slug=${slug}`
+  );
+
+  return data;
+}
+
+export async function getDestinationsByType(typeId: number) {
+  const data = await wordpressFetch<WPDestination[]>(
+    `/destination?destination_type=${typeId}&acf_format=standard`
   );
 
   return data;

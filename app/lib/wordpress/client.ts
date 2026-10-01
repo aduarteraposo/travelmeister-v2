@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 export const baseUrl = process.env.WORDPRESS_API_URL;
 export const REVALIDATE = {
-  day: 1,
+  day: 60 * 60 * 24,
 };
 
 type WordPressFetchOptions = {
@@ -22,6 +22,7 @@ export async function wordpressFetch<T>(
   });
 
   if (!res.ok) {
+    console.error("Failed on this endpoint: ", endpoint);
     notFound();
   }
 
@@ -45,6 +46,7 @@ export async function wordpressFetchWithTotal<T>(
   });
 
   if (!res.ok) {
+    console.error("Failed on this endpoint: ", endpoint);
     notFound();
   }
 

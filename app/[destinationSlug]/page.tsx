@@ -2,12 +2,12 @@ import { getAllDestinationRouteParams } from "@/app/lib/wordpress/routes";
 import Image from "next/image";
 import Tags from "../components/Tags";
 import TravelStyleTabs from "../components/TravelStyleTabs";
-import SubDestinations from "../components/SubDestinations";
 import PracticalInfo from "../components/PracticalInfo";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Recommendations from "../components/Recommendations";
 import ArticleSections from "../components/RelatedArticleSections";
 import { getDestinationPageData } from "../lib/page-data/destination-page";
+import SubDestinations from "../components/SubDestinations";
 
 type DestinationProps = {
   params: Promise<{
@@ -53,7 +53,6 @@ export default async function DestinationPage({ params }: DestinationProps) {
         parentDestination={destination}
         subdestinations={destination.acf.featured_subdestinations}
       />
-
       <Recommendations
         hotels={destination.acf.featured_hotels}
         restaurants={destination.acf.featured_restaurants}

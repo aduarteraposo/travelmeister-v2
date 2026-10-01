@@ -1,28 +1,29 @@
 import { Destination } from "../types/app/destination";
 import { WPDestination } from "../types/wordpress/destination";
-import SubDestination from "./SubDestination";
+import SubDestinationTeaser from "./SubDestinationTeaser";
 
 export default function SubDestinations({
-  parentDestination,
   subdestinations,
+  parentDestination,
 }: {
-  parentDestination: Destination;
   subdestinations: WPDestination[];
+  parentDestination: Destination;
 }) {
   return (
     <section className="my-10">
-      {parentDestination.acf.destination_type === "city" && (
-        <h2 className="text-gray-800 mb-2 font-outdoor text-[3.375rem]/14">
-          Neighborhoods
+      {
+        <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
+          {parentDestination.acf.destination_type.slug === "city"
+            ? "Neighborhoods"
+            : "Top Destinations"}
         </h2>
-      )}
-
+      }
       <ul className="flex  gap-4 overflow-auto">
         {subdestinations.map((subdestination) => (
-          <SubDestination
+          <SubDestinationTeaser
             key={subdestination.slug}
             destination={subdestination}
-            parentDestinationType={parentDestination.acf.destination_type}
+            parentDestination={parentDestination}
           />
         ))}
       </ul>
