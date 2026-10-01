@@ -6,6 +6,7 @@ import Filters from "./Filters";
 import { PlaceWithSection } from "../types/app/place";
 import { WPPost } from "../types/wordpress/post";
 import ArticleTeaser from "./ArticleTeaser";
+import SocialEmbeds from "./SocialEmbeds";
 
 export default function FilterContainer({
   places,
@@ -71,9 +72,10 @@ export default function FilterContainer({
           />
         </Suspense>
       </div>
+      <SocialEmbeds places={filteredPlaces} />
       <div className="lg:hidden mt-12">
         <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
-        <div className="h-full overflow-y-auto">
+        <div>
           {relatedArticles.map((article) => (
             <ArticleTeaser key={article.slug} article={article} />
           ))}
