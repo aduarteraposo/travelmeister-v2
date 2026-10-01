@@ -39,7 +39,7 @@ function setupNavigationMocks({
     forward: vi.fn(),
     refresh: vi.fn(),
     prefetch: vi.fn(),
-  });
+  } as unknown as ReturnType<typeof navigation.useRouter>);
 
   return {
     replace,

@@ -6,6 +6,7 @@ import { getPlaceAttributesArray } from "../lib/place/place-comparison";
 import type { Place } from "../types/app/place";
 import { useRef, useState } from "react";
 import usePlaceComparison from "../hooks/usePlaceComparison";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function PlaceComparisonTable({
   eligiblePlaces,
@@ -77,20 +78,17 @@ export default function PlaceComparisonTable({
         >
           Clear All
         </button>
+
         <ul className="flex flex-wrap gap-4">
           {allPlaces.map((place) => (
             <li key={place.slug} className="flex gap-2 items-center">
-              <label htmlFor={place.slug}>
-                <input
-                  className="mr-2"
-                  type="checkbox"
-                  name={place.title}
-                  id={place.slug}
+              <label htmlFor={place.slug} className="flex items-center">
+                <Checkbox
                   checked={selectedPlaceIds.includes(place.id)}
-                  onChange={(e) =>
-                    handleCheckboxChange(place.id, e.currentTarget.checked)
-                  }
+                  id={place.slug}
+                  onCheckedChange={(e) => handleCheckboxChange(place.id, e)}
                   disabled={!isEligible(place)}
+                  className="mr-2"
                 />
                 {place.title}
               </label>
@@ -112,7 +110,7 @@ export default function PlaceComparisonTable({
                 {placeNameArray.map((name, index) => (
                   <th
                     key={`${name}_${index}`}
-                    className="p-2 pr-8 w-70 max-w-70 truncate"
+                    className="p-2 mr-8 w-70 max-w-70 truncate"
                   >
                     {name}
                   </th>
@@ -128,14 +126,14 @@ export default function PlaceComparisonTable({
                   {attribute[1].map((item, index) =>
                     typeof item === "string" ? (
                       <td
-                        className="p-2 pr-8 border-b border-gray-300 text-center"
+                        className="p-2 mr-8 border-b border-gray-300 text-center"
                         key={`${item}_${index}`}
                       >
                         {item}
                       </td>
                     ) : (
                       <td
-                        className="py-4 pr-8 text-center"
+                        className="p-4 mr-8 text-center"
                         key={`${item.url}_${index}`}
                       >
                         {item.url && (
@@ -161,7 +159,7 @@ export default function PlaceComparisonTable({
           <div className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-linear-to-l from-white to-transparent" />
         )}
       </div>
-      <div className="max-w-full overflow-scroll mt-16">
+      {/* <div className="max-w-full overflow-scroll mt-16">
         <table className="table-auto border-collapse border border-gray-400 rounded-sm">
           <thead className="bg-black text-white">
             <tr className="text-left">
@@ -204,7 +202,7 @@ export default function PlaceComparisonTable({
             )}
           </tbody>
         </table>
-      </div>
+      </div> */}
     </>
   );
 }

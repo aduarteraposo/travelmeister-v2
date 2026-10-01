@@ -9,7 +9,9 @@ export default function QuickPicks({
 }) {
   return (
     <>
-      <h2 className="text-6xl font-outdoor mb-2">The Long Story Short</h2>
+      <h2 className="text-5xl md:text-6xl font-outdoor mb-2">
+        The Long Story Short
+      </h2>
       <ul className="border-3 border-green-300 rounded-xl p-4 mb-32 flex flex-col gap-4">
         {quickPicks.map((pick, index) => (
           <li

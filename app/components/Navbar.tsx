@@ -44,14 +44,15 @@ export default function Navbar() {
       <div className="max-w-6xl flex flex-col items-end md:items-center relative mx-auto px-4">
         <Link
           href="/"
+          aria-label="Travelmeister - Home"
           className={`
-            ${isScrolled ? "-top-3" : " top-[2px] md:-top-2"} absolute left-4`}
+            ${isScrolled ? "-top-3" : "top-0.5 md:-top-2"} absolute left-4`}
         >
           <img
             src={isScrolled ? "/logo_small.svg" : "/logo.svg"}
-            alt="Travelmeister - Home"
+            alt="Travelmeister Logo"
             className={`${
-              isScrolled ? "w-12 md:w-12" : "w-16 md:w-24"
+              isScrolled ? "w-12 md:w-12" : "w-16 md:w-22"
             } transition-all duration-200`}
           />
         </Link>
@@ -77,13 +78,12 @@ export default function Navbar() {
               {NAV_LINKS.map((item) => {
                 const isActive = pathname === item.href;
                 return (
-                  <li
-                    key={item.href}
-                    className={`py-1 px-2 hover:text-green-300 ${
-                      isActive ? "border-b-3 border-b-green-300" : ""
-                    }`}
-                  >
-                    <NavbarItem href={item.href} label={item.label} />
+                  <li key={item.href} className="py-1 px-2">
+                    <NavbarItem
+                      href={item.href}
+                      label={item.label}
+                      isActive={isActive}
+                    />
                   </li>
                 );
               })}
