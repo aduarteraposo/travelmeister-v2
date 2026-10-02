@@ -3,7 +3,10 @@ import FilterContainer from "@/app/components/FilterContainer";
 import QuickPicks from "@/app/components/QuickPicks";
 import { getAllArticleRouteParams } from "@/app/lib/wordpress/routes";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { getArticlePageData } from "@/app/lib/page-data/article-page";
+import { getPostBySlug } from "@/app/lib/wordpress/post";
+import { htmlToPlainText, toMetaDescription } from "@/app/lib/metadata";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -14,6 +17,21 @@ type ArticlePageProps = {
 
 export async function generateStaticParams() {
   return await getAllArticleRouteParams();
+}
+
+export async function generateMetadata({
+  params,
+}: ArticlePageProps): Promise<Metadata> {
+  const { destinationSlug, articleSlug } = await params;
+  // Same request as in the page, so Next.js reuses the response.
+  const post = await getPostBySlug(articleSlug);
+
+  return {
+    title: post ? htmlToPlainText(post.title.rendered) : undefined,
+    description: toMetaDescription(post?.excerpt.rendered),
+    // Query params like ?compare= or ?utm_source= point to the same content.
+    alternates: { canonical: `/${destinationSlug}/${articleSlug}` },
+  };
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {

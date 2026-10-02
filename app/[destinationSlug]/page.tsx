@@ -1,5 +1,6 @@
 import { getAllDestinationRouteParams } from "@/app/lib/wordpress/routes";
 import Image from "next/image";
+import type { Metadata } from "next";
 import Tags from "../components/Tags";
 import TravelStyleTabs from "../components/TravelStyleTabs";
 import PracticalInfo from "../components/PracticalInfo";
@@ -8,6 +9,8 @@ import Recommendations from "../components/Recommendations";
 import ArticleSections from "../components/RelatedArticleSections";
 import { getDestinationPageData } from "../lib/page-data/destination-page";
 import SubDestinations from "../components/SubDestinations";
+import { getDestinationBySlug } from "../lib/wordpress/destination";
+import { htmlToPlainText, toMetaDescription } from "../lib/metadata";
 
 type DestinationProps = {
   params: Promise<{
@@ -17,6 +20,24 @@ type DestinationProps = {
 
 export async function generateStaticParams() {
   return getAllDestinationRouteParams();
+}
+
+export async function generateMetadata({
+  params,
+}: DestinationProps): Promise<Metadata> {
+  const { destinationSlug } = await params;
+  // Same request as in the page, so Next.js reuses the response.
+  const destination = await getDestinationBySlug(destinationSlug);
+
+  return {
+    title: destination
+      ? htmlToPlainText(destination.title.rendered)
+      : undefined,
+    description: toMetaDescription(
+      destination?.acf.card_description || destination?.acf.hero_intro
+    ),
+    alternates: { canonical: `/${destinationSlug}` },
+  };
 }
 
 export default async function DestinationPage({ params }: DestinationProps) {
