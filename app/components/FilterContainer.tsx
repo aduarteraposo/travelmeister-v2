@@ -1,12 +1,11 @@
 "use client";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import PlaceComparisonTable from "./PlaceComparisonTable";
+import { useMemo, useState } from "react";
+import PlaceComparisonSection from "./PlaceComparisonSection";
 import PlaceList from "./PlaceList";
 import Filters from "./Filters";
 import { PlaceWithSection } from "../types/app/place";
 import { WPPost } from "../types/wordpress/post";
 import ArticleTeaser from "./ArticleTeaser";
-import SocialEmbeds from "./SocialEmbeds";
 
 export default function FilterContainer({
   places,
@@ -65,14 +64,14 @@ export default function FilterContainer({
           activeFilter={activeFilter}
           fixed={true}
         />
-        <Suspense fallback={null}>
-          <PlaceComparisonTable
-            eligiblePlaces={filteredPlaces}
-            allPlaces={places}
-          />
-        </Suspense>
+        <PlaceComparisonSection
+          allPlaces={places}
+          filteredPlaces={filteredPlaces}
+          filters={availableFilters}
+          setFilter={setActiveFilter}
+          activeFilter={activeFilter}
+        />
       </div>
-      <SocialEmbeds places={filteredPlaces} />
       <div className="lg:hidden mt-12">
         <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
         <div>

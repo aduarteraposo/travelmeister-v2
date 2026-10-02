@@ -18,7 +18,7 @@ export default function SubDestinations({
             : "Top Destinations"}
         </h2>
       }
-      <ul className="flex  gap-4 overflow-auto">
+      <ul className="flex  gap-4 overflow-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {subdestinations.map((subdestination) => (
           <SubDestinationTeaser
             key={subdestination.slug}

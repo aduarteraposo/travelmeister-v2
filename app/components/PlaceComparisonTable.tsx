@@ -3,32 +3,16 @@
 import Link from "next/link";
 import { slugify } from "../lib/utils";
 import { getPlaceAttributesArray } from "../lib/place/place-comparison";
-import type { Place } from "../types/app/place";
+import type { Place, PlaceWithSection } from "../types/app/place";
 import { useRef, useState } from "react";
-import usePlaceComparison from "../hooks/usePlaceComparison";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export default function PlaceComparisonTable({
-  eligiblePlaces,
-  allPlaces,
+  visiblePlaces,
 }: {
-  eligiblePlaces: Place[];
-  allPlaces: Place[];
+  visiblePlaces: PlaceWithSection[];
 }) {
-  const {
-    selectedPlaceIds,
-    visibleComparisonPlaces,
-    selectAllPlaces,
-    clearAllPlaces,
-    handleCheckboxChange,
-    isEligible,
-  } = usePlaceComparison({
-    allPlaces,
-    eligiblePlaces,
-  });
-
-  const placeNameArray = visibleComparisonPlaces.map((place) => place.title);
-  const placeAttributesArray = getPlaceAttributesArray(visibleComparisonPlaces);
+  const placeNameArray = visiblePlaces.map((place) => place.title);
+  const placeAttributesArray = getPlaceAttributesArray(visiblePlaces);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftScrollFade, setShowLeftScrollFade] = useState(false);
   const [showRightScrollFade, setShowRightScrollFade] = useState(false);
@@ -63,39 +47,6 @@ export default function PlaceComparisonTable({
 
   return (
     <>
-      <div>
-        <button
-          type="button"
-          onClick={selectAllPlaces}
-          className="rounded-full px-3 py-1 bg-black text-white mr-4 mb-4 text-sm"
-        >
-          Select All
-        </button>
-        <button
-          type="button"
-          onClick={clearAllPlaces}
-          className="rounded-full px-3 py-1 bg-black text-white text-sm"
-        >
-          Clear All
-        </button>
-
-        <ul className="flex flex-wrap gap-4">
-          {allPlaces.map((place) => (
-            <li key={place.slug} className="flex gap-2 items-center">
-              <label htmlFor={place.slug} className="flex items-center">
-                <Checkbox
-                  checked={selectedPlaceIds.includes(place.id)}
-                  id={place.slug}
-                  onCheckedChange={(e) => handleCheckboxChange(place.id, e)}
-                  disabled={!isEligible(place)}
-                  className="mr-2"
-                />
-                {place.title}
-              </label>
-            </li>
-          ))}
-        </ul>
-      </div>
       <div className="relative my-8">
         <div
           onScroll={handleScroll}
@@ -172,7 +123,7 @@ export default function PlaceComparisonTable({
             </tr>
           </thead>
           <tbody>
-            {visibleComparisonPlaces.map((place) =>
+            {visiblePlaces.map((place) =>
               place.acf.show_in_table ? (
                 <tr className="" key={slugify(place.title)}>
                   <td className="p-2 border border-gray-300">{place.title}</td>
