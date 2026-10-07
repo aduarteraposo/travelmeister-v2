@@ -21,14 +21,19 @@ export async function getArticlePageData(
   destinationSlug: string,
   articleSlug: string
 ) {
-  const canonicalDestination = await getDestinationBySlug(destinationSlug);
-  const post = await getPostBySlug(articleSlug);
+  const [canonicalDestination, post] = await Promise.all([
+    getDestinationBySlug(destinationSlug),
+    getPostBySlug(articleSlug),
+  ]);
 
   if (!post) {
     notFound();
   }
 
-  if (canonicalDestination.id !== post.acf.primary_destination.ID) {
+  if (
+    !canonicalDestination ||
+    canonicalDestination.id !== post.acf.primary_destination?.ID
+  ) {
     notFound();
   }
 
