@@ -34,10 +34,10 @@ export type WPPost = {
 };
 
 export type WPQuickPick = {
-  pick_label: string;
-  reason: string;
-  cta_text: string;
-  place: WPPlaceReference;
+  label?: string;
+  reason?: string;
+  cta_text?: string;
+  item?: WPPlaceReference | false | null;
 };
 
 export type WPPlaceSection = {

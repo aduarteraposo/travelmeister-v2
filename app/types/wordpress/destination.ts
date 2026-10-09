@@ -30,7 +30,7 @@ export type WPDestination = {
 };
 
 export type WPTravelStyle = {
-  style: { term_id: number; name: string; slug: string };
+  style: WPTravelStylereference;
   summary: string;
   where_to_stay: {
     stay_note: string;
@@ -67,5 +67,11 @@ export type WPPracticalInfo = {
 
 export type WPDestinationType = {
   id: number;
+  slug: string;
+};
+
+export type WPTravelStylereference = {
+  term_id: number;
+  name: string;
   slug: string;
 };
