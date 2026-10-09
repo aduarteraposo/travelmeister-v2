@@ -1,6 +1,6 @@
 import { Article } from "@/app/types/app/article";
 import { Place } from "@/app/types/app/place";
-import { WPPost } from "@/app/types/wordpress/post";
+import { WPPost, WPQuickPick } from "@/app/types/wordpress/post";
 
 export function normalizeArticle(
   post: WPPost,
@@ -22,10 +22,21 @@ export function normalizeArticle(
           }))
         : [],
       quick_picks: Array.isArray(post.acf.quick_picks)
-        ? post.acf.quick_picks.map((pick) => ({
-            ...pick,
-            place: placesById[pick.place.ID],
-          }))
+        ? post.acf.quick_picks.flatMap((pick: WPQuickPick) => {
+            if (!pick?.item || typeof pick.item !== "object") return [];
+
+            const item = placesById[pick.item.ID];
+            if (!item) return [];
+
+            return [
+              {
+                label: pick.label ?? "",
+                reason: pick.reason ?? "",
+                cta_text: pick.cta_text || "Check prices",
+                item: placesById[pick.item.ID],
+              },
+            ];
+          })
         : [],
     },
   };
@@ -43,7 +54,7 @@ export function getArticlePlaceIds(post: WPPost): number[] {
     : [];
 
   const quickPickPlaceIds = Array.isArray(post.acf.quick_picks)
-    ? post.acf.quick_picks.map((pick) => pick.place.ID)
+    ? post.acf.quick_picks.map((pick) => pick.item.ID)
     : [];
 
   return [...new Set([...listSectionPlaceIds, ...quickPickPlaceIds])];
