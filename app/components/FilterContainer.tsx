@@ -3,30 +3,32 @@ import { useMemo, useState } from "react";
 import PlaceComparisonSection from "./PlaceComparisonSection";
 import PlaceList from "./PlaceList";
 import Filters from "./Filters";
-import { PlaceWithSection } from "../types/app/place";
-import { WPPost } from "../types/wordpress/post";
+import { Place, WithSection } from "../types/app/place";
+import { CleanArticle } from "../types/app/article";
 import ArticleTeaser from "./ArticleTeaser";
+import { getAvailableFilters } from "../lib/filters";
 
 export default function FilterContainer({
   places,
   relatedArticles,
 }: {
-  places: PlaceWithSection[];
-  relatedArticles: WPPost[];
+  places: WithSection<Place>[];
+  relatedArticles: CleanArticle[];
 }) {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const filteredPlaces = useMemo(() => {
     return activeFilter === "all"
       ? places
-      : places.filter((place) =>
-          place.acf.hotel_filters.includes(activeFilter)
+      : places.filter(
+          (place) =>
+            place.filters.some((filter) => filter.slug === activeFilter) ||
+            place.travelStyles.some((style) => style.slug === activeFilter)
         );
   }, [activeFilter, places]);
 
-  const availableFilters = [
-    "all",
-    ...new Set(places.flatMap((place) => place.acf.hotel_filters)),
-  ];
+  const availableFilters = useMemo(() => {
+    return getAvailableFilters(places);
+  }, [places]);
 
   return (
     <>

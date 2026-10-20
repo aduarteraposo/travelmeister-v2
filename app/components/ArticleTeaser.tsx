@@ -1,14 +1,16 @@
 import Image from "next/image";
-import { WPPost } from "../types/wordpress/post";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { CleanArticle } from "../types/app/article";
 
-export default function ArticleTeaser({ article }: { article: WPPost }) {
-  const featuredImage = article._embedded?.["wp:featuredmedia"]?.[0];
+export default function ArticleTeaser({ article }: { article: CleanArticle }) {
+  const featuredImage = article.heroImage;
 
   const router = useRouter();
 
-  const url = `/${article.acf.primary_destination.post_name}/${article.slug}`;
+  console.log(article.destination);
+
+  const url = `/${article.destination?.post_name}/${article.slug}`;
 
   function goToPost() {
     router.push(url);
@@ -21,10 +23,10 @@ export default function ArticleTeaser({ article }: { article: WPPost }) {
           {featuredImage ? (
             <Image
               className="h-full object-cover transition-transform duration-100 ease-in-out group-hover:scale-105"
-              src={featuredImage.source_url || ""}
-              alt={featuredImage.alt_text || article.title.rendered}
-              width={featuredImage.media_details.width}
-              height={featuredImage.media_details.height}
+              src={featuredImage.url || ""}
+              alt={featuredImage.alt || article.title}
+              width={featuredImage.width}
+              height={featuredImage.height}
             />
           ) : (
             <div className="bg-gray-100 aspect-video flex justify-center items-center text-sm text-gray-500 transition-transform duration-100 ease-in-out group-hover:scale-105">
@@ -34,7 +36,7 @@ export default function ArticleTeaser({ article }: { article: WPPost }) {
         </div>
 
         <h4 className="font-medium group-hover:font-semibold">
-          {article.title.rendered}
+          {article.title}
         </h4>
       </article>
     </Link>

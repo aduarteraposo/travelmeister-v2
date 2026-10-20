@@ -1,12 +1,16 @@
-import type { PlaceWithSection } from "../types/app/place";
+import type { Place, WithSection } from "../types/app/place";
 import PlaceCard from "./PlaceCard";
 
 type placesection = {
   section_title: string;
-  places: PlaceWithSection[];
+  places: WithSection<Place>[];
 };
 
-export default function PlaceList({ places }: { places: PlaceWithSection[] }) {
+export default function PlaceList({
+  places,
+}: {
+  places: WithSection<Place>[];
+}) {
   const sectionTitles = [
     ...new Set(places.map((place) => place.section_title)),
   ];

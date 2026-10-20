@@ -8,9 +8,10 @@ describe("normalizePlace", () => {
     const input = {
       id: 1,
       acf: {
-        hotel_filters: [
-          { name: "Romantic", slug: "romantic" },
-          { name: "Rooftop", slug: "rooftop" },
+        badge: "test badge",
+        filters: [
+          { term_id: 1, name: "Romantic", slug: "romantic" },
+          { term_id: 2, name: "Rooftop", slug: "rooftop" },
         ],
       },
     } as WPPlace;
@@ -19,7 +20,7 @@ describe("normalizePlace", () => {
     const result = normalizePlace(input);
 
     // assert
-    expect(result.acf.hotel_filters).toEqual(["romantic", "rooftop"]);
+    expect(result.filters.map((t) => t.slug)).toEqual(["romantic", "rooftop"]);
   });
 });
 
@@ -32,7 +33,7 @@ describe("normalizePlace", () => {
     const result = normalizePlace(input);
 
     // assert
-    expect(result.acf.hotel_filters).toEqual([]);
+    expect(result.filters).toEqual([]);
   });
 });
 
@@ -42,7 +43,7 @@ describe("normalizePlace", () => {
     const input = {
       id: 1,
       acf: {
-        hotel_filters: [] as WPPlace["acf"]["hotel_filters"],
+        filters: [] as WPPlace["acf"]["filters"],
       },
     } as WPPlace;
 
@@ -50,14 +51,14 @@ describe("normalizePlace", () => {
     const result = normalizePlace(input);
 
     // assert
-    expect(result.acf.hotel_filters).toEqual([]);
+    expect(result.filters).toEqual([]);
   });
 });
 
 describe("normalizePlace", () => {
   it("extracts title from title.rendered", () => {
     // arrange
-    const input = { title: { rendered: "Test Place" } } as WPPlace;
+    const input = { title: { rendered: "Test Place" }, acf: {} } as WPPlace;
     // act
     const result = normalizePlace(input);
     // assert

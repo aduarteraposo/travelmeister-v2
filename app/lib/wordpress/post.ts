@@ -1,6 +1,7 @@
 import { WPPost } from "@/app/types/wordpress/post";
 import { REVALIDATE, wordpressFetch, wordpressFetchWithTotal } from "./client";
 import { PaginatedArticlesResponse } from "@/app/types/api/pagination";
+import { normalizeArticle } from "@/app/lib/normalizers/article";
 
 export async function getPostsByDestinationId(id: number): Promise<WPPost[]> {
   const data = await wordpressFetch<WPPost[]>(`/posts?destination=${id}`);
@@ -54,7 +55,7 @@ export async function getPostsByCategoryAndDestination(params: {
   });
 
   return {
-    articles: response.items,
+    articles: response.items.map(normalizeArticle),
     total: response.total,
   };
 }
@@ -74,7 +75,7 @@ export async function getPostsByDestination(params: {
   });
 
   return {
-    articles: response.items,
+    articles: response.items.map(normalizeArticle),
     total: response.total,
   };
 }
@@ -94,7 +95,17 @@ export async function getPostsByCategory(params: {
   });
 
   return {
-    articles: response.items,
+    articles: response.items.map(normalizeArticle),
     total: response.total,
   };
+}
+
+export async function getRelatedCandidates(scopeId: number, excludeId: number) {
+  const endpoint = `/posts?destination=${scopeId}&per_page=100&exclude=${excludeId}&acf_format=standard&_fields=id,slug,title,acf.hotel_style,acf.primary_destination,acf.article_category,acf.hero_image`;
+
+  return wordpressFetch<WPPost[]>(endpoint, {
+    revalidate: REVALIDATE.day,
+    tags: ["articles", `articles:destination:${scopeId}`],
+    throwNotFound: false,
+  });
 }

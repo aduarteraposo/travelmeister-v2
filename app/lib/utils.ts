@@ -5,14 +5,7 @@ export function slugify(str: string) {
 export function mapById<T extends { id: number }>(
   items: T[]
 ): Record<number, T> {
-  const itemsById = Object.fromEntries(
-    items.map((item) => [
-      item.id,
-      {
-        ...item,
-      },
-    ])
-  );
+  const itemsById = Object.fromEntries(items.map((item) => [item.id, item]));
 
   return itemsById;
 }

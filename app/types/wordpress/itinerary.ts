@@ -1,14 +1,13 @@
-import { WPDestinationReference, WPTravelStylereference } from "./destination";
-import { WPExperienceReference } from "./experience";
 import { WPImage } from "./media";
-import { WPPlaceReference } from "./place";
+import { WPTerm } from "./place";
+import { WPItemRef } from "./post";
 
 export type WPItinerary = {
-  primary_destination: WPDestinationReference;
+  primary_destination: WPItemRef;
   duration_days: number;
   summary: string;
   hero_image: WPImage;
-  travel_style: WPTravelStylereference;
+  travel_style: WPTerm;
 };
 
 export type WPItineraryDay = {
@@ -22,6 +21,6 @@ export type ItineraryDayItem = {
   slot_span: number;
   title: string;
   text: string;
-  main: WPPlaceReference | WPExperienceReference;
-  options: (WPPlaceReference | WPExperienceReference)[];
+  main: WPItemRef;
+  options: WPItemRef[];
 };

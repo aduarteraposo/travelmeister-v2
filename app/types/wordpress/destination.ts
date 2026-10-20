@@ -1,6 +1,6 @@
 import { WPImage } from "./media";
-import { WPPlaceReference } from "./place";
-import { WPPostReference } from "./post";
+import { WPTerm } from "./place";
+import { WPItemRef, WPPostReference } from "./post";
 import { WPArticleCategory } from "./taxonomy";
 
 export type WPDestinationReference = {
@@ -12,15 +12,15 @@ export type WPDestination = {
   slug: string;
   title: { rendered: string };
   acf: {
-    destination_type: { term_id: number; slug: string };
-    parent_destination: WPDestinationReference[] | "";
+    destination_type: WPTerm;
+    parent_destination: WPItemRef | WPItemRef[] | "";
     hero_image: WPImage;
     hero_intro: string;
     card_description: string;
     hero_tags: { label: string }[];
     practical_info: WPPracticalInfo;
     travel_styles: WPTravelStyle[];
-    featured_subdestinations: WPDestinationReference[];
+    featured_subdestinations: WPItemRef[];
     featured_hotels: WPLabeledPlace[];
     featured_restaurants: WPLabeledPlace[];
     featured_tours: WPLabeledPlace[];
@@ -30,23 +30,23 @@ export type WPDestination = {
 };
 
 export type WPTravelStyle = {
-  style: WPTravelStylereference;
+  style: WPTerm;
   summary: string;
   where_to_stay: {
     stay_note: string;
-    primary_place: WPPlaceReference;
-    alternative_places: WPPlaceReference[];
+    primary_place: WPItemRef;
+    alternative_places: WPItemRef[];
   };
   focus: string;
   skip: string;
-  featured_experiences: WPPlaceReference[];
+  featured_experiences: WPItemRef[];
   suggested_itinerary: { label: string; value: string }[];
   related_articles: WPPostReference[];
 };
 
 export type WPLabeledPlace = {
   label: string;
-  place: WPPlaceReference;
+  place: WPItemRef;
 };
 
 export type WPPostSection = {
@@ -67,11 +67,5 @@ export type WPPracticalInfo = {
 
 export type WPDestinationType = {
   id: number;
-  slug: string;
-};
-
-export type WPTravelStylereference = {
-  term_id: number;
-  name: string;
   slug: string;
 };

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { PlaceWithSection } from "../types/app/place";
+import { Place, WithSection } from "../types/app/place";
 import usePlaceSelection from "./usePlaceSelection";
 
 vi.mock("next/navigation", () => ({
@@ -10,9 +10,13 @@ vi.mock("next/navigation", () => ({
 
 import * as navigation from "next/navigation";
 
-const filteredPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as PlaceWithSection[];
+const filteredPlaces = [
+  { id: 1 },
+  { id: 2 },
+  { id: 3 },
+] as WithSection<Place>[];
 
-const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as PlaceWithSection[];
+const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as WithSection<Place>[];
 
 function setupNavigationMocks({
   pathname = "/paris",
@@ -45,7 +49,7 @@ function setupNavigationMocks({
   };
 }
 
-function getSelectedIds(isSelected: (place: PlaceWithSection) => boolean) {
+function getSelectedIds(isSelected: (place: WithSection<Place>) => boolean) {
   return allPlaces.filter(isSelected).map((place) => place.id);
 }
 
@@ -152,8 +156,12 @@ describe("usePlaceSelection", () => {
 
   it("updates URLParams correctly", async () => {
     // arrange
-    const filteredPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as PlaceWithSection[];
-    const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as PlaceWithSection[];
+    const filteredPlaces = [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+    ] as WithSection<Place>[];
+    const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as WithSection<Place>[];
 
     const { replace } = setupNavigationMocks();
 
@@ -208,7 +216,7 @@ describe("usePlaceSelection", () => {
   it("only marks places as visible that are both selected and filtered", () => {
     // arrange
     setupNavigationMocks({ compare: "1,2" });
-    const filteredPlaces = [{ id: 2 }, { id: 3 }] as PlaceWithSection[];
+    const filteredPlaces = [{ id: 2 }, { id: 3 }] as WithSection<Place>[];
 
     // act
     const { result } = renderHook(() =>

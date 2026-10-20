@@ -1,7 +1,8 @@
-import { Destination } from "@/app/types/app/destination";
+import { ArticleSection, Destination } from "@/app/types/app/destination";
 import { Place } from "@/app/types/app/place";
 import { WPDestination } from "@/app/types/wordpress/destination";
 import { WPPost } from "@/app/types/wordpress/post";
+import { normalizeArticle } from "./article";
 
 export function mapDestinationWithPlacesAndSubDestinationsAndPosts(
   destination: WPDestination,
@@ -9,10 +10,13 @@ export function mapDestinationWithPlacesAndSubDestinationsAndPosts(
   subdestionationsByIds: Record<number, WPDestination>,
   postsByIds: Record<number, WPPost>
 ): Destination {
-  const normalizedDestination = {
+  const normalizedDestination: Destination = {
     ...destination,
     acf: {
       ...destination.acf,
+      parent_destination: destination.acf.parent_destination
+        ? destination.acf.parent_destination
+        : null,
       travel_styles: Array.isArray(destination.acf.travel_styles)
         ? destination.acf.travel_styles.map((style) => ({
             ...style,
@@ -68,12 +72,14 @@ export function mapDestinationWithPlacesAndSubDestinationsAndPosts(
           }))
         : [],
       article_sections: Array.isArray(destination.acf.article_sections)
-        ? destination.acf.article_sections.map((section) => ({
+        ? (destination.acf.article_sections.map((section) => ({
             ...section,
             manual_articles: section.manual_articles
-              ? section.manual_articles.map((article) => postsByIds[article.ID])
+              ? section.manual_articles
+                  .map((article) => postsByIds[article.ID])
+                  .map(normalizeArticle)
               : [],
-          }))
+          })) as ArticleSection[])
         : [],
     },
   };

@@ -31,9 +31,10 @@ export async function getDestinationById(id: number) {
 
 function getParentDestinationId(
   destination: WPDestination | Destination
-): number | undefined {
+): number | null {
   const parent = destination.acf.parent_destination;
-  return parent ? parent[0]?.ID : undefined;
+  const ref = Array.isArray(parent) ? parent[0] : parent;
+  return ref ? ref.ID : null;
 }
 
 export async function getParentDestinations(

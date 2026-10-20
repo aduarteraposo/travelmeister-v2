@@ -8,22 +8,25 @@ export const REVALIDATE = {
 type WordPressFetchOptions = {
   revalidate?: number;
   tags?: string[];
+  throwNotFound?: boolean;
 };
 
 export async function wordpressFetch<T>(
   endpoint: string,
-  options: WordPressFetchOptions = {}
+  { revalidate, tags, throwNotFound = true }: WordPressFetchOptions = {}
 ): Promise<T> {
   const res = await fetch(`${baseUrl}${endpoint}`, {
     next: {
-      revalidate: options.revalidate,
-      tags: options.tags,
+      revalidate,
+      tags,
     },
   });
 
   if (!res.ok) {
     console.error("Failed on this endpoint: ", endpoint);
-    notFound();
+
+    if (throwNotFound) notFound();
+    throw new Error(`WordPress ${res.status} on ${endpoint}`);
   }
 
   return res.json();
@@ -36,18 +39,19 @@ type PaginatedResponse<T> = {
 
 export async function wordpressFetchWithTotal<T>(
   endpoint: string,
-  options: WordPressFetchOptions
+  { revalidate, tags, throwNotFound = true }: WordPressFetchOptions = {}
 ): Promise<PaginatedResponse<T>> {
   const res = await fetch(`${baseUrl}${endpoint}`, {
     next: {
-      revalidate: options.revalidate,
-      tags: options.tags,
+      revalidate,
+      tags,
     },
   });
 
   if (!res.ok) {
     console.error("Failed on this endpoint: ", endpoint);
-    notFound();
+    if (throwNotFound) notFound();
+    throw new Error(`WordPress ${res.status} on ${endpoint}`);
   }
 
   const data = (await res.json()) as T[];

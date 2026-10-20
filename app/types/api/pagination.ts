@@ -1,6 +1,6 @@
-import { WPPost } from "../wordpress/post";
+import { CleanArticle } from "../app/article";
 
 export type PaginatedArticlesResponse = {
-  articles: WPPost[];
+  articles: CleanArticle[];
   total: number;
 };

@@ -2,8 +2,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import ArticleLane from "./ArticleLane";
-import { WPPost } from "../types/wordpress/post";
 import "@testing-library/jest-dom";
+import { CleanArticle } from "../types/app/article";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -24,17 +24,17 @@ describe("ArticleLane", () => {
     // arrange
     const manualArticles = [
       {
-        slug: "manual_article",
-        title: { rendered: "Manual Article" },
-        acf: { primary_destination: { post_name: "test-destination" } },
-      } as WPPost,
+        slug: "manual-article",
+        title: "Manual Article",
+        destination: { post_name: "test-destination" },
+      } as CleanArticle,
     ];
     const fetchedArticles = [
       {
-        slug: "fetched_article",
-        title: { rendered: "Fetched Article" },
-        acf: { primary_destination: { post_name: "test-destination" } },
-      } as WPPost,
+        slug: "fetched-article",
+        title: "Fetched Article",
+        destination: { post_name: "test-destination" },
+      } as CleanArticle,
     ];
 
     // act
@@ -62,33 +62,33 @@ describe("ArticleLane", () => {
     // arrange
     const manualArticles = [
       {
-        slug: "manual_article_1",
-        title: { rendered: "Manual Article 1" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "manual-article-1",
+        title: "Manual Article 1",
+        destination: { post_name: "test-destination" },
       },
       {
-        slug: "manual_article_2",
-        title: { rendered: "Manual Article 2" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "manual-article-2",
+        title: "Manual Article 2",
+        destination: { post_name: "test-destination" },
       },
-    ] as WPPost[];
+    ] as CleanArticle[];
     const fetchedArticles = [
       {
-        slug: "fetched_article_1",
-        title: { rendered: "Fetched Article 1" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "fetched-article-1",
+        title: "fetched Article 1",
+        destination: { post_name: "test-destination" },
       },
       {
-        slug: "fetched_article_2",
-        title: { rendered: "Fetched Article 2" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "fetched-article-2",
+        title: "fetched Article 2",
+        destination: { post_name: "test-destination" },
       },
       {
-        slug: "fetched_article_3",
-        title: { rendered: "Fetched Article 3" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "fetched-article-3",
+        title: "fetched Article 3",
+        destination: { post_name: "test-destination" },
       },
-    ] as WPPost[];
+    ] as CleanArticle[];
 
     // act
     renderWithQueryClient(
@@ -116,33 +116,33 @@ describe("ArticleLane", () => {
     // arrange
     const manualArticles = [
       {
-        slug: "manual_article_1",
-        title: { rendered: "Manual Article 1" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "manual-article-1",
+        title: "Manual Article 1",
+        destination: { post_name: "test-destination" },
       },
       {
-        slug: "manual_article_2",
-        title: { rendered: "Manual Article 2" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "manual-article-2",
+        title: "Manual Article 2",
+        destination: { post_name: "test-destination" },
       },
-    ] as WPPost[];
+    ] as CleanArticle[];
     const fetchedArticles = [
       {
-        slug: "fetched_article_1",
-        title: { rendered: "Fetched Article 1" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "fetched-article-1",
+        title: "fetched Article 1",
+        destination: { post_name: "test-destination" },
       },
       {
-        slug: "fetched_article_2",
-        title: { rendered: "Fetched Article 2" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "fetched-article-2",
+        title: "fetched Article 2",
+        destination: { post_name: "test-destination" },
       },
       {
-        slug: "fetched_article_3",
-        title: { rendered: "Fetched Article 3" },
-        acf: { primary_destination: { post_name: "test-destination" } },
+        slug: "fetched-article-3",
+        title: "fetched Article 3",
+        destination: { post_name: "test-destination" },
       },
-    ] as WPPost[];
+    ] as CleanArticle[];
 
     // act
     renderWithQueryClient(

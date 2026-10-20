@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { capitalizeFirstLetter } from "../lib/utils";
+import { Term } from "../types/app/place";
 
 export default function Filters({
   setFilter,
@@ -8,7 +8,7 @@ export default function Filters({
   fixed = false,
 }: {
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  filters: string[];
+  filters: Term[];
   activeFilter: string;
   fixed?: boolean;
 }) {
@@ -39,15 +39,25 @@ export default function Filters({
       className="flex gap-3 mb-12 overflow-scroll [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       ref={comparisonRef}
     >
+      <li key="all">
+        <button
+          onClick={() => handleFilterClick("all")}
+          className={`rounded-full py-1 px-4 text-sm cursor-pointer font-medium whitespace-nowrap ${
+            activeFilter === "all" ? "bg-green-300" : "bg-gray-300"
+          }`}
+        >
+          All
+        </button>
+      </li>
       {filters.map((filter) => (
-        <li key={filter}>
+        <li key={filter.slug}>
           <button
-            onClick={() => handleFilterClick(filter)}
+            onClick={() => handleFilterClick(filter.slug)}
             className={`rounded-full py-1 px-4 text-sm cursor-pointer font-medium whitespace-nowrap ${
-              activeFilter === filter ? "bg-green-300" : "bg-gray-300"
+              activeFilter === filter.slug ? "bg-green-300" : "bg-gray-300"
             }`}
           >
-            {capitalizeFirstLetter(filter)}
+            {filter.name}
           </button>
         </li>
       ))}

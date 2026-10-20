@@ -1,7 +1,6 @@
 "use client";
 
-import { InstagramEmbed, TikTokEmbed } from "react-social-media-embed";
-import { Place, PlaceWithSection } from "../types/app/place";
+import { Place, Term, WithSection } from "../types/app/place";
 import { useInView } from "react-intersection-observer";
 import PlaceSocialEmbedCard from "./PlaceSocialEmbedCard";
 import Filters from "./Filters";
@@ -15,10 +14,10 @@ export default function SocialEmbeds({
   setFilter,
   activeFilter,
 }: {
-  allPlaces: PlaceWithSection[];
+  allPlaces: WithSection<Place>[];
   isVisible: (place: Place) => boolean;
   placeSelector: React.ReactNode;
-  filters: string[];
+  filters: Term[];
   setFilter: React.Dispatch<React.SetStateAction<string>>;
   activeFilter: string;
 }) {

@@ -27,10 +27,10 @@ export default function Recommendations({
                   <div className="aspect-video mb-1">
                     <Image
                       className="rounded-t-xl h-full object-cover"
-                      src={hotel.place.acf.images[0].url}
-                      alt={hotel.place.acf.images[0].alt}
-                      width={hotel.place.acf.images[0].width}
-                      height={hotel.place.acf.images[0].height}
+                      src={hotel.place.images[0].url}
+                      alt={hotel.place.images[0].alt}
+                      width={hotel.place.images[0].width}
+                      height={hotel.place.images[0].height}
                     />
                   </div>
 
@@ -58,10 +58,10 @@ export default function Recommendations({
                   <div className="aspect-3/2">
                     <Image
                       className="rounded-lg h-full object-cover"
-                      src={tour.place.acf.images[0].url}
-                      alt={tour.place.acf.images[0].alt}
-                      width={tour.place.acf.images[0].width}
-                      height={tour.place.acf.images[0].height}
+                      src={tour.place.images[0].url}
+                      alt={tour.place.images[0].alt}
+                      width={tour.place.images[0].width}
+                      height={tour.place.images[0].height}
                     />
                   </div>
 

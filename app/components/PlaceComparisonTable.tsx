@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { slugify } from "../lib/utils";
 import { getPlaceAttributesArray } from "../lib/place/place-comparison";
-import type { Place, PlaceWithSection } from "../types/app/place";
+import type { Place, WithSection } from "../types/app/place";
 import { useRef, useState } from "react";
 
 export default function PlaceComparisonTable({
   visiblePlaces,
 }: {
-  visiblePlaces: PlaceWithSection[];
+  visiblePlaces: WithSection<Place>[];
 }) {
   const placeNameArray = visiblePlaces.map((place) => place.title);
   const placeAttributesArray = getPlaceAttributesArray(visiblePlaces);
@@ -83,19 +83,21 @@ export default function PlaceComparisonTable({
                         {item}
                       </td>
                     ) : (
-                      <td
-                        className="p-4 mr-8 text-center"
-                        key={`${item.url}_${index}`}
-                      >
-                        {item.url && (
-                          <Link
-                            className="rounded-full py-2 px-4 bg-green-300 font-medium"
-                            href={item.url}
-                          >
-                            {item.label}
-                          </Link>
-                        )}
-                      </td>
+                      item && (
+                        <td
+                          className="p-4 mr-8 text-center"
+                          key={`${item.url}_${index}`}
+                        >
+                          {item.url && (
+                            <Link
+                              className="rounded-full py-2 px-4 bg-green-300 font-medium"
+                              href={item.url}
+                            >
+                              {item.label}
+                            </Link>
+                          )}
+                        </td>
+                      )
                     )
                   )}
                 </tr>

@@ -1,21 +1,20 @@
-import { Article } from "@/app/types/app/article";
-import { getArticlePlaceIds, normalizeArticle } from "../normalizers/article";
-import { mapById } from "../utils";
+import {
+  getArticlePlaceIds,
+  normalizeArticle,
+  resolveArticle,
+} from "../normalizers/article";
 import { getDestinationBySlug } from "../wordpress/destination";
 import { getPlacesByIds } from "../wordpress/place";
-import {
-  getPostBySlug,
-  getPostsByCategory,
-  getPostsByCategoryAndDestination,
-  getPostsByDestination,
-} from "../wordpress/post";
+import { getPostBySlug } from "../wordpress/post";
 import { normalizePlace } from "../normalizers/place";
-import { PlaceWithSection } from "@/app/types/app/place";
+import { Place, WithSection } from "@/app/types/app/place";
 import { notFound } from "next/navigation";
-import { WPPost } from "@/app/types/wordpress/post";
-import { PaginatedArticlesResponse } from "@/app/types/api/pagination";
-
-const NUMBER_OF_RELATED_ARTICLES = 10;
+import { Experience } from "@/app/types/app/experience";
+import { getExperiencesByIds } from "../wordpress/experience";
+import { normalizeExperience } from "../normalizers/experience";
+import { toItem } from "../normalizers/item";
+import { Item } from "@/app/types/app/item";
+import { getRelatedArticles } from "../related-articles";
 
 export async function getArticlePageData(
   destinationSlug: string,
@@ -37,108 +36,48 @@ export async function getArticlePageData(
     notFound();
   }
 
-  const heroImage = post._embedded?.["wp:featuredmedia"]?.[0];
-  const placeIds = getArticlePlaceIds(post);
-  const places = await getPlacesByIds(placeIds);
-  const normalizedPlaces = places.map(normalizePlace);
-  const placesById = mapById(normalizedPlaces);
-  const article: Article = normalizeArticle(post, placesById);
+  const cleanArticle = normalizeArticle(post);
+  const { placeIds, experienceIds } = getArticlePlaceIds(cleanArticle);
+  const [places, experiences] = await Promise.all([
+    getPlacesByIds(placeIds),
+    getExperiencesByIds(experienceIds),
+  ]);
 
-  const allPlacesWithSections: PlaceWithSection[] =
-    article.acf.list_sections.flatMap((section) =>
-      section.places.map((place) => ({
-        ...place,
-        section_title: section.section_title,
-      }))
+  const items: Item[] = [
+    ...places.map(normalizePlace).map(toItem),
+    ...experiences
+      .map(normalizeExperience)
+      .map((data) => ({ kind: "experience", data } as Item)),
+  ];
+
+  const itemsById = Object.fromEntries(
+    items.map((item) => [item.data.id, item])
+  );
+  const article = resolveArticle(cleanArticle, itemsById);
+
+  const allItemsWithSections: WithSection<Place | Experience>[] =
+    article.sections.flatMap((section) =>
+      section.entries.flatMap((entry) =>
+        entry.item
+          ? [
+              {
+                ...entry.item,
+                section_title: section.title,
+              },
+            ]
+          : []
+      )
     );
 
-  const relatedArticles = await getRelatedArticles(post);
+  const relatedArticles = await getRelatedArticles(
+    article,
+    canonicalDestination
+  );
 
   return {
     canonicalDestination,
     article,
-    allPlacesWithSections,
-    heroImage,
+    allItemsWithSections,
     relatedArticles,
   };
-}
-
-async function getRelatedArticles(post: WPPost): Promise<WPPost[]> {
-  const destinationId = post.acf.primary_destination.ID;
-  const categoryId = post.article_category[0];
-  const strategies: RelatedStrategy[] = [];
-
-  if (categoryId !== undefined) {
-    strategies.push((excludeIds, perPage) =>
-      getPostsByCategoryAndDestination({
-        destinationId,
-        categoryId,
-        perPage,
-        offset: 0,
-        exclude: excludeIds,
-      })
-    );
-  }
-
-  strategies.push((excludeIds, perPage) =>
-    getPostsByDestination({
-      destinationId,
-      perPage,
-      offset: 0,
-      exclude: excludeIds,
-    })
-  );
-
-  if (categoryId !== undefined) {
-    strategies.push((excludeIds, perPage) =>
-      getPostsByCategory({
-        categoryId,
-        perPage,
-        offset: 0,
-        exclude: excludeIds,
-      })
-    );
-  }
-
-  try {
-    return await collectRelatedArticles(
-      strategies,
-      post.id,
-      NUMBER_OF_RELATED_ARTICLES
-    );
-  } catch (error) {
-    console.warn(
-      `Failed to load related articles for post "${post.slug}" (id: ${post.id}):`,
-      error
-    );
-    return [];
-  }
-}
-
-type RelatedStrategy = (
-  excludeIds: number[],
-  perPage: number
-) => Promise<PaginatedArticlesResponse>;
-
-async function collectRelatedArticles(
-  strategies: RelatedStrategy[],
-  excludeSelf: number,
-  target: number
-) {
-  let collected: WPPost[] = [];
-  const excludeIds = [excludeSelf];
-
-  for (const strategy of strategies) {
-    const remaining = target - collected.length;
-
-    if (remaining <= 0) {
-      break;
-    }
-
-    const { articles } = await strategy(excludeIds, remaining);
-    collected = collected.concat(articles);
-    excludeIds.push(...articles.map((a) => a.id));
-  }
-
-  return collected;
 }

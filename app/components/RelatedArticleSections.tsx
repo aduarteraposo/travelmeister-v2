@@ -1,3 +1,4 @@
+import { normalizeArticle } from "../lib/normalizers/article";
 import { getPostsByCategoryAndDestination } from "../lib/wordpress/post";
 import { ArticleSection } from "../types/app/destination";
 import ArticleLane from "./ArticleLane";

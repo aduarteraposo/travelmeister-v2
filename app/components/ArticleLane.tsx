@@ -2,7 +2,7 @@
 
 import { getNextArticlesOffset } from "../lib/pagination/getNextArticleOffset";
 import { PaginatedArticlesResponse } from "../types/api/pagination";
-import { WPPost } from "../types/wordpress/post";
+import { CleanArticle } from "../types/app/article";
 import ArticleTeaser from "./ArticleTeaser";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 
@@ -12,8 +12,8 @@ type ArticleLaneProps = {
   destinationId: number;
   manualArticleIds: number[];
   perPage: number;
-  initialFetchedArticles: WPPost[];
-  manualArticles: WPPost[];
+  initialFetchedArticles: CleanArticle[];
+  manualArticles: CleanArticle[];
   initialTotal: number;
 };
 

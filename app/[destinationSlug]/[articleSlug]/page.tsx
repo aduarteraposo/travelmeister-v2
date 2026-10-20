@@ -39,10 +39,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const {
     canonicalDestination,
     article,
-    heroImage,
-    allPlacesWithSections,
+    allItemsWithSections,
     relatedArticles,
   } = await getArticlePageData(destinationSlug, articleSlug);
+
+  const heroImage = article.heroImage;
 
   return (
     <>
@@ -50,10 +51,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         {heroImage && (
           <Image
             loading="eager"
-            src={heroImage.source_url}
-            alt={heroImage.alt_text || article.title || ""}
-            width={heroImage.media_details.width}
-            height={heroImage.media_details.height}
+            src={heroImage.url}
+            alt={heroImage.alt}
+            width={heroImage.width}
+            height={heroImage.height}
           />
         )}
         <Breadcrumbs article={article} destination={canonicalDestination} />
@@ -72,9 +73,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           className="prose mb-16"
           dangerouslySetInnerHTML={{ __html: article.content }}
         ></div>
-        <QuickPicks quickPicks={article.acf.quick_picks} />
+        <QuickPicks quickPicks={article.quickPicks} />
         <FilterContainer
-          places={allPlacesWithSections}
+          places={allItemsWithSections}
           relatedArticles={relatedArticles}
         />
       </div>

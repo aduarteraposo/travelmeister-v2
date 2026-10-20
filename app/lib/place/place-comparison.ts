@@ -1,6 +1,6 @@
 import { Place } from "@/app/types/app/place";
 
-export type PlaceAttributeValue = string | PlaceCTAObject;
+export type PlaceAttributeValue = string | PlaceCTAObject | null;
 
 export type PlaceAttributeRow = [string, PlaceAttributeValue[]];
 
@@ -29,27 +29,27 @@ function getPlaceHighlightsFromTags(
 }
 
 function getPlaceCTA(place: Place) {
-  return {
-    label: "See details",
-    url: place.acf.cta_links[0]?.url || "",
-  };
+  if (place.ctaLinks.length > 0) {
+    return {
+      label: "See details",
+      url: place.ctaLinks[0]?.url || "",
+    };
+  }
+
+  return null;
 }
 
 function getPlaceHighlights(place: Place) {
-  return getPlaceHighlightsFromTags(
-    place.acf.editor_tags ? place.acf.editor_tags : [],
-    3
-  );
+  return getPlaceHighlightsFromTags(place.editorTags, 3);
 }
 
 export function getPlaceAttributesArray(places: Place[]) {
   const rows: PlaceRowDefinition[] = [
     {
       label: "Ideal for",
-      getValue: (place) => place.acf.ideal_for?.join(", "),
+      getValue: (place) => place.idealFor?.join(", "),
     },
-    { label: "Location", getValue: (place) => place.acf.location },
-    { label: "Price", getValue: (place) => place.acf.budget },
+    { label: "Price", getValue: (place) => place.budget },
     {
       label: "Highlights",
       getValue: (place) => getPlaceHighlights(place),

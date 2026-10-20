@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { Place, PlaceWithSection } from "../types/app/place";
+import { Place, WithSection } from "../types/app/place";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function usePlaceSelection({
   filteredPlaces,
   allPlaces,
 }: {
-  filteredPlaces: PlaceWithSection[];
-  allPlaces: PlaceWithSection[];
+  filteredPlaces: WithSection<Place>[];
+  allPlaces: WithSection<Place>[];
 }): {
-  visiblePlaces: PlaceWithSection[];
+  visiblePlaces: WithSection<Place>[];
   isSelected: (place: Place) => boolean;
   clearAllPlaces: () => void;
   selectAllPlaces: () => void;

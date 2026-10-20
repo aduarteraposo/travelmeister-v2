@@ -1,10 +1,10 @@
 import { TikTokEmbed } from "react-social-media-embed";
-import { PlaceWithSection } from "../types/app/place";
+import { Place, WithSection } from "../types/app/place";
 
 export default function PlaceSocialEmbedCard({
   place,
 }: {
-  place: PlaceWithSection;
+  place: WithSection<Place>;
 }) {
   return (
     <div className="border-gray-300 border rounded-xl">

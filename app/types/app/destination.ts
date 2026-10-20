@@ -1,10 +1,8 @@
-import {
-  WPDestination,
-  WPDestinationReference,
-} from "../wordpress/destination";
+import { WPDestination } from "../wordpress/destination";
 import { WPImage } from "../wordpress/media";
-import { WPPost } from "../wordpress/post";
+import { WPItemRef, WPPost } from "../wordpress/post";
 import { WPArticleCategory } from "../wordpress/taxonomy";
+import { CleanArticle } from "./article";
 import { LabeledPlace, Place } from "./place";
 
 export type Destination = {
@@ -13,7 +11,7 @@ export type Destination = {
   title: { rendered: string };
   acf: {
     destination_type: { term_id: number; slug: string };
-    parent_destination: WPDestinationReference[] | "";
+    parent_destination: WPItemRef | WPItemRef[] | null;
     hero_image: WPImage;
     hero_intro: string;
     card_description: string;
@@ -55,7 +53,7 @@ export type TravelStyle = {
 export type ArticleSection = {
   title: string;
   category: WPArticleCategory;
-  manual_articles: WPPost[];
+  manual_articles: CleanArticle[];
   initial_items_count: number;
   load_more_count: number;
 };

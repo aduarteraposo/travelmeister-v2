@@ -1,6 +1,6 @@
 "use client";
 
-import { PlaceWithSection } from "../types/app/place";
+import { Place, Term, WithSection } from "../types/app/place";
 import usePlaceSelection from "../hooks/usePlaceSelection";
 import PlaceSelector from "./PlaceSelector";
 import PlaceComparisonTable from "./PlaceComparisonTable";
@@ -13,9 +13,9 @@ export default function PlaceComparisonSection({
   setFilter,
   activeFilter,
 }: {
-  allPlaces: PlaceWithSection[];
-  filteredPlaces: PlaceWithSection[];
-  filters: string[];
+  allPlaces: WithSection<Place>[];
+  filteredPlaces: WithSection<Place>[];
+  filters: Term[];
   setFilter: React.Dispatch<React.SetStateAction<string>>;
   activeFilter: string;
 }) {
