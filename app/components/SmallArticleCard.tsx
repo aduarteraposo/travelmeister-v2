@@ -4,14 +4,14 @@ import { WPPost } from "../types/wordpress/post";
 export default function SmallArticleCard({ post }: { post: WPPost }) {
   return (
     <article className="bg-gray-200 rounded-xl p-4 w-72">
-      {post._embedded["wp:featuredmedia"] && (
+      {post.acf?.hero_image && (
         <div className="aspect-21/9 flex justify-center overflow-hidden mb-2">
           <Image
             className="object-cover h-full"
-            src={post._embedded["wp:featuredmedia"][0].source_url}
-            alt={post._embedded["wp:featuredmedia"][0].alt_text}
-            width={post._embedded["wp:featuredmedia"][0].media_details.width}
-            height={post._embedded["wp:featuredmedia"][0].media_details.height}
+            src={post.acf.hero_image.url}
+            alt={post.acf.hero_image.alt}
+            width={post.acf.hero_image.width}
+            height={post.acf.hero_image.height}
           />
         </div>
       )}

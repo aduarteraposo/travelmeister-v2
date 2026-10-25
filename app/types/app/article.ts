@@ -6,11 +6,11 @@ import { Item } from "./item";
 import { Itinerary } from "./itinerary";
 import { Place } from "./place";
 
-export type Article = ArticleOf<Place | Experience>;
+export type Article = ArticleOf<Item, Place | Experience>;
 
 export type CleanArticle = ArticleOf<WPItemRef>;
 
-export type ArticleOf<T> = {
+export type ArticleOf<TItem, TOption = TItem> = {
   id: number;
   slug: string;
   title: string;
@@ -19,13 +19,22 @@ export type ArticleOf<T> = {
   destination: WPItemRef | null;
   heroImage: WPImage | null;
   articleCategory: WPTerm | null;
-  articleTemplate: string;
-  sections: Section<T>[];
-  quickPicks: QuickPick<T>[];
+  articleTemplate: ArticleTemplate;
+  sections: Section<TItem, TOption>[];
+  quickPicks: QuickPick<TOption>[];
   itinerary: Itinerary | false;
   roomFeature: string;
-  hotelStyle: string | null;
+  hotelStyle: HotelStyle | null;
+  sectionsBy: string | null;
   featuredRelatedArticles: WPItemRef[];
+};
+
+export type Entry<TItem, TOption> = {
+  item: TItem | null;
+  editorialNote: string;
+  groupLabel: string;
+  options: TOption[];
+  key: string;
 };
 
 export type QuickPick<T> = {
@@ -35,13 +44,24 @@ export type QuickPick<T> = {
   item: T;
 };
 
-export type Section<T> = {
+export type Section<TItem, TOption> = {
   title: string;
-  intro_text: string;
-  entries: {
-    item: T | null;
-    editorial_note: string;
-    group_label: string;
-    options: T[];
-  }[];
+  introText: string;
+  entries: Entry<TItem, TOption>[];
+  key: string;
 };
+
+export const ARTICLE_TEMPLATES = [
+  "list",
+  "long-tail",
+  "style",
+  "neighborhood",
+  "view",
+  "feature",
+  "where-to-stay",
+  "proximity",
+] as const;
+export type ArticleTemplate = (typeof ARTICLE_TEMPLATES)[number];
+
+export const HOTEL_STYLES = ["boutique", "luxury", "family", "budget"] as const;
+export type HotelStyle = (typeof HOTEL_STYLES)[number];

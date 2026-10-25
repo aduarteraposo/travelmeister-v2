@@ -23,16 +23,16 @@ export type WPPost = {
   };
   article_category: number[];
   acf: {
-    primary_destination: WPItemRef;
+    primary_destination: WPItemRef | "";
     article_category: WPTerm;
-    article_template: string;
+    article_template: string | false;
     hero_image: WPImage | false;
-    article_type: string;
     list_sections: WPListSection[];
     quick_picks: WPQuickPick[];
     itinerary: Itinerary | false;
     room_feature: WPTerm | false;
     hotel_style: string | false;
+    sections_by: string | false;
     featured_related_articles: WPItemRef[] | null;
   };
 };

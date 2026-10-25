@@ -1,5 +1,6 @@
 import { WPImage } from "../wordpress/media";
 import { WPTerm } from "../wordpress/place";
+import { WPItemRef } from "../wordpress/post";
 
 export type Place = {
   id: number;
@@ -8,6 +9,7 @@ export type Place = {
   badge: string;
   images: WPImage[];
   shortDescription: string;
+  destination: WPItemRef | null;
   editorTags: { label: string }[];
   bestIf: string;
   notIdealIf: string;

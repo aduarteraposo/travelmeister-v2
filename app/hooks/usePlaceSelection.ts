@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { Place, WithSection } from "../types/app/place";
+import { Place } from "../types/app/place";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function usePlaceSelection({
-  filteredPlaces,
-  allPlaces,
+  filteredHotels,
+  allHotels,
 }: {
-  filteredPlaces: WithSection<Place>[];
-  allPlaces: WithSection<Place>[];
+  filteredHotels: Place[];
+  allHotels: Place[];
 }): {
-  visiblePlaces: WithSection<Place>[];
+  visiblePlaces: Place[];
   isSelected: (place: Place) => boolean;
-  clearAllPlaces: () => void;
-  selectAllPlaces: () => void;
+  clearAllHotels: () => void;
+  selectAllHotels: () => void;
   handleCheckboxChange: (id: number, isChecked: boolean) => void;
   isEligible: (place: Place) => boolean;
   isVisible: (place: Place) => boolean;
@@ -20,7 +20,7 @@ export default function usePlaceSelection({
   const router = useRouter();
   const pathname = usePathname();
   const [selectedIds, setSelectedIds] = useState<Set<number>>(
-    () => new Set(allPlaces.map((place) => place.id))
+    () => new Set(allHotels.map((place) => place.id))
   );
 
   // Read the URL only after mount, so the static HTML always contains all
@@ -38,16 +38,16 @@ export default function usePlaceSelection({
       );
     }
   }, []);
-  const visiblePlaces = filteredPlaces.filter((place) =>
+  const visiblePlaces = filteredHotels.filter((place) =>
     selectedIds.has(place.id)
   );
-  const eligiblePlaceIds = new Set(filteredPlaces.map((place) => place.id));
+  const eligiblePlaceIds = new Set(filteredHotels.map((place) => place.id));
 
   function updateSelection(updatedIds: Set<number>) {
     setSelectedIds(updatedIds);
 
-    const allPlacesSelected = updatedIds.size === allPlaces.length;
-    if (updatedIds.size > 0 && !allPlacesSelected) {
+    const allHotelsSelected = updatedIds.size === allHotels.length;
+    if (updatedIds.size > 0 && !allHotelsSelected) {
       router.replace(`${pathname}?compare=${[...updatedIds].join(",")}`, {
         scroll: false,
       });
@@ -78,19 +78,19 @@ export default function usePlaceSelection({
     updateSelection(updatedIds);
   }
 
-  function selectAllPlaces() {
-    updateSelection(new Set(allPlaces.map((place) => place.id)));
+  function selectAllHotels() {
+    updateSelection(new Set(allHotels.map((place) => place.id)));
   }
 
-  function clearAllPlaces() {
+  function clearAllHotels() {
     updateSelection(new Set());
   }
 
   return {
     visiblePlaces,
     isSelected,
-    clearAllPlaces,
-    selectAllPlaces,
+    clearAllHotels,
+    selectAllHotels,
     handleCheckboxChange,
     isEligible,
     isVisible,

@@ -1,9 +1,16 @@
-import { Article, CleanArticle } from "@/app/types/app/article";
+import {
+  Article,
+  ARTICLE_TEMPLATES,
+  ArticleTemplate,
+  CleanArticle,
+  HOTEL_STYLES,
+  HotelStyle,
+} from "@/app/types/app/article";
 import { Item } from "@/app/types/app/item";
 import { WPPost } from "@/app/types/wordpress/post";
 
 export function normalizeArticle(post: WPPost): CleanArticle {
-  const article = {
+  const article: CleanArticle = {
     id: post.id,
     slug: post.slug,
     title: post.title ? post.title.rendered : "",
@@ -29,14 +36,17 @@ export function normalizeArticle(post: WPPost): CleanArticle {
       post.acf.article_category && typeof post.acf.article_category === "object"
         ? post.acf.article_category
         : null,
-    articleTemplate: post.acf.article_template ?? "",
+    articleTemplate: isArticleTemplate(post.acf.article_template)
+      ? post.acf.article_template
+      : "list",
     sections: Array.isArray(post.acf.list_sections)
-      ? post.acf.list_sections.map((section) => ({
+      ? post.acf.list_sections.map((section, sIndex) => ({
           title: section.section_title,
-          intro_text: section.intro_text,
+          introText: section.intro_text,
           entries: Array.isArray(section.entries)
-            ? section.entries.flatMap((entry) => {
+            ? section.entries.flatMap((entry, eIndex) => {
                 if (!entry) return [];
+                if (entry.item && typeof entry.item !== "object") return [];
 
                 return [
                   {
@@ -44,13 +54,15 @@ export function normalizeArticle(post: WPPost): CleanArticle {
                       entry.item && typeof entry.item === "object"
                         ? entry.item
                         : null,
-                    editorial_note: entry.editorial_note,
-                    group_label: entry.group_label,
+                    editorialNote: entry.editorial_note,
+                    groupLabel: entry.group_label,
                     options: Array.isArray(entry.options) ? entry.options : [],
+                    key: `${sIndex}-${eIndex}`,
                   },
                 ];
               })
             : [],
+          key: `section-${sIndex}`,
         }))
       : [],
     quickPicks: Array.isArray(post.acf.quick_picks)
@@ -72,10 +84,13 @@ export function normalizeArticle(post: WPPost): CleanArticle {
       post.acf.room_feature && typeof post.acf.room_feature === "object"
         ? post.acf.room_feature.name
         : "",
-    hotelStyle: post.acf.hotel_style
-      ? post.acf.hotel_style === "none"
+    hotelStyle: isHotelStyle(post.acf.hotel_style)
+      ? post.acf.hotel_style
+      : null,
+    sectionsBy: post.acf.sections_by
+      ? post.acf.sections_by === "none"
         ? null
-        : post.acf.hotel_style
+        : post.acf.sections_by
       : null,
     featuredRelatedArticles: Array.isArray(post.acf.featured_related_articles)
       ? post.acf.featured_related_articles
@@ -89,18 +104,20 @@ export function resolveArticle(
   cleanArticle: CleanArticle,
   itemsById: Record<number, Item>
 ): Article {
-  const article = {
+  const article: Article = {
     ...cleanArticle,
     sections: cleanArticle.sections.map((section) => ({
       ...section,
       entries: section.entries.map((entry) => ({
         ...entry,
-        item: entry.item ? itemsById[entry.item.ID].data ?? null : null,
-        options: entry.options.map((option) => itemsById[option.ID].data),
+        item: entry.item ? itemsById[entry.item.ID] ?? null : null,
+        options: entry.options.flatMap((option) =>
+          itemsById[option.ID]?.data ? [itemsById[option.ID].data] : []
+        ),
       })),
     })),
     quickPicks: cleanArticle.quickPicks.flatMap((pick) => {
-      const item = itemsById[pick.item.ID].data;
+      const item = itemsById[pick.item.ID]?.data;
       return item
         ? [
             {
@@ -113,6 +130,14 @@ export function resolveArticle(
   };
 
   return article;
+}
+
+function isArticleTemplate(value: unknown): value is ArticleTemplate {
+  return ARTICLE_TEMPLATES.includes(value as ArticleTemplate);
+}
+
+function isHotelStyle(value: unknown): value is HotelStyle {
+  return HOTEL_STYLES.includes(value as HotelStyle);
 }
 
 export function getArticlePlaceIds(article: CleanArticle) {

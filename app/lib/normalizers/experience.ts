@@ -5,11 +5,11 @@ import { toTerm } from "./place";
 export function normalizeExperience(place: WPExperience): Experience {
   const acf = place.acf ?? {};
 
-  const normalizedPlace = {
+  const normalizedExperience: Experience = {
     id: place.id,
     slug: place.slug,
     title: place.title ? place.title.rendered : "",
-    primaryDestination: acf.primary_destination ?? null,
+    destination: acf.primary_destination ? acf.primary_destination : null,
     images: Array.isArray(acf.images)
       ? acf.images.flatMap((image) =>
           image && typeof image === "object"
@@ -34,13 +34,13 @@ export function normalizeExperience(place: WPExperience): Experience {
         }))
       : [],
     isBookable: Array.isArray(acf.cta_links) ? true : false,
-    // filters: Array.isArray(acf.filters)
-    //   ? acf.filters
-    //       .map((filter) =>
-    //         filter && typeof filter === "object" ? toTerm(filter) : null
-    //       )
-    //       .filter((filter) => filter !== null)
-    //   : [],
+    filters: Array.isArray(acf.filters)
+      ? acf.filters
+          .map((filter) =>
+            filter && typeof filter === "object" ? toTerm(filter) : null
+          )
+          .filter((filter) => filter !== null)
+      : [],
     experienceType:
       acf.experience_type && typeof acf.experience_type === "object"
         ? acf.experience_type.slug ?? ""
@@ -76,5 +76,5 @@ export function normalizeExperience(place: WPExperience): Experience {
     meetingPoint: acf.meeting_point,
   };
 
-  return normalizedPlace;
+  return normalizedExperience;
 }

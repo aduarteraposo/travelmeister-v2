@@ -1,15 +1,11 @@
 import { TikTokEmbed } from "react-social-media-embed";
 import { Place, WithSection } from "../types/app/place";
 
-export default function PlaceSocialEmbedCard({
-  place,
-}: {
-  place: WithSection<Place>;
-}) {
+export default function PlaceSocialEmbedCard({ hotel }: { hotel: Place }) {
   return (
     <div className="border-gray-300 border rounded-xl">
       <h3 className="text-lg font-bold px-6 py-4 bg-black text-white text-center rounded-t-xl">
-        {place.title}
+        {hotel.title}
       </h3>
       <div className="flex items-start justify-end md:justify-normal relative p-3 md:p-6 md:gap-4">
         <div className="min-w-81.5 absolute md:relative top-3 left-3 md:top-0 md:left-0 scale-60 md:scale-100 origin-top-left">

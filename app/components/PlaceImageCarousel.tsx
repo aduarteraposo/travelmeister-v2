@@ -74,7 +74,7 @@ export default function PlaceImageCarousel({ images }: Props) {
     <div className="space-y-3">
       <div className="relative">
         <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-3">
+          <div className="flex gap-2 lg:gap-3">
             {images.map((image, index) => (
               <div
                 key={`${image.url}-${index}`}
@@ -92,7 +92,7 @@ export default function PlaceImageCarousel({ images }: Props) {
           </div>
         </div>
         {withButtons && (
-          <div className="lg:flex gap-1 absolute -top-12 right-0">
+          <div className="flex gap-1 absolute -top-12 right-0">
             <button
               type="button"
               onClick={scrollPrev}

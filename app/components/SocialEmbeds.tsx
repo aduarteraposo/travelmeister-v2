@@ -7,16 +7,16 @@ import Filters from "./Filters";
 import { cn } from "cn";
 
 export default function SocialEmbeds({
-  allPlaces,
+  allHotels,
   isVisible,
-  placeSelector,
+  hotelSelector,
   filters,
   setFilter,
   activeFilter,
 }: {
-  allPlaces: WithSection<Place>[];
+  allHotels: Place[];
   isVisible: (place: Place) => boolean;
-  placeSelector: React.ReactNode;
+  hotelSelector: React.ReactNode;
   filters: Term[];
   setFilter: React.Dispatch<React.SetStateAction<string>>;
   activeFilter: string;
@@ -44,19 +44,19 @@ export default function SocialEmbeds({
             setFilter={setFilter}
             activeFilter={activeFilter}
           />
-          {placeSelector}
+          {hotelSelector}
 
           {/* Hidden instead of unmounted, so the embeds don't reload on toggle */}
           <ul className="flex gap-8 items-start overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden mt-8">
-            {allPlaces.map((place) => (
+            {allHotels.map((hotel) => (
               <li
-                key={place.slug}
+                key={hotel.slug}
                 className={cn(
                   "max-w-[calc(100dvw-2rem)] min-w-[calc(100dvw-2rem)] md:min-w-auto min-h-137.5 md:min-h-auto md:max-w-auto shrink-0",
-                  !isVisible(place) && "hidden"
+                  !isVisible(hotel) && "hidden"
                 )}
               >
-                <PlaceSocialEmbedCard place={place} />
+                <PlaceSocialEmbedCard hotel={hotel} />
               </li>
             ))}
           </ul>

@@ -1,18 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { slugify } from "../lib/utils";
 import { getPlaceAttributesArray } from "../lib/place/place-comparison";
 import type { Place, WithSection } from "../types/app/place";
 import { useRef, useState } from "react";
 
 export default function PlaceComparisonTable({
-  visiblePlaces,
+  visibleHotels,
 }: {
-  visiblePlaces: WithSection<Place>[];
+  visibleHotels: Place[];
 }) {
-  const placeNameArray = visiblePlaces.map((place) => place.title);
-  const placeAttributesArray = getPlaceAttributesArray(visiblePlaces);
+  const placeNameArray = visibleHotels.map((place) => place.title);
+  const placeAttributesArray = getPlaceAttributesArray(visibleHotels);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftScrollFade, setShowLeftScrollFade] = useState(false);
   const [showRightScrollFade, setShowRightScrollFade] = useState(false);

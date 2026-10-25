@@ -8,8 +8,6 @@ export default function ArticleTeaser({ article }: { article: CleanArticle }) {
 
   const router = useRouter();
 
-  console.log(article.destination);
-
   const url = `/${article.destination?.post_name}/${article.slug}`;
 
   function goToPost() {

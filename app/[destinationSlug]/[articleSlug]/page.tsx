@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import { getArticlePageData } from "@/app/lib/page-data/article-page";
 import { getPostBySlug } from "@/app/lib/wordpress/post";
 import { htmlToPlainText, toMetaDescription } from "@/app/lib/metadata";
+import { ARTICLE_TYPES } from "@/app/lib/article-config";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -36,14 +37,12 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { destinationSlug, articleSlug } = await params;
-  const {
-    canonicalDestination,
-    article,
-    allItemsWithSections,
-    relatedArticles,
-  } = await getArticlePageData(destinationSlug, articleSlug);
+  const { canonicalDestination, article, sections, relatedArticles } =
+    await getArticlePageData(destinationSlug, articleSlug);
 
   const heroImage = article.heroImage;
+  const config = ARTICLE_TYPES[article.articleTemplate];
+  const neighborhoodLabels = article.sectionsBy !== "neighborhood";
 
   return (
     <>
@@ -75,8 +74,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         ></div>
         <QuickPicks quickPicks={article.quickPicks} />
         <FilterContainer
-          places={allItemsWithSections}
+          display={{
+            neighborhoodLabels,
+            grouped: config.grouped,
+            showFilters: config.filters,
+            showComparison: config.comparison,
+            cardSize: config.cardSize,
+          }}
+          sections={sections}
           relatedArticles={relatedArticles}
+          articleDestinationId={canonicalDestination.id}
         />
       </div>
     </>

@@ -6,15 +6,17 @@ export type Experience = {
   id: number;
   slug: string;
   title: string;
-  primaryDestination: WPItemRef;
+  destination: WPItemRef | null;
   shortDescription: string;
   images: WPImage[];
   experienceType: string;
   travelStyles: Term[];
+  filters: Term[];
   durationInMinutes: number | null;
   defaultSlotSpan: number | null;
   steps: ExperienceStep[];
   ctaLinks: { label: string; url: string }[];
+  isBookable: boolean;
   mapLink: string;
   coordinates: { lat: string | null; long: string | null } | null;
   doneIt: boolean;

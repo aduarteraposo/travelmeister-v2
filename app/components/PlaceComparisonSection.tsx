@@ -1,20 +1,20 @@
 "use client";
 
-import { Place, Term, WithSection } from "../types/app/place";
+import { Place, Term } from "../types/app/place";
 import usePlaceSelection from "../hooks/usePlaceSelection";
 import PlaceSelector from "./PlaceSelector";
 import PlaceComparisonTable from "./PlaceComparisonTable";
 import SocialEmbeds from "./SocialEmbeds";
 
-export default function PlaceComparisonSection({
-  allPlaces,
-  filteredPlaces,
+export default function HotelComparisonSection({
+  allHotels,
+  filteredHotels,
   filters,
   setFilter,
   activeFilter,
 }: {
-  allPlaces: WithSection<Place>[];
-  filteredPlaces: WithSection<Place>[];
+  allHotels: Place[];
+  filteredHotels: Place[];
   filters: Term[];
   setFilter: React.Dispatch<React.SetStateAction<string>>;
   activeFilter: string;
@@ -25,29 +25,29 @@ export default function PlaceComparisonSection({
     isEligible,
     isVisible,
     handleCheckboxChange,
-    selectAllPlaces,
-    clearAllPlaces,
-  } = usePlaceSelection({ allPlaces, filteredPlaces });
+    selectAllHotels,
+    clearAllHotels,
+  } = usePlaceSelection({ allHotels, filteredHotels });
 
-  const placeSelector = (
+  const hotelSelector = (
     <PlaceSelector
-      allPlaces={allPlaces}
+      allPlaces={allHotels}
       isSelected={isSelected}
       isEligible={isEligible}
       handleCheckboxChange={handleCheckboxChange}
-      selectAllPlaces={selectAllPlaces}
-      clearAllPlaces={clearAllPlaces}
+      selectAllPlaces={selectAllHotels}
+      clearAllPlaces={clearAllHotels}
     />
   );
 
   return (
     <>
-      {placeSelector}
-      <PlaceComparisonTable visiblePlaces={visiblePlaces} />
+      {hotelSelector}
+      <PlaceComparisonTable visibleHotels={visiblePlaces} />
       <SocialEmbeds
-        allPlaces={allPlaces}
+        allHotels={allHotels}
         isVisible={isVisible}
-        placeSelector={placeSelector}
+        hotelSelector={hotelSelector}
         filters={filters}
         setFilter={setFilter}
         activeFilter={activeFilter}

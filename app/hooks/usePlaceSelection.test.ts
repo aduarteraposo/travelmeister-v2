@@ -10,13 +10,13 @@ vi.mock("next/navigation", () => ({
 
 import * as navigation from "next/navigation";
 
-const filteredPlaces = [
+const filteredHotels = [
   { id: 1 },
   { id: 2 },
   { id: 3 },
 ] as WithSection<Place>[];
 
-const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as WithSection<Place>[];
+const allHotels = [{ id: 1 }, { id: 2 }, { id: 3 }] as WithSection<Place>[];
 
 function setupNavigationMocks({
   pathname = "/paris",
@@ -50,7 +50,7 @@ function setupNavigationMocks({
 }
 
 function getSelectedIds(isSelected: (place: WithSection<Place>) => boolean) {
-  return allPlaces.filter(isSelected).map((place) => place.id);
+  return allHotels.filter(isSelected).map((place) => place.id);
 }
 
 describe("usePlaceSelection", () => {
@@ -61,8 +61,8 @@ describe("usePlaceSelection", () => {
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 
@@ -77,13 +77,13 @@ describe("usePlaceSelection", () => {
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 
     act(() => {
-      result.current.clearAllPlaces();
+      result.current.clearAllHotels();
     });
 
     // expect
@@ -97,8 +97,8 @@ describe("usePlaceSelection", () => {
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 
@@ -117,8 +117,8 @@ describe("usePlaceSelection", () => {
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 
@@ -145,8 +145,8 @@ describe("usePlaceSelection", () => {
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 
@@ -156,20 +156,20 @@ describe("usePlaceSelection", () => {
 
   it("updates URLParams correctly", async () => {
     // arrange
-    const filteredPlaces = [
+    const filteredHotels = [
       { id: 1 },
       { id: 2 },
       { id: 3 },
     ] as WithSection<Place>[];
-    const allPlaces = [{ id: 1 }, { id: 2 }, { id: 3 }] as WithSection<Place>[];
+    const allHotels = [{ id: 1 }, { id: 2 }, { id: 3 }] as WithSection<Place>[];
 
     const { replace } = setupNavigationMocks();
 
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 
@@ -193,8 +193,8 @@ describe("usePlaceSelection", () => {
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 
@@ -216,18 +216,18 @@ describe("usePlaceSelection", () => {
   it("only marks places as visible that are both selected and filtered", () => {
     // arrange
     setupNavigationMocks({ compare: "1,2" });
-    const filteredPlaces = [{ id: 2 }, { id: 3 }] as WithSection<Place>[];
+    const filteredHotels = [{ id: 2 }, { id: 3 }] as WithSection<Place>[];
 
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 
     // expect
-    expect(allPlaces.filter(result.current.isVisible).map((p) => p.id)).toEqual(
+    expect(allHotels.filter(result.current.isVisible).map((p) => p.id)).toEqual(
       [2]
     );
   });
@@ -239,8 +239,8 @@ describe("usePlaceSelection", () => {
     // act
     const { result } = renderHook(() =>
       usePlaceSelection({
-        allPlaces,
-        filteredPlaces,
+        allHotels,
+        filteredHotels,
       })
     );
 

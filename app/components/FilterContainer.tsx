@@ -1,46 +1,85 @@
 "use client";
 import { useMemo, useState } from "react";
 import PlaceComparisonSection from "./PlaceComparisonSection";
-import PlaceList from "./PlaceList";
 import Filters from "./Filters";
-import { Place, WithSection } from "../types/app/place";
-import { CleanArticle } from "../types/app/article";
+import { Place } from "../types/app/place";
+import { CleanArticle, Section } from "../types/app/article";
 import ArticleTeaser from "./ArticleTeaser";
-import { getAvailableFilters } from "../lib/filters";
+import { getAvailableFilters, matchesFilter } from "../lib/filters";
+import { Experience } from "../types/app/experience";
+import { Item } from "../types/app/item";
+import ArticleSection from "./ArticleSection";
 
 export default function FilterContainer({
-  places,
+  sections,
   relatedArticles,
+  display,
+  articleDestinationId,
 }: {
-  places: WithSection<Place>[];
+  sections: Section<Item, Place | Experience>[];
   relatedArticles: CleanArticle[];
+  articleDestinationId: number;
+  display: {
+    showComparison: boolean;
+    showFilters: boolean;
+    grouped: boolean;
+    neighborhoodLabels: boolean;
+    cardSize: string;
+  };
 }) {
   const [activeFilter, setActiveFilter] = useState<string>("all");
-  const filteredPlaces = useMemo(() => {
+  const filteredSections: Section<Item, Place | Experience>[] = useMemo(() => {
     return activeFilter === "all"
-      ? places
-      : places.filter(
-          (place) =>
-            place.filters.some((filter) => filter.slug === activeFilter) ||
-            place.travelStyles.some((style) => style.slug === activeFilter)
-        );
-  }, [activeFilter, places]);
+      ? sections
+      : sections
+          .map((section) => ({
+            ...section,
+            entries: section.entries.filter((entry) =>
+              matchesFilter(entry, activeFilter)
+            ),
+          }))
+          .filter((section) => section.entries.length > 0);
+  }, [activeFilter, sections]);
 
   const availableFilters = useMemo(() => {
-    return getAvailableFilters(places);
-  }, [places]);
+    return getAvailableFilters(sections);
+  }, [sections]);
 
+  const hotels = useMemo(() => getHotels(sections), [sections]);
+  const filteredHotels = useMemo(
+    () => getHotels(filteredSections),
+    [filteredSections]
+  );
+
+  function getHotels(sections: Section<Item, Place | Experience>[]): Place[] {
+    return sections.flatMap((section) =>
+      section.entries.flatMap((entry) =>
+        entry.item?.kind === "hotel" ? [entry.item.data] : []
+      )
+    );
+  }
   return (
     <>
       <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-12 items-start">
         <div className="lg:col-span-3">
           <div>
-            <Filters
-              filters={availableFilters}
-              setFilter={setActiveFilter}
-              activeFilter={activeFilter}
-            />
-            <PlaceList places={filteredPlaces} />
+            {display.showFilters && (
+              <Filters
+                filters={availableFilters}
+                setFilter={setActiveFilter}
+                activeFilter={activeFilter}
+              />
+            )}
+            <div>
+              {filteredSections.map((section) => (
+                <ArticleSection
+                  key={section.key}
+                  section={section}
+                  display={display}
+                  articleDestinationId={articleDestinationId}
+                />
+              ))}
+            </div>
           </div>
         </div>
         <div className="hidden lg:block lg:col-span-1 sticky top-20 h-[calc(100dvh-130px)]">
@@ -52,28 +91,32 @@ export default function FilterContainer({
           </div>
         </div>
       </div>
-      <div className="lg:col-span-4 mt-12 lg:mt-40">
-        <h2 className="font-outdoor text-5xl md:text-6xl mb-1">
-          Compare your favorites
-        </h2>
-        <p className="mb-8">
-          Select all or check the boxes of the stays you want to see
-          side-by-side.
-        </p>
-        <Filters
-          filters={availableFilters}
-          setFilter={setActiveFilter}
-          activeFilter={activeFilter}
-          fixed={true}
-        />
-        <PlaceComparisonSection
-          allPlaces={places}
-          filteredPlaces={filteredPlaces}
-          filters={availableFilters}
-          setFilter={setActiveFilter}
-          activeFilter={activeFilter}
-        />
-      </div>
+      {display.showComparison && (
+        <div className="lg:col-span-4 mt-12 lg:mt-40">
+          <h2 className="font-outdoor text-5xl md:text-6xl mb-1">
+            Compare your favorites
+          </h2>
+          <p className="mb-8">
+            Select all or check the boxes of the stays you want to see
+            side-by-side.
+          </p>
+          {display.showFilters && (
+            <Filters
+              filters={availableFilters}
+              setFilter={setActiveFilter}
+              activeFilter={activeFilter}
+              fixed={true}
+            />
+          )}
+          <PlaceComparisonSection
+            allHotels={hotels}
+            filteredHotels={filteredHotels}
+            filters={availableFilters}
+            setFilter={setActiveFilter}
+            activeFilter={activeFilter}
+          />
+        </div>
+      )}
       <div className="lg:hidden mt-12">
         <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
         <div>

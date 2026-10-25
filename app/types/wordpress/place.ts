@@ -10,7 +10,7 @@ export type WPPlace = {
   place_filters: number[];
   travel_style: number[];
   acf: {
-    primary_destination: WPItemRef;
+    primary_destination: WPItemRef | "";
     badge: string;
     images: WPImage[];
     short_description: string;

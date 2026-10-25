@@ -7,14 +7,15 @@ import { getDestinationBySlug } from "../wordpress/destination";
 import { getPlacesByIds } from "../wordpress/place";
 import { getPostBySlug } from "../wordpress/post";
 import { normalizePlace } from "../normalizers/place";
-import { Place, WithSection } from "@/app/types/app/place";
 import { notFound } from "next/navigation";
-import { Experience } from "@/app/types/app/experience";
 import { getExperiencesByIds } from "../wordpress/experience";
 import { normalizeExperience } from "../normalizers/experience";
 import { toItem } from "../normalizers/item";
 import { Item } from "@/app/types/app/item";
 import { getRelatedArticles } from "../related-articles";
+import { Section } from "@/app/types/app/article";
+import { Experience } from "@/app/types/app/experience";
+import { Place } from "@/app/types/app/place";
 
 export async function getArticlePageData(
   destinationSlug: string,
@@ -31,17 +32,21 @@ export async function getArticlePageData(
 
   if (
     !canonicalDestination ||
+    !post.acf.primary_destination ||
     canonicalDestination.id !== post.acf.primary_destination?.ID
   ) {
     notFound();
   }
 
   const cleanArticle = normalizeArticle(post);
+
   const { placeIds, experienceIds } = getArticlePlaceIds(cleanArticle);
   const [places, experiences] = await Promise.all([
     getPlacesByIds(placeIds),
     getExperiencesByIds(experienceIds),
   ]);
+
+  // console.log(placeIds);
 
   const items: Item[] = [
     ...places.map(normalizePlace).map(toItem),
@@ -53,21 +58,10 @@ export async function getArticlePageData(
   const itemsById = Object.fromEntries(
     items.map((item) => [item.data.id, item])
   );
+
   const article = resolveArticle(cleanArticle, itemsById);
 
-  const allItemsWithSections: WithSection<Place | Experience>[] =
-    article.sections.flatMap((section) =>
-      section.entries.flatMap((entry) =>
-        entry.item
-          ? [
-              {
-                ...entry.item,
-                section_title: section.title,
-              },
-            ]
-          : []
-      )
-    );
+  const sections: Section<Item, Place | Experience>[] = article.sections;
 
   const relatedArticles = await getRelatedArticles(
     article,
@@ -77,7 +71,7 @@ export async function getArticlePageData(
   return {
     canonicalDestination,
     article,
-    allItemsWithSections,
+    sections,
     relatedArticles,
   };
 }

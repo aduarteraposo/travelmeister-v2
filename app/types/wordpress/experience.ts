@@ -7,11 +7,12 @@ export type WPExperience = {
   slug: string;
   title: { rendered: string };
   acf: {
-    primary_destination: WPItemRef;
+    primary_destination: WPItemRef | "";
     short_description: string;
     images: WPImage[];
     experience_type: WPTerm;
     travel_styles: WPTerm;
+    filters: WPTerm[] | false;
     duration_minutes: number;
     default_slot_span: number;
     steps: WPExperienceStep[];
