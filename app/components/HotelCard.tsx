@@ -1,9 +1,4 @@
-import Image from "next/image";
 import { Place } from "../types/app/place";
-import PlaceImageCarousel from "./PlaceImageCarousel";
-import Tags from "./Tags";
-import { FaLocationDot } from "react-icons/fa6";
-import Link from "next/link";
 import HotelCardFull from "./HotelCardFull";
 import HotelCardMedium from "./HotelCardMedium";
 import HotelCardSmall from "./HotelCardSmall";
