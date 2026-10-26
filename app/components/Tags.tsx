@@ -11,7 +11,7 @@ export default function Tags({
   center?: boolean;
   stayed?: boolean;
   count?: number;
-  size: string;
+  size?: string;
 }) {
   if (stayed && count) count--;
 

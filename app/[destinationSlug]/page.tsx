@@ -60,7 +60,7 @@ export default async function DestinationPage({ params }: DestinationProps) {
             {destination.title.rendered}
           </h1>
           <p>{destination.acf.hero_intro}</p>
-          <Tags tags={destination.acf.hero_tags} center size="full" />
+          <Tags tags={destination.acf.hero_tags} center />
         </div>
       </header>
       <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">

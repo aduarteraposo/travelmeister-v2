@@ -40,7 +40,9 @@ export async function getAllArticleRouteParams(): Promise<
   const routeParams: ArticleRouteParams[] = [];
 
   for (const article of articles) {
-    const destinationSlug = article.acf.primary_destination?.post_name;
+    const destinationSlug = article.acf.primary_destination
+      ? article.acf.primary_destination.post_name
+      : "";
 
     if (!destinationSlug) {
       console.warn(
