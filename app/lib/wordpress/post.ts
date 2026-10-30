@@ -101,7 +101,7 @@ export async function getPostsByCategory(params: {
 }
 
 export async function getRelatedCandidates(scopeId: number, excludeId: number) {
-  const endpoint = `/posts?destination=${scopeId}&per_page=100&exclude=${excludeId}&acf_format=standard&_fields=id,slug,title,acf.hotel_style,acf.primary_destination,acf.article_category,acf.hero_image`;
+  const endpoint = `/posts?destination=${scopeId}&per_page=100&exclude=${excludeId}&acf_format=standard&_fields=id,slug,title,meta.url_destination,acf.hotel_style,acf.primary_destination,acf.article_category,acf.hero_image`;
 
   return wordpressFetch<WPPost[]>(endpoint, {
     revalidate: REVALIDATE.day,

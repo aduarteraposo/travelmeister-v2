@@ -8,6 +8,7 @@ import {
 } from "@/app/types/app/article";
 import { Item } from "@/app/types/app/item";
 import { WPPost } from "@/app/types/wordpress/post";
+import { toTerm } from "./place";
 
 export function normalizeArticle(post: WPPost): CleanArticle {
   const article: CleanArticle = {
@@ -21,6 +22,7 @@ export function normalizeArticle(post: WPPost): CleanArticle {
       typeof post.acf.primary_destination === "object"
         ? post.acf.primary_destination
         : null,
+    urlDestination: post.meta?.url_destination ? post.meta.url_destination : "",
     heroImage:
       post.acf.hero_image && typeof post.acf.hero_image === "object"
         ? {
@@ -34,7 +36,7 @@ export function normalizeArticle(post: WPPost): CleanArticle {
         : null,
     articleCategory:
       post.acf.article_category && typeof post.acf.article_category === "object"
-        ? post.acf.article_category
+        ? toTerm(post.acf.article_category)
         : null,
     articleTemplate: isArticleTemplate(post.acf.article_template)
       ? post.acf.article_template

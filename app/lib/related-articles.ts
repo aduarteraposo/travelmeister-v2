@@ -8,7 +8,7 @@ export async function getRelatedArticles(
   destination: WPDestination
 ): Promise<CleanArticle[]> {
   const destinationId = destination.id;
-  const categoryId = article.articleCategory?.term_id;
+  const categoryId = article.articleCategory?.id;
   const hotelStyle = article.hotelStyle;
   const parentDestination = Array.isArray(destination.acf.parent_destination)
     ? destination.acf.parent_destination[0]
@@ -58,7 +58,7 @@ export function rankArticles(
 ) {
   const rankedArticleList = relatedArticles.map((rel) => {
     let points = 0;
-    const relCategoryId = rel.articleCategory?.term_id;
+    const relCategoryId = rel.articleCategory?.id;
     const relDestinationId = rel.destination?.ID;
     const relHotelStyle = rel.hotelStyle;
 

@@ -1,3 +1,4 @@
+import { ArticleConfig } from "../lib/article-config";
 import { Entry } from "../types/app/article";
 import { Experience } from "../types/app/experience";
 import { Item } from "../types/app/item";
@@ -15,14 +16,14 @@ export default function EntryCard({
   entry: Entry<Item, Place | Experience>;
   neighborhoodLabels: boolean;
   articleDestinationId: number;
-  cardSize: string;
+  cardSize: ArticleConfig["cardSize"];
 }) {
   const item = entry.item;
 
   if (!item) {
     return (
       <li className="mb-28 last:mb-0">
-        <h3>Test Title</h3>
+        <h3 className="text-2xl font-bold">Test Title</h3>
         <p>{entry.editorialNote}</p>
         {cardSize === "full" && entry.options.length > 0 && (
           <ul className="flex overflow-x-auto snax-x">

@@ -3,6 +3,8 @@ import { Place } from "../types/app/place";
 import Tags from "./Tags";
 import Image from "next/image";
 import { FaLocationDot } from "react-icons/fa6";
+import HotelImage from "./HotelImage";
+import MapLinkAndBudget from "./MapLinkAndBudget";
 
 export default function HotelCardMedium({
   hotel,
@@ -16,15 +18,7 @@ export default function HotelCardMedium({
   return (
     <li className="last:mb-0 md:flex border rounded-xl mb-12 gap-2">
       <div className="relative h-60 md:h-auto md:min-h-48 md:w-2/5 shrink-0">
-        {hotel.images?.length > 0 && (
-          <Image
-            className="object-cover rounded-t-xl md:rounded-l-xl md:rounded-tr-none"
-            src={hotel.images[0].url}
-            alt={hotel.images[0].alt}
-            fill
-            sizes="(min-width: 768px) 40vw, 100vw"
-          />
-        )}
+        {hotel.images.length > 0 && <HotelImage image={hotel.images[0]} />}
       </div>
       <div className="md:flex-1 pt-4 px-4 pb-4">
         <h3 className="flex flex-col-reverse gap-1 lg:gap-4 items-start lg:items-center lg:flex-row text-2xl font-bold mb-3">
@@ -39,28 +33,7 @@ export default function HotelCardMedium({
           />
         )}
         <p className="mb-4">{note ? note : hotel.shortDescription}</p>
-        <ul className="flex items-center gap-3 mb-4">
-          <li className="flex items-center gap-1">
-            <span>
-              <FaLocationDot />
-            </span>
-            <Link
-              href={hotel.mapLink}
-              className="hover:underline underline-offset-3"
-            >
-              {showNeighborhood
-                ? `${hotel.destination?.post_title} - View on Map`
-                : "View on Map"}
-            </Link>
-          </li>
-          {hotel.budget && (
-            <>
-              <span>-</span>
-              <li>{hotel.budget}</li>
-            </>
-          )}
-        </ul>
-
+        <MapLinkAndBudget hotel={hotel} showNeighborhood={showNeighborhood} />
         <p className="mb-4">
           <span className="font-bold">Vibe: </span>
           {hotel.vibe}

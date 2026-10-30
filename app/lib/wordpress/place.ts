@@ -16,3 +16,15 @@ export async function getPlacesByIds(ids: number[]): Promise<WPPlace[]> {
 
   return data;
 }
+
+export async function getPlaceBySlug(slug: string): Promise<WPPlace> {
+  const data = await wordpressFetch<WPPlace[]>(
+    `/place?slug=${slug}&acf_format=standard`,
+    {
+      revalidate: REVALIDATE.day,
+      tags: [`places:slug:${slug}`, "places"],
+    }
+  );
+
+  return data[0];
+}

@@ -9,6 +9,7 @@ import { getAvailableFilters, matchesFilter } from "../lib/filters";
 import { Experience } from "../types/app/experience";
 import { Item } from "../types/app/item";
 import ArticleSection from "./ArticleSection";
+import { ArticleConfig } from "../lib/article-config";
 
 export default function FilterContainer({
   sections,
@@ -24,7 +25,7 @@ export default function FilterContainer({
     showFilters: boolean;
     grouped: boolean;
     neighborhoodLabels: boolean;
-    cardSize: string;
+    cardSize: ArticleConfig["cardSize"];
   };
 }) {
   const [activeFilter, setActiveFilter] = useState<string>("all");

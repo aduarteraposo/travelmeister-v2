@@ -1,59 +1,55 @@
-import { WPDestination } from "../wordpress/destination";
 import { WPImage } from "../wordpress/media";
-import { WPItemRef, WPPost } from "../wordpress/post";
-import { WPArticleCategory } from "../wordpress/taxonomy";
-import { CleanArticle } from "./article";
-import { LabeledPlace, Place } from "./place";
+import { WPItemRef } from "../wordpress/post";
+import { Term } from "./place";
 
 export type Destination = {
   id: number;
   slug: string;
-  title: { rendered: string };
-  acf: {
-    destination_type: { term_id: number; slug: string };
-    parent_destination: WPItemRef | WPItemRef[] | null;
-    hero_image: WPImage;
-    hero_intro: string;
-    card_description: string;
-    hero_tags: { label: string }[];
-    practical_info: PracticalInfo;
-    travel_styles: TravelStyle[];
-    featured_subdestinations: WPDestination[];
-    featured_hotels: LabeledPlace[];
-    featured_restaurants: LabeledPlace[];
-    featured_tours: LabeledPlace[];
-    featured_sights: LabeledPlace[];
-    article_sections: ArticleSection[];
-  };
+  title: string;
+  destinationType: Term | null;
+  parentDestination: WPItemRef | null;
+  heroImage: WPImage | null;
+  heroIntro: string;
+  cardDescription: string;
+  heroTags: { label: string }[];
+  practicalInfo: PracticalInfo | null;
+  travelStyles: TravelStyle[];
+  whichRegion:
+    | { label: string; destinations: WPItemRef[]; why: string }[]
+    | null;
+  featuredSubdestinations: WPItemRef[];
+  picks: WPItemRef[];
+  articleSections: ArticleSection[];
 };
 
 export type PracticalInfo = {
-  best_time: string;
-  trip_planning_note: string;
-  budget_note: string;
-  transport_note: string;
-  food_tip: string;
+  bestTime: string;
+  tripPlanningNote: string;
+  budgetNote: string;
+  transportNote: string;
+  foodTip: string;
 };
 
 export type TravelStyle = {
-  style: { term_id: number; name: string; slug: string };
+  style: Term | null;
   summary: string;
-  where_to_stay: {
-    stay_note: string;
-    primary_place: Place;
-    alternative_places: Place[];
-  };
-  focus: string;
-  skip: string;
-  featured_experiences: Place[];
-  suggested_itinerary: { label: string; value: string }[];
-  related_articles: WPPost[];
+  whereToStay: {
+    stayNote: string;
+    primaryPlace: WPItemRef | null;
+    alternativePlaces: WPItemRef[];
+  } | null;
+  whatToDo: {
+    focus: string;
+    skip: string;
+    bestExperiences: WPItemRef[];
+  } | null;
+  suggestedPlan: { title: string; text: string }[];
 };
 
 export type ArticleSection = {
   title: string;
-  category: WPArticleCategory;
-  manual_articles: CleanArticle[];
-  initial_items_count: number;
-  load_more_count: number;
+  category: Term | null;
+  manualArticles: WPItemRef[];
+  initialItemsCount: number;
+  loadMoreCount: number;
 };

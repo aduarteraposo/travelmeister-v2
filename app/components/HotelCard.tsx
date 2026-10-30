@@ -1,6 +1,8 @@
+import { ArticleConfig } from "../lib/article-config";
 import { Place } from "../types/app/place";
 import HotelCardFull from "./HotelCardFull";
 import HotelCardMedium from "./HotelCardMedium";
+import HotelCardMini from "./HotelCardMini";
 import HotelCardSmall from "./HotelCardSmall";
 
 export default function HotelCard({
@@ -10,7 +12,7 @@ export default function HotelCard({
   note,
 }: {
   hotel: Place;
-  size: string;
+  size: ArticleConfig["cardSize"];
   showNeighborhood: boolean;
   note: string;
 }) {
@@ -43,6 +45,14 @@ export default function HotelCard({
           showNeighborhood={showNeighborhood}
         />
       );
+      break;
+    case "mini":
+      hotelCard = <HotelCardMini hotel={hotel} />;
+      break;
+
+    default:
+      const _exhaustiveCheck: never = size;
+      console.warn(`Unhandled size: ${_exhaustiveCheck}`);
   }
 
   return hotelCard;

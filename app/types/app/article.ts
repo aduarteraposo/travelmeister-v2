@@ -4,7 +4,7 @@ import { WPItemRef } from "../wordpress/post";
 import { Experience } from "./experience";
 import { Item } from "./item";
 import { Itinerary } from "./itinerary";
-import { Place } from "./place";
+import { Place, Term } from "./place";
 
 export type Article = ArticleOf<Item, Place | Experience>;
 
@@ -17,8 +17,9 @@ export type ArticleOf<TItem, TOption = TItem> = {
   excerpt: string;
   content: string;
   destination: WPItemRef | null;
+  urlDestination: string;
   heroImage: WPImage | null;
-  articleCategory: WPTerm | null;
+  articleCategory: Term | null;
   articleTemplate: ArticleTemplate;
   sections: Section<TItem, TOption>[];
   quickPicks: QuickPick<TOption>[];

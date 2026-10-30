@@ -3,7 +3,7 @@ import {
   normalizeArticle,
   resolveArticle,
 } from "../normalizers/article";
-import { getDestinationBySlug } from "../wordpress/destination";
+import { getDestinationById } from "../wordpress/destination";
 import { getPlacesByIds } from "../wordpress/place";
 import { getPostBySlug } from "../wordpress/post";
 import { normalizePlace } from "../normalizers/place";
@@ -21,23 +21,25 @@ export async function getArticlePageData(
   destinationSlug: string,
   articleSlug: string
 ) {
-  const [canonicalDestination, post] = await Promise.all([
-    getDestinationBySlug(destinationSlug),
-    getPostBySlug(articleSlug),
-  ]);
+  const post = await getPostBySlug(articleSlug);
+  const urlDestinationSlug = destinationSlug;
 
   if (!post) {
     notFound();
   }
 
   if (
-    !canonicalDestination ||
+    !urlDestinationSlug ||
+    !post.meta.url_destination ||
     !post.acf.primary_destination ||
-    canonicalDestination.id !== post.acf.primary_destination?.ID
+    urlDestinationSlug !== post.meta.url_destination
   ) {
     notFound();
   }
 
+  const canonicalDestination = await getDestinationById(
+    post.acf.primary_destination.ID
+  );
   const cleanArticle = normalizeArticle(post);
 
   const { placeIds, experienceIds } = getArticlePlaceIds(cleanArticle);
@@ -45,8 +47,6 @@ export async function getArticlePageData(
     getPlacesByIds(placeIds),
     getExperiencesByIds(experienceIds),
   ]);
-
-  // console.log(placeIds);
 
   const items: Item[] = [
     ...places.map(normalizePlace).map(toItem),

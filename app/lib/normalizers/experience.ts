@@ -2,14 +2,17 @@ import { Experience } from "@/app/types/app/experience";
 import { WPExperience } from "@/app/types/wordpress/experience";
 import { toTerm } from "./place";
 
-export function normalizeExperience(place: WPExperience): Experience {
-  const acf = place.acf ?? {};
+export function normalizeExperience(experience: WPExperience): Experience {
+  const acf = experience.acf ?? {};
 
   const normalizedExperience: Experience = {
-    id: place.id,
-    slug: place.slug,
-    title: place.title ? place.title.rendered : "",
+    id: experience.id,
+    slug: experience.slug,
+    title: experience.title ? experience.title.rendered : "",
     destination: acf.primary_destination ? acf.primary_destination : null,
+    urlDestination: experience.meta?.url_destination
+      ? experience.meta.url_destination
+      : "",
     images: Array.isArray(acf.images)
       ? acf.images.flatMap((image) =>
           image && typeof image === "object"
@@ -43,8 +46,8 @@ export function normalizeExperience(place: WPExperience): Experience {
       : [],
     experienceType:
       acf.experience_type && typeof acf.experience_type === "object"
-        ? acf.experience_type.slug ?? ""
-        : "",
+        ? toTerm(acf.experience_type)
+        : null,
     travelStyles: Array.isArray(acf.travel_styles)
       ? acf.travel_styles.flatMap((style) =>
           style && typeof style === "object" ? [toTerm(style)] : []

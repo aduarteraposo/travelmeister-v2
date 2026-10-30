@@ -9,6 +9,7 @@ export type WPPlace = {
   place_subtype: number[];
   place_filters: number[];
   travel_style: number[];
+  meta: { url_destination: string };
   acf: {
     primary_destination: WPItemRef | "";
     badge: string;

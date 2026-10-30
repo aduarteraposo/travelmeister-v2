@@ -1,3 +1,4 @@
+import { ArticleConfig } from "../lib/article-config";
 import { groupEntries } from "../lib/group-entries";
 import { Section } from "../types/app/article";
 import { Experience } from "../types/app/experience";
@@ -22,7 +23,7 @@ export default function ArticleSection({
   display: {
     grouped: boolean;
     neighborhoodLabels: boolean;
-    cardSize: string;
+    cardSize: ArticleConfig["cardSize"];
   };
 }) {
   const groups = display.grouped
@@ -42,10 +43,7 @@ export default function ArticleSection({
       )}
 
       {groups.map((group, index) => (
-        <div
-          className="mb-12 last:mb-0"
-          key={group.label ? group.label : index}
-        >
+        <div className="mb-4 last:mb-0" key={group.label ? group.label : index}>
           {GROUP_NAMES[group.label] && (
             <h3 className="font-outdoor text-5xl mb-2">
               {GROUP_NAMES[group.label]}
@@ -53,7 +51,7 @@ export default function ArticleSection({
           )}
           <ul
             className={`${
-              display.cardSize === "small"
+              display.cardSize === "small" || display.cardSize === "mini"
                 ? "flex gap-3 overflow-x-auto snap-x no-scrollbar items-start"
                 : ""
             }`}

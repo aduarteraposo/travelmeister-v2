@@ -7,9 +7,10 @@ export type Experience = {
   slug: string;
   title: string;
   destination: WPItemRef | null;
+  urlDestination: string;
   shortDescription: string;
   images: WPImage[];
-  experienceType: string;
+  experienceType: Term | null;
   travelStyles: Term[];
   filters: Term[];
   durationInMinutes: number | null;

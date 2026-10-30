@@ -17,7 +17,7 @@ export default function Tags({
 
   return (
     <ul
-      className={`flex flex-wrap gap-3 ${
+      className={`flex flex-wrap gap-3 items-center ${
         size === "small"
           ? "mt-3 mb-4 md:mt-3 md:my-4"
           : size === "medium"
@@ -25,7 +25,7 @@ export default function Tags({
           : "mt-5 mb-4 md:mt-6 md:my-5"
       } ${center ? "justify-center" : ""}`}
     >
-      {stayed && <Tag key="stayed">Stayed here</Tag>}
+      {stayed && <Tag key="stayed">We stayed here</Tag>}
       {tags &&
         tags.flatMap((tag, index) =>
           count && index >= count

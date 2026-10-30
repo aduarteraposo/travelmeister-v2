@@ -10,6 +10,7 @@ export type Place = {
   images: WPImage[];
   shortDescription: string;
   destination: WPItemRef | null;
+  urlDestination: string;
   editorTags: { label: string }[];
   bestIf: string;
   notIdealIf: string;

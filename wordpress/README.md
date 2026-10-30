@@ -37,8 +37,9 @@ index ever looks wrong. Activate → open `/wp-admin/?tm_reindex=1` → deactiva
 
 ## Good to know
 
-- `parent_destination` is an ACF relationship field, stored as a serialized list
-  (`a:1:{i:0;s:3:"186";}`). That's why the subtree search uses `LIKE '"186"'` instead of `=`.
+- `parent_destination` is an ACF Post Object field (Select Multiple off), stored as a plain ID
+  (`186`). It used to be a relationship field, stored as a list (`a:1:{i:0;s:3:"186";}`), so the
+  subtree search matches both formats.
 - Deactivating `destination-index.php` stops the filter; the stored `destination_ids` stay in the
   database but are unused. No cleanup needed.
 - Items created via the REST API (the hotel agent) may not trigger `acf/save_post`. If such an item

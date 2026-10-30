@@ -27,6 +27,9 @@ export function normalizePlace(place: WPPlace): Place {
       : [],
     shortDescription: acf.short_description ?? "",
     destination: acf.primary_destination ? acf.primary_destination : null,
+    urlDestination: place.meta?.url_destination
+      ? place.meta.url_destination
+      : "",
     editorTags: Array.isArray(acf.editor_tags)
       ? acf.editor_tags.map((tag) => ({ label: tag.label ?? "" }))
       : [],

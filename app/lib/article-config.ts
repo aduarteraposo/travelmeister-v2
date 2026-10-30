@@ -1,7 +1,7 @@
 import { ArticleTemplate } from "../types/app/article";
 
 export type ArticleConfig = {
-  cardSize: "full" | "medium" | "small";
+  cardSize: "full" | "medium" | "small" | "mini";
   filters: boolean;
   comparison: boolean;
   grouped: boolean;
@@ -27,7 +27,7 @@ export const ARTICLE_TYPES: Record<ArticleTemplate, ArticleConfig> = {
     grouped: false,
   },
   "where-to-stay": {
-    cardSize: "small",
+    cardSize: "mini",
     filters: false,
     comparison: false,
     grouped: true,

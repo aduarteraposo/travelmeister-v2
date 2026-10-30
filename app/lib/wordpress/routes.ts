@@ -1,5 +1,5 @@
 import { WPDestination } from "@/app/types/wordpress/destination";
-import { REVALIDATE, wordpressFetch } from "./client";
+import { REVALIDATE, wordpressFetch, wordpressFetchAll } from "./client";
 import { WPPost } from "@/app/types/wordpress/post";
 
 type DestinationRoutParams = {
@@ -29,8 +29,8 @@ type ArticleRouteParams = {
 export async function getAllArticleRouteParams(): Promise<
   ArticleRouteParams[]
 > {
-  const articles = await wordpressFetch<WPPost[]>(
-    "/posts?acf_format=standard",
+  const articles = await wordpressFetchAll<WPPost>(
+    "/posts?_fields=slug,meta.url_destination&per_page=100",
     {
       revalidate: REVALIDATE.day,
       tags: ["articles", "article-routes"],
@@ -40,13 +40,13 @@ export async function getAllArticleRouteParams(): Promise<
   const routeParams: ArticleRouteParams[] = [];
 
   for (const article of articles) {
-    const destinationSlug = article.acf.primary_destination
-      ? article.acf.primary_destination.post_name
+    const destinationSlug = article.meta?.url_destination
+      ? article.meta.url_destination
       : "";
 
     if (!destinationSlug) {
       console.warn(
-        `Skipping article "${article.slug}" (id: ${article.id}): missing or invalid acf.primary_destination.`
+        `Skipping article "${article.slug}" (id: ${article.id}): missing or invalid url_destination.`
       );
       continue;
     }

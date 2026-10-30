@@ -6,6 +6,7 @@ export type WPExperience = {
   id: number;
   slug: string;
   title: { rendered: string };
+  meta: { url_destination: string };
   acf: {
     primary_destination: WPItemRef | "";
     short_description: string;

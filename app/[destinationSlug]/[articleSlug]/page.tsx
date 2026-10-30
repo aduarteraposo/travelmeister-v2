@@ -36,9 +36,9 @@ export async function generateMetadata({
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  const { destinationSlug, articleSlug } = await params;
+  const { destinationSlug: urlDestinationSlug, articleSlug } = await params;
   const { canonicalDestination, article, sections, relatedArticles } =
-    await getArticlePageData(destinationSlug, articleSlug);
+    await getArticlePageData(urlDestinationSlug, articleSlug);
 
   const heroImage = article.heroImage;
   const config = ARTICLE_TYPES[article.articleTemplate];
