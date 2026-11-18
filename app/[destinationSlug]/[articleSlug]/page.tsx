@@ -37,8 +37,12 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { destinationSlug: urlDestinationSlug, articleSlug } = await params;
-  const { canonicalDestination, article, sections, relatedArticles } =
-    await getArticlePageData(urlDestinationSlug, articleSlug);
+  const {
+    normalizedDestination: destination,
+    article,
+    sections,
+    relatedArticles,
+  } = await getArticlePageData(urlDestinationSlug, articleSlug);
 
   const heroImage = article.heroImage;
   const config = ARTICLE_TYPES[article.articleTemplate];
@@ -56,7 +60,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             height={heroImage.height}
           />
         )}
-        <Breadcrumbs article={article} destination={canonicalDestination} />
+        <Breadcrumbs article={article} destination={destination} />
       </header>
       <div className="mx-auto">
         <div className="mb-20">
@@ -83,7 +87,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           }}
           sections={sections}
           relatedArticles={relatedArticles}
-          articleDestinationId={canonicalDestination.id}
+          articleDestinationId={destination.id}
         />
       </div>
     </>
