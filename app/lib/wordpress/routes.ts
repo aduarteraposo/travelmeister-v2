@@ -1,6 +1,8 @@
 import { WPDestination } from "@/app/types/wordpress/destination";
-import { REVALIDATE, wordpressFetch, wordpressFetchAll } from "./client";
+import { REVALIDATE, wordpressFetchAll } from "./client";
 import { WPPost } from "@/app/types/wordpress/post";
+import { WPPlace } from "@/app/types/wordpress/place";
+import { isPlaceType } from "@/app/types/app/place";
 
 type DestinationRoutParams = {
   destinationSlug: string;
@@ -9,7 +11,7 @@ type DestinationRoutParams = {
 export async function getAllDestinationRouteParams(): Promise<
   DestinationRoutParams[]
 > {
-  const destinations = await wordpressFetch<WPDestination[]>("/destination", {
+  const destinations = await wordpressFetchAll<WPDestination>("/destination", {
     revalidate: REVALIDATE.day,
     tags: ["destinations", "destination-routes"],
   });
@@ -52,6 +54,50 @@ export async function getAllArticleRouteParams(): Promise<
     }
 
     routeParams.push({ destinationSlug, articleSlug: article.slug });
+  }
+
+  return routeParams;
+}
+
+type HotelRouteParams = {
+  destinationSlug: string;
+  hotelSlug: string;
+};
+
+export async function getAllHotelRouteParams(): Promise<HotelRouteParams[]> {
+  const places = await wordpressFetchAll<WPPlace>(
+    "/place?_fields=id,slug,meta.url_destination,acf.place_type&per_page=100",
+    {
+      revalidate: REVALIDATE.day,
+      tags: ["places", "place-routes"],
+    }
+  );
+
+  const routeParams: HotelRouteParams[] = [];
+
+  for (const place of places) {
+    const destinationSlug = place.meta?.url_destination
+      ? place.meta.url_destination
+      : "";
+
+    if (!destinationSlug) {
+      console.warn(
+        `Skipping place "${place.slug}" (id: ${place.id}): missing or invalid url_destination.`
+      );
+      continue;
+    }
+
+    if (
+      isPlaceType(place.acf?.place_type?.slug) &&
+      place.acf?.place_type?.slug !== "hotel"
+    ) {
+      console.warn(
+        `Skipping place "${place.slug}" (id: ${place.id}): missing or invalid place_type.`
+      );
+      continue;
+    }
+
+    routeParams.push({ destinationSlug, hotelSlug: place.slug });
   }
 
   return routeParams;

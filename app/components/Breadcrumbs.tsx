@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getParentDestinations } from "../lib/wordpress/destination";
-import { WPDestination } from "../types/wordpress/destination";
 import { Destination } from "../types/app/destination";
 import { Article } from "../types/app/article";
+import { Place } from "../types/app/place";
 
 type Breadcrumb = {
   label: string;
@@ -11,11 +11,13 @@ type Breadcrumb = {
 
 type BreadcrumbsProps = {
   article?: Article;
-  destination: WPDestination | Destination;
+  place?: Place;
+  destination: Destination;
 };
 
 export default async function Breadcrumbs({
   article,
+  place,
   destination,
 }: BreadcrumbsProps) {
   const ancestorTree = await getParentDestinations(destination);
@@ -26,7 +28,7 @@ export default async function Breadcrumbs({
       href: "/",
     },
     ...ancestorTree.map((parent) => ({
-      label: parent.title.rendered,
+      label: parent.title,
       href: `/${parent.slug}`,
     })),
     article
@@ -34,10 +36,11 @@ export default async function Breadcrumbs({
           label: article.title,
         }
       : null,
+    place ? { label: place.title } : null,
   ].filter(Boolean);
 
   return (
-    <ul className="px-2 md:px-0 mt-2 md:mt-4 flex items-center gap-1 md:gap-2 text-xs md:text-sm md:pl-4">
+    <ul className="px-2 md:px-0 mt-2 md:mt-4 flex items-center gap-1 md:gap-2 text-xs md:text-sm md:pl-0">
       {breadcrumbs.map((item, index) => (
         <li
           key={index}

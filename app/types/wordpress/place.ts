@@ -9,9 +9,10 @@ export type WPPlace = {
   place_subtype: number[];
   place_filters: number[];
   travel_style: number[];
-  meta: { url_destination: string };
+  meta: { url_destination: string; url_destination_title: string };
   acf: {
     primary_destination: WPItemRef | "";
+    headline: string;
     badge: string;
     images: WPImage[];
     short_description: string;
@@ -36,19 +37,20 @@ export type WPPlace = {
       lat: string;
       long: string;
     };
-    stayed_here: boolean;
+    been_there: string | null;
     last_reviewed: string | null;
+    reviewed_by: number[] | false;
     verdict: string;
     photo_honesty: string;
     booking_request: string;
-    booking_notes: string[] | "";
-    privacy_note: string;
+    booking_notes: { item_text: string }[] | "";
     celebrations: string;
     night_view: string;
     sunset: string;
     noise: string;
     video: string | null;
     rooms: WPRoom[] | false;
+    number_of_rooms: string;
     shared_views:
       | { space_name: string; view: WPTerm | false; amount: string }
       | false;
@@ -72,11 +74,12 @@ export type WPRoom = {
   is_rest_row: boolean;
   views: WPView[];
   ask_for: string;
-  privacy_level: string;
+  privacy_level: { value: string; label: string } | "";
+  privacy_note: string;
   features: WPTerm[] | false;
   evidence: string[];
   is_pick: boolean;
-  photo: WPImage | false;
+  images: WPImage[] | false;
   note: string;
 };
 
@@ -85,3 +88,5 @@ export type WPView = {
   amount: string;
   seen_from: string[];
 };
+
+export type PlaceType = { id: number; slug: string };

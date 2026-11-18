@@ -6,11 +6,13 @@ export type Place = {
   id: number;
   slug: string;
   title: string;
+  headline: string;
   badge: string;
   images: WPImage[];
   shortDescription: string;
   destination: WPItemRef | null;
   urlDestination: string;
+  urlDestinationTitle: string;
   editorTags: { label: string }[];
   bestIf: string;
   notIdealIf: string;
@@ -29,19 +31,20 @@ export type Place = {
   visitDurationMinutes: string;
   mapLink: string;
   coordinates: { lat: string | null; long: string | null } | null;
-  stayedHere: boolean;
+  beenThere: Date | null;
   lastReviewed: Date | null;
+  reviewedBy: number | null;
   verdict: string;
   photoHonesty: string;
   bookingRequest: string;
   bookingNotes: string[];
-  privacyNote: string;
   celebrations: string;
   nightView: string;
   sunset: string;
   noise: string;
   video: string;
   rooms: Room[];
+  numberOfRooms: number | null;
   sharedViews:
     | { spaceName: string; view: WPTerm | null; amount: string }
     | false;
@@ -89,11 +92,12 @@ export type Room = {
   isRestRow: boolean;
   views: View[];
   askFor: string;
-  privacyLevel: string;
+  privacyLevel: { value: string; label: string } | null;
+  privacyNote: string;
   features: WPTerm[];
   evidence: string[];
   isPick: boolean;
-  photo: WPImage | null;
+  images: WPImage[] | null;
   note: string;
 };
 

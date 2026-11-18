@@ -11,6 +11,7 @@ import localFont from "next/font/local";
 import Navbar from "./components/Navbar";
 import { cn } from "@/lib/utils";
 import { DEFAULT_DESCRIPTION } from "./lib/metadata";
+import { Toaster } from "@/components/ui/toast";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -65,6 +66,7 @@ export default function RootLayout({
         <main className="max-w-6xl px-4 py-10 mx-auto">
           <Providers>{children}</Providers>
         </main>
+        <Toaster />
       </body>
     </html>
   );
