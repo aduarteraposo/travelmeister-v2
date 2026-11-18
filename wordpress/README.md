@@ -15,9 +15,17 @@ ignored and returns all posts. These snippets add exactly that filter – nothin
 `destination_ids` = its `primary_destination` plus all parents.
 Example: an article on Montmartre gets `[Montmartre, Paris, France]`.
 
+**URL hub:** it also stores `url_destination` (slug) and `url_destination_title` (title) =
+the nearest destination in the chain with the ACF true/false field **`is_hub`** ticked.
+This is the first URL segment: `/berlin/hotels/x`, also for a hotel in Kreuzberg.
+The frontend shows "Kreuzberg, Berlin" from `destination` + `url_destination_title`.
+Hubs are set by hand on the destination (Berlin, New York, Asturias), never per post.
+Both are exposed read-only as `meta.url_destination` and `meta.url_destination_title`.
+
 **When it updates:**
 - saving an item in the admin → that item is re-indexed
-- saving a destination → every item in it and below it is re-indexed (e.g. after changing a parent)
+- saving a destination → every item in it and below it is re-indexed (e.g. after changing a parent
+  or ticking `is_hub` – **this changes URLs**; the frontend 301s old URLs because it looks up by slug)
 
 **What it adds to the REST API** (`/posts`, `/place`, `/experience`, `/itinerary`):
 

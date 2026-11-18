@@ -51,4 +51,10 @@ export const ARTICLE_TYPES: Record<ArticleTemplate, ArticleConfig> = {
     comparison: false,
     grouped: false,
   },
+  itinerary: {
+    cardSize: "full",
+    filters: false,
+    comparison: false,
+    grouped: false,
+  },
 };

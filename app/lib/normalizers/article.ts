@@ -9,20 +9,25 @@ import {
 import { Item } from "@/app/types/app/item";
 import { WPPost } from "@/app/types/wordpress/post";
 import { toTerm } from "./place";
+import { htmlToPlainText } from "../metadata";
 
 export function normalizeArticle(post: WPPost): CleanArticle {
   const article: CleanArticle = {
     id: post.id,
     slug: post.slug,
-    title: post.title ? post.title.rendered : "",
-    excerpt: post.excerpt ? post.excerpt.rendered : "",
+    title: post.title ? htmlToPlainText(post.title.rendered) : "",
+    excerpt: post.excerpt ? htmlToPlainText(post.excerpt.rendered) : "",
     content: post.content ? post.content.rendered : "",
+    modifiedDate: post.modified ? new Date(post.modified) : null,
     destination:
       post.acf.primary_destination &&
       typeof post.acf.primary_destination === "object"
         ? post.acf.primary_destination
         : null,
     urlDestination: post.meta?.url_destination ? post.meta.url_destination : "",
+    urlDestinationTitle: post.meta?.url_destination_title
+      ? post.meta.url_destination_title
+      : "",
     heroImage:
       post.acf.hero_image && typeof post.acf.hero_image === "object"
         ? {
@@ -84,8 +89,8 @@ export function normalizeArticle(post: WPPost): CleanArticle {
     itinerary: post.acf.itinerary,
     roomFeature:
       post.acf.room_feature && typeof post.acf.room_feature === "object"
-        ? post.acf.room_feature.name
-        : "",
+        ? post.acf.room_feature
+        : null,
     hotelStyle: isHotelStyle(post.acf.hotel_style)
       ? post.acf.hotel_style
       : null,
@@ -119,7 +124,7 @@ export function resolveArticle(
       })),
     })),
     quickPicks: cleanArticle.quickPicks.flatMap((pick) => {
-      const item = itemsById[pick.item.ID]?.data;
+      const item = itemsById[pick.item.ID];
       return item
         ? [
             {

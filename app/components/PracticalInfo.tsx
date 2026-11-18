@@ -17,27 +17,22 @@ const en_json: Record<InfoKey, string> = {
 };
 
 export default function PracticalInfo({ info }: { info: PracticalInfo }) {
-  const {
-    best_time,
-    trip_planning_note,
-    budget_note,
-    transport_note,
-    food_tip,
-  } = info;
+  const { bestTime, tripPlanningNote, budgetNote, transportNote, foodTip } =
+    info;
 
   const infoArray: { key: InfoKey; value: string }[] = [
-    { key: "best_time", value: best_time },
-    { key: "ideal_stay", value: trip_planning_note },
-    { key: "budget", value: budget_note },
-    { key: "transport_note", value: transport_note },
-    { key: "food_tip", value: food_tip },
+    { key: "best_time", value: bestTime },
+    { key: "ideal_stay", value: tripPlanningNote },
+    { key: "budget", value: budgetNote },
+    { key: "transport_note", value: transportNote },
+    { key: "food_tip", value: foodTip },
   ];
 
   return (
-    <div className="rounded-xl px-4 md:px-8 py-6 bg-green-300 lg:max-w-56 mb-8 lg:mb-0">
-      <ul className="flex flex-col flex-wrap md:flex-row md:flex-nowrap lg:flex-col justify-center gap-y-4">
+    <div className="rounded-lg px-4 md:px-8 py-6 bg-green-300 mb-8">
+      <ul className="flex justify-evenly gap-4">
         {infoArray.map((item) => (
-          <li key={item.key} className={`px-2 text-center md:min-w-1/5`}>
+          <li key={item.key} className={`px-2 text-center`}>
             <InfoPiece label={en_json[item.key]} value={item.value} />
           </li>
         ))}

@@ -1,13 +1,12 @@
 import Link from "next/link";
 import type { QuickPick } from "../types/app/article";
 import Image from "next/image";
-import { Place } from "../types/app/place";
-import { Experience } from "../types/app/experience";
+import { Item } from "../types/app/item";
 
 export default function QuickPicks({
   quickPicks,
 }: {
-  quickPicks: QuickPick<Place | Experience>[];
+  quickPicks: QuickPick<Item>[];
 }) {
   return (
     <>
@@ -19,17 +18,19 @@ export default function QuickPicks({
           pick.item && typeof pick.item === "object" ? (
             <li
               className="flex flex-col md:flex-row gap-4 items-center"
-              key={`${pick.item.slug}-${index}`}
+              key={`${pick.item.data.slug}-${index}`}
             >
               <div className="basis-1/5 shrink-0 min-w-32 min-h-24">
-                {pick.item.images.length > 0 && (
+                {pick.item.data.images.length > 0 && (
                   <Image
                     className="aspect-3/2"
                     loading="eager"
-                    src={pick.item.images[0].url}
-                    alt={pick.item.images[0].alt || pick.item.title || ""}
-                    width={pick.item.images[0].width}
-                    height={pick.item.images[0].height}
+                    src={pick.item.data.images[0].url}
+                    alt={
+                      pick.item.data.images[0].alt || pick.item.data.title || ""
+                    }
+                    width={pick.item.data.images[0].width}
+                    height={pick.item.data.images[0].height}
                   />
                 )}
               </div>
@@ -37,14 +38,14 @@ export default function QuickPicks({
               <div className="basis-3/5">
                 <p className="flex gap-2">
                   <span className="font-bold">{pick.label}:</span>{" "}
-                  {pick.item.title}
+                  {pick.item.data.title}
                 </p>
                 <p>{pick.reason}</p>
               </div>
-              {pick.item.ctaLinks.length > 0 && (
+              {pick.item.data.ctaLinks.length > 0 && (
                 <Link
                   className="bg-green-300 rounded-full py-2 px-4 min-w-30 text-center font-medium ml-auto mr-8"
-                  href={pick.item.ctaLinks[0].url}
+                  href={pick.item.data.ctaLinks[0].url}
                 >
                   {pick.ctaText}
                 </Link>

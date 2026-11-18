@@ -13,6 +13,9 @@ export function normalizeExperience(experience: WPExperience): Experience {
     urlDestination: experience.meta?.url_destination
       ? experience.meta.url_destination
       : "",
+    urlDestinationTitle: experience.meta?.url_destination_title
+      ? experience.meta.url_destination_title
+      : "",
     images: Array.isArray(acf.images)
       ? acf.images.flatMap((image) =>
           image && typeof image === "object"
@@ -72,7 +75,7 @@ export function normalizeExperience(experience: WPExperience): Experience {
           options: Array.isArray(step.options) ? step.options : [],
         }))
       : [],
-    doneIt: acf.done_it,
+    doneIt: acf.done_it ? new Date(acf.done_it) : null,
     priceFrom: acf.price_from,
     priceChecked: acf.price_checked ? new Date(acf.price_checked) : null,
     preferredSlot: acf.preferred_slot ? acf.preferred_slot : "",

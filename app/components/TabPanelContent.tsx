@@ -14,25 +14,28 @@ export default function TabPanelContent({ style }: { style: TravelStyle }) {
             </h4>
             <dl className="md:flex gap-2">
               <dt className="font-medium shrink-0">Best areas:</dt>
-              <dd>{style.where_to_stay.stay_note}</dd>
+              <dd>{style.whereToStay?.stayNote}</dd>
             </dl>
 
             <dl className="md:flex gap-2">
               <dt className="font-medium">Recommended Hotel:</dt>
-              {style.where_to_stay.primary_place && (
-                <dd>{style.where_to_stay.primary_place.title}</dd>
+              {style.whereToStay?.primaryPlace && (
+                <dd>{style.whereToStay.primaryPlace.post_title}</dd>
               )}
             </dl>
-            <dl className="md:flex gap-2">
-              <dt className="font-medium">Alternatives:</dt>
-              {style.where_to_stay.alternative_places.map((place, index) => (
-                <dd key={place.slug}>{`${place.title}${
-                  index === style.where_to_stay.alternative_places.length - 1
-                    ? ""
-                    : ", "
-                }`}</dd>
-              ))}
-            </dl>
+            {style.whereToStay && (
+              <dl className="md:flex gap-2">
+                <dt className="font-medium">Alternatives:</dt>
+                {style.whereToStay?.alternativePlaces.map((place, index) => (
+                  <dd key={place.post_name}>{`${place.post_title}${
+                    style.whereToStay &&
+                    index === style.whereToStay.alternativePlaces.length - 1
+                      ? ""
+                      : ", "
+                  }`}</dd>
+                ))}
+              </dl>
+            )}
           </div>
           <div className="mb-8">
             <h4 className="font-semibold text-xl mb-2 text-gray-700">
@@ -40,19 +43,20 @@ export default function TabPanelContent({ style }: { style: TravelStyle }) {
             </h4>
             <dl className="md:flex gap-2">
               <dt className="font-medium text-gray-800">Focus on:</dt>
-              <dd>{style.focus}</dd>
+              <dd>{style.whatToDo?.focus}</dd>
             </dl>
             <dl className="md:flex gap-2">
               <dt className="font-medium text-gray-800">Skip:</dt>
-              <dd>{style.skip}</dd>
+              <dd>{style.whatToDo?.skip}</dd>
             </dl>
             <dl className="md:flex gap-2">
               <dt className="font-medium text-gray-800">Best experiences:</dt>
               <dd>
                 <ul className="flex gap-1">
-                  {style.featured_experiences.map((place, index) => (
-                    <li key={place.slug}>{`${place.title}${
-                      index === style.featured_experiences.length - 1
+                  {style.whatToDo?.bestExperiences.map((place, index) => (
+                    <li key={place.post_name}>{`${place.post_title}${
+                      style.whatToDo &&
+                      index === style.whatToDo?.bestExperiences.length - 1
                         ? ""
                         : ", "
                     }`}</li>

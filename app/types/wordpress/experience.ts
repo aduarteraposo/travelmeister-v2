@@ -6,7 +6,7 @@ export type WPExperience = {
   id: number;
   slug: string;
   title: { rendered: string };
-  meta: { url_destination: string };
+  meta: { url_destination: string; url_destination_title: string };
   acf: {
     primary_destination: WPItemRef | "";
     short_description: string;
@@ -18,7 +18,7 @@ export type WPExperience = {
     default_slot_span: number;
     steps: WPExperienceStep[];
     cta_links: { label: string; url: string }[];
-    done_it: boolean;
+    done_it: string | null;
     price_from: string;
     price_checked: string | null;
     preferred_slot: string | false;

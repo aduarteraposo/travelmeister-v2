@@ -1,23 +1,20 @@
 import { Article, CleanArticle } from "../types/app/article";
-import { WPDestination } from "../types/wordpress/destination";
+import { Destination } from "../types/app/destination";
 import { normalizeArticle } from "./normalizers/article";
 import { getRelatedCandidates } from "./wordpress/post";
 
 export async function getRelatedArticles(
   article: Article,
-  destination: WPDestination
+  destination: Destination
 ): Promise<CleanArticle[]> {
   const destinationId = destination.id;
   const categoryId = article.articleCategory?.id;
   const hotelStyle = article.hotelStyle;
-  const parentDestination = Array.isArray(destination.acf.parent_destination)
-    ? destination.acf.parent_destination[0]
-    : destination.acf.parent_destination;
-  const parentDestinationId =
-    typeof parentDestination === "object" ? parentDestination.ID : null;
+  const parentDestination = destination.parentDestination;
+  const parentDestinationId = parentDestination ? parentDestination.ID : null;
   let scopeId = null;
 
-  if (destination.acf.destination_type.slug === "neighborhood") {
+  if (destination.destinationType?.slug === "neighborhood") {
     scopeId = parentDestinationId ?? destinationId;
   } else {
     scopeId = destinationId;

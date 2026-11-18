@@ -4,6 +4,7 @@ import {
 } from "@/app/types/wordpress/destination";
 import { REVALIDATE, wordpressFetch } from "./client";
 import { Destination } from "@/app/types/app/destination";
+import { normalizeDestination } from "../normalizers/destination";
 
 export async function getDestinationBySlug(slug: string) {
   const data = await wordpressFetch<WPDestination[]>(
@@ -29,24 +30,23 @@ export async function getDestinationById(id: number) {
   return data;
 }
 
-function getParentDestinationId(
-  destination: WPDestination | Destination
-): number | null {
-  const parent = destination.acf.parent_destination;
+function getParentDestinationId(destination: Destination): number | null {
+  const parent = destination.parentDestination;
   const ref = Array.isArray(parent) ? parent[0] : parent;
   return ref ? ref.ID : null;
 }
 
 export async function getParentDestinations(
-  destination: WPDestination | Destination
-): Promise<(WPDestination | Destination)[]> {
-  let ancestorTree: (WPDestination | Destination)[] = [destination];
+  destination: Destination
+): Promise<Destination[]> {
+  let ancestorTree: Destination[] = [destination];
   let parentId = getParentDestinationId(destination);
 
   while (parentId) {
     const directParent = await getDestinationById(parentId);
-    ancestorTree = [directParent, ...ancestorTree];
-    parentId = getParentDestinationId(directParent);
+    const normalizedParent = normalizeDestination(directParent);
+    ancestorTree = [normalizedParent, ...ancestorTree];
+    parentId = getParentDestinationId(normalizedParent);
   }
 
   return ancestorTree;

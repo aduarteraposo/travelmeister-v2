@@ -11,7 +11,7 @@ export default function DestinationTeaser({
   details,
   slug,
 }: {
-  image: WPImage;
+  image: WPImage | null;
   title: string;
   description?: string;
   details?: ReactNode;
@@ -44,14 +44,16 @@ export default function DestinationTeaser({
       {/* The photo stops above the bottom corners so no photo pixels bleed
           through the antialiased rounded edge under the white overlay */}
       <div className="absolute inset-x-0 top-0 bottom-4 -z-10">
-        <Image
-          loading="eager"
-          src={image.url}
-          alt={image.alt}
-          fill
-          sizes="(min-width: 768px) 20rem, 18rem"
-          className="object-cover"
-        />
+        {image && (
+          <Image
+            loading="eager"
+            src={image.url}
+            alt={image.alt}
+            fill
+            sizes="(min-width: 768px) 20rem, 18rem"
+            className="object-cover"
+          />
+        )}
       </div>
       {/* Fades in over the top padding, then keeps fading behind the text so it stays readable.
           Solid white by the last 1rem, where the photo ends */}

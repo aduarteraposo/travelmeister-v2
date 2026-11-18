@@ -8,6 +8,7 @@ export type Experience = {
   title: string;
   destination: WPItemRef | null;
   urlDestination: string;
+  urlDestinationTitle: string;
   shortDescription: string;
   images: WPImage[];
   experienceType: Term | null;
@@ -20,7 +21,7 @@ export type Experience = {
   isBookable: boolean;
   mapLink: string;
   coordinates: { lat: string | null; long: string | null } | null;
-  doneIt: boolean;
+  doneIt: Date | null;
   priceFrom: string;
   priceChecked: Date | null;
   preferredSlot: string;

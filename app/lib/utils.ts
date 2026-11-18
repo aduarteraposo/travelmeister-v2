@@ -16,3 +16,16 @@ export function capitalizeFirstLetter(str: string) {
 
   return `${firstLetter.toUpperCase()}${restWord}`;
 }
+
+export function uniqueBy<T>(list: T[], key: (item: T) => string | number): T[] {
+  const seen = new Set<string | number>();
+  return list.filter((item) => {
+    const value = key(item);
+    if (seen.has(value)) {
+      return false;
+    } else {
+      seen.add(value);
+      return true;
+    }
+  });
+}

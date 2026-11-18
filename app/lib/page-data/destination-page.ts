@@ -1,90 +1,105 @@
 import { notFound } from "next/navigation";
 import {
-  getTravelStylePlaceIDs,
-  mapDestinationWithPlacesAndSubDestinationsAndPosts,
+  getPicksItemIds,
+  getTravelStyleItemIds,
+  normalizeDestination,
 } from "../normalizers/destination";
 import { mapById } from "../utils";
 import { normalizePlace } from "../normalizers/place";
-import { Destination } from "@/app/types/app/destination";
 import {
   getDestinationBySlug,
   getDestinationsByIds,
 } from "../wordpress/destination";
 import { getPlacesByIds } from "../wordpress/place";
-import { getPostsByIds } from "../wordpress/post";
+import { getExperiencesByIds } from "../wordpress/experience";
+import { normalizeArticle } from "../normalizers/article";
+import { normalizeExperience } from "../normalizers/experience";
+import {
+  REVALIDATE,
+  wordpressFetch,
+  wordpressFetchAll,
+} from "../wordpress/client";
+import { WPPost } from "@/app/types/wordpress/post";
+import { getRoomsBlock, RoomFeature } from "../rooms";
+import {
+  experienceToExploreItem,
+  placeToExploreItem,
+} from "../normalizers/explore-item";
 
 export async function getDestinationPageData(destinationSlug: string) {
-  const destination = await getDestinationBySlug(destinationSlug);
-  if (!destination) {
+  const wpDestination = await getDestinationBySlug(destinationSlug);
+  if (!wpDestination) {
     notFound();
   }
 
-  const travelStylePlaceIDs = getTravelStylePlaceIDs(destination);
+  const destination = normalizeDestination(wpDestination);
+
+  const travelStyleItemIds = getTravelStyleItemIds(destination);
+  const picksItemIds = getPicksItemIds(destination);
 
   const placesIds: number[] = [
-    ...travelStylePlaceIDs,
-    ...(destination.acf.featured_hotels
-      ? destination.acf.featured_hotels.map((hotel) => hotel.place.ID)
-      : []),
-    ...(destination.acf.featured_restaurants
-      ? destination.acf.featured_restaurants.map(
-          (restaurant) => restaurant.place.ID
-        )
-      : []),
-    ...(destination.acf.featured_tours
-      ? destination.acf.featured_tours.map((tour) => tour.place.ID)
-      : []),
-    ...(destination.acf.featured_sights
-      ? destination.acf.featured_sights.map((sight) => sight.place.ID)
-      : []),
+    ...travelStyleItemIds.places,
+    ...picksItemIds.placeIds,
   ];
+
+  const experienceIds: number[] = picksItemIds.experienceIds;
 
   const subdestinationsIds: number[] = [
-    ...(Array.isArray(destination.acf.featured_subdestinations)
-      ? destination.acf.featured_subdestinations.map(
-          (subDestination) => subDestination.ID
-        )
-      : []),
-  ];
-
-  const postIds: number[] = [
-    ...(destination.acf.travel_styles
-      ? destination.acf.travel_styles.flatMap((style) => [
-          ...(style.related_articles
-            ? style.related_articles.map((article) => article.ID)
-            : []),
-        ])
-      : []),
-    ...(destination.acf.article_sections
-      ? destination.acf.article_sections.flatMap((section) => [
-          ...(section.manual_articles
-            ? section.manual_articles.map((article) => article.ID)
-            : []),
-        ])
-      : []),
+    ...destination.featuredSubdestinations.map(
+      (subDestination) => subDestination.ID
+    ),
   ];
 
   const uniquePlacesIds = Array.from(new Set(placesIds));
+  const uniqueExperienceIds = Array.from(new Set(experienceIds));
   const uniqueSubdestinationsIds = Array.from(new Set(subdestinationsIds));
-  const uniquePostIds = Array.from(new Set(postIds));
 
-  const subDestinations = await getDestinationsByIds(uniqueSubdestinationsIds);
-  const places = await getPlacesByIds(uniquePlacesIds);
-  const posts = await getPostsByIds(uniquePostIds);
+  const [subDestinations, places, experiences, posts, roomFeatures] =
+    await Promise.all([
+      getDestinationsByIds(uniqueSubdestinationsIds),
+      getPlacesByIds(uniquePlacesIds),
+      getExperiencesByIds(uniqueExperienceIds),
+      wordpressFetchAll<WPPost>(
+        `/posts?destination=${destination.id}&perPage=100&acf_format=standard&_fields=id,title,slug,meta.url_destination,acf.hero_image,acf.article_template,acf.primary_destination,acf.room_feature`,
+        {
+          revalidate: REVALIDATE.day,
+          tags: ["articles", `articles:destination:${destination.id}`],
+        }
+      ),
+      wordpressFetch<RoomFeature[]>(
+        `/room_feature?per_page=100&_fields=id,acf`
+      ),
+    ]);
 
   const normalizedPlaces = places.map(normalizePlace);
+  const normalizedArticles = posts.map(normalizeArticle);
+  const normalizedExperiences = experiences.map(normalizeExperience);
+  const normalizedSubDestinations = subDestinations.map(normalizeDestination);
 
-  const subdestinationsById = mapById(subDestinations);
+  const subdestinationsById = mapById(normalizedSubDestinations);
   const placesById = mapById(normalizedPlaces);
-  const postsById = mapById(posts);
+  const articlesById = mapById(normalizedArticles);
+  const experiencesById = mapById(normalizedExperiences);
+  const labelsById = mapById(roomFeatures);
 
-  const normalizedDestination: Destination =
-    mapDestinationWithPlacesAndSubDestinationsAndPosts(
-      destination,
-      placesById,
-      subdestinationsById,
-      postsById
-    );
+  const roomsBlock = await getRoomsBlock(mapById(posts));
+  const picks = [
+    ...picksItemIds.placeIds
+      .flatMap((placeId) => placesById[placeId] ?? [])
+      .map(placeToExploreItem),
+    ...picksItemIds.experienceIds
+      .flatMap((expId) => experiencesById[expId] ?? [])
+      .map(experienceToExploreItem),
+  ];
 
-  return normalizedDestination;
+  return {
+    destination,
+    articlesById,
+    placesById,
+    experiencesById,
+    subdestinationsById,
+    labelsById,
+    roomsBlock,
+    picks,
+  };
 }

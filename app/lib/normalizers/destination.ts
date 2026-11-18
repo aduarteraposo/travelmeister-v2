@@ -2,9 +2,7 @@ import { Destination } from "@/app/types/app/destination";
 import { WPDestination } from "@/app/types/wordpress/destination";
 import { toTerm } from "./place";
 
-export function mapDestinationWithPlacesAndSubDestinationsAndPosts(
-  destination: WPDestination
-): Destination {
+export function normalizeDestination(destination: WPDestination): Destination {
   const acf = destination.acf;
   const normalizedDestination: Destination = {
     id: destination.id,
@@ -135,18 +133,37 @@ export function mapDestinationWithPlacesAndSubDestinationsAndPosts(
   return normalizedDestination;
 }
 
-export function getTravelStylePlaceIDs(destination: WPDestination) {
-  return Array.isArray(destination.acf.travel_styles)
-    ? destination.acf.travel_styles.flatMap((style) => [
-        ...(style.where_to_stay.primary_place
-          ? [style.where_to_stay.primary_place.ID]
-          : []),
-        ...(style.where_to_stay.alternative_places
-          ? style.where_to_stay.alternative_places.map((place) => place.ID)
-          : []),
-        ...(style.what_to_do.best_experiences
-          ? style.what_to_do.best_experiences.map((place) => place.ID)
-          : []),
-      ])
-    : [];
+export function getTravelStyleItemIds(destination: Destination): {
+  places: number[];
+  experiences: number[];
+} {
+  return {
+    places: destination.travelStyles.flatMap((style) => [
+      ...(style.whereToStay?.primaryPlace
+        ? [style.whereToStay.primaryPlace.ID]
+        : []),
+      ...(style.whereToStay?.alternativePlaces
+        ? style.whereToStay.alternativePlaces.map((place) => place.ID)
+        : []),
+    ]),
+    experiences: destination.travelStyles.flatMap((style) => [
+      ...(style.whatToDo?.bestExperiences
+        ? style.whatToDo?.bestExperiences.map((place) => place.ID)
+        : []),
+    ]),
+  };
+}
+
+export function getPicksItemIds(destination: Destination): {
+  placeIds: number[];
+  experienceIds: number[];
+} {
+  return {
+    placeIds: destination.picks.flatMap((pick) =>
+      pick.item?.post_type === "place" ? [pick.item.ID] : []
+    ),
+    experienceIds: destination.picks.flatMap((pick) =>
+      pick.item?.post_type === "experience" ? [pick.item.ID] : []
+    ),
+  };
 }

@@ -6,6 +6,8 @@ import { Place } from "./place";
 
 export type Itinerary = {
   primary_destination: WPDestinationReference;
+  urlDestination: string;
+  urlDestinationTitle: string;
   durationDays: number;
   summary: string;
   heroImage: WPImage;

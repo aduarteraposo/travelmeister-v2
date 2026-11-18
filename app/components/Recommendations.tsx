@@ -1,17 +1,8 @@
 import Image from "next/image";
 import { LabeledPlace } from "../types/app/place";
+import { WPItemRef } from "../types/wordpress/post";
 
-export default function Recommendations({
-  hotels,
-  restaurants,
-  tours,
-  sights,
-}: {
-  hotels: LabeledPlace[];
-  restaurants: LabeledPlace[];
-  tours: LabeledPlace[];
-  sights: LabeledPlace[];
-}) {
+export default function Recommendations({ picks }: { picks: WPItemRef[] }) {
   return (
     <section>
       <h2 className="text-[3.375rem]/14 mb-4 font-outdoor text-gray-800">
@@ -21,7 +12,7 @@ export default function Recommendations({
         <div>
           <h3 className="text-lg font-semibold text-stone-800 mb-2">Stay</h3>
           <ul>
-            {hotels.map((hotel, index) => (
+            {/* {hotels.map((hotel, index) => (
               <li key={`${hotel.place.slug}_${index}`} className="w-60 mb-6">
                 <div className="rounded-xl border border-gray-300">
                   <div className="aspect-video mb-1">
@@ -44,37 +35,13 @@ export default function Recommendations({
                   </div>
                 </div>
               </li>
-            ))}
+            ))} */}
           </ul>
         </div>
         <div>
           <h3 className="text-lg font-semibold text-stone-800 mb-2">
             Experiences
           </h3>
-          <ul>
-            {tours.map((tour, index) => (
-              <li key={`${tour.place.slug}_${index}`}>
-                <div className="space-y-2">
-                  <div className="aspect-3/2">
-                    <Image
-                      className="rounded-lg h-full object-cover"
-                      src={tour.place.images[0].url}
-                      alt={tour.place.images[0].alt}
-                      width={tour.place.images[0].width}
-                      height={tour.place.images[0].height}
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <h4 className="font-medium text-base">Molitor Paris</h4>
-                    <p className="text-sm text-gray-500">
-                      Elegant • Iconic • Pool
-                    </p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </section>

@@ -24,7 +24,7 @@ export type WPDestination = {
       | { label: string; destinations: WPItemRef[]; why: string }[]
       | false;
     featured_subdestinations: WPItemRef[] | "";
-    picks: WPItemRef[] | false;
+    picks: { label: string; item: WPItemRef }[] | false;
     article_sections: WPPostSection[] | false;
   };
 };

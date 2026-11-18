@@ -8,6 +8,7 @@ export function normalizePlace(place: WPPlace): Place {
     id: place.id,
     slug: place.slug,
     title: place.title ? place.title.rendered : "",
+    headline: acf.headline,
     badge: acf.badge ?? "",
     images: Array.isArray(acf.images)
       ? acf.images.flatMap((image) =>
@@ -29,6 +30,9 @@ export function normalizePlace(place: WPPlace): Place {
     destination: acf.primary_destination ? acf.primary_destination : null,
     urlDestination: place.meta?.url_destination
       ? place.meta.url_destination
+      : "",
+    urlDestinationTitle: place.meta?.url_destination_title
+      ? place.meta.url_destination_title
       : "",
     editorTags: Array.isArray(acf.editor_tags)
       ? acf.editor_tags.map((tag) => ({ label: tag.label ?? "" }))
@@ -81,13 +85,18 @@ export function normalizePlace(place: WPPlace): Place {
             long: acf.coordinates.long ?? null,
           }
         : null,
-    stayedHere: acf.stayed_here ?? false,
+    beenThere: acf.been_there ? new Date(acf.been_there) : null,
     lastReviewed: acf.last_reviewed ? new Date(acf.last_reviewed) : null,
+    reviewedBy:
+      acf.reviewed_by && Array.isArray(acf.reviewed_by)
+        ? acf.reviewed_by[0]
+        : null,
     verdict: acf.verdict ?? "",
     photoHonesty: acf.photo_honesty ?? "",
     bookingRequest: acf.booking_request ?? "",
-    bookingNotes: Array.isArray(acf.booking_notes) ? acf.booking_notes : [],
-    privacyNote: acf.privacy_note ?? "",
+    bookingNotes: Array.isArray(acf.booking_notes)
+      ? acf.booking_notes.map((n) => n.item_text)
+      : [],
     celebrations: acf.celebrations ?? "",
     nightView: acf.night_view ?? "",
     sunset: acf.sunset ?? "",
@@ -105,7 +114,8 @@ export function normalizePlace(place: WPPlace): Place {
               }))
             : [],
           askFor: room.ask_for ?? "",
-          privacyLevel: room.privacy_level ?? "",
+          privacyLevel: room.privacy_level ? room.privacy_level : null,
+          privacyNote: room.privacy_note ?? "",
           features: Array.isArray(room.features)
             ? room.features.flatMap((f) =>
                 f && typeof f === "object" ? [f] : []
@@ -113,11 +123,12 @@ export function normalizePlace(place: WPPlace): Place {
             : [],
           evidence: Array.isArray(room.evidence) ? room.evidence : [],
           isPick: room.is_pick ?? false,
-          photo:
-            room.photo && typeof room.photo === "object" ? room.photo : null,
+          images:
+            room.images && Array.isArray(room.images) ? room.images : null,
           note: room.note ?? "",
         }))
       : [],
+    numberOfRooms: acf.number_of_rooms ? Number(acf.number_of_rooms) : null,
     sharedViews:
       acf.shared_views && typeof acf.shared_views === "object"
         ? {

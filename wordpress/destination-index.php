@@ -12,21 +12,17 @@ function tm_first_id($v) {
     return (int) (is_array($v) ? ($v[0] ?? 0) : $v);
 }
 
-// URL slug for an item: the nearest destination in its chain that is NOT a neighborhood.
-// Montmartre → Montmartre is a neighborhood, so → Paris → "paris".
-function tm_url_destination_slug(array $chain) {
+// URL hub for an item: the nearest destination in its chain with "is_hub" ticked (ACF true/false).
+// Kreuzberg (no hub) → Berlin (hub). A village in Asturias → Asturias.
+// Returns the destination ID, or 0 if no hub is found.
+function tm_url_destination_id(array $chain) {
     foreach ($chain as $destination_id) {
-        $type = get_term(tm_first_id(get_field('destination_type', $destination_id, false)));
-        $is_neighborhood = $type && !is_wp_error($type) && $type->slug === 'neighborhood';
-
-        if (!$is_neighborhood) {
-            return get_post_field('post_name', $destination_id);
-        }
+        if (get_field('is_hub', $destination_id)) return $destination_id;
     }
-    return '';
+    return 0;
 }
 
-// Rebuild destination_ids + url_destination for ONE item.
+// Rebuild destination_ids + url_destination + url_destination_title for ONE item.
 function tm_sync_destination_ids($post_id) {
     if (!in_array(get_post_type($post_id), TM_INDEXED_TYPES, true)) return;
 
@@ -41,7 +37,9 @@ function tm_sync_destination_ids($post_id) {
     delete_post_meta($post_id, 'destination_ids');
     foreach ($ids as $d) add_post_meta($post_id, 'destination_ids', $d);
 
-    update_post_meta($post_id, 'url_destination', tm_url_destination_slug($ids));
+    $hub_id = tm_url_destination_id($ids);
+    update_post_meta($post_id, 'url_destination',       $hub_id ? get_post_field('post_name', $hub_id) : '');
+    update_post_meta($post_id, 'url_destination_title', $hub_id ? get_the_title($hub_id) : '');
 }
 add_action('acf/save_post', 'tm_sync_destination_ids', 20);
 
@@ -76,7 +74,7 @@ function tm_destination_subtree($destination_id) {
 }
 
 // When a DESTINATION is saved, re-index everything beneath it
-// (parent changed, type changed, slug changed → destination_ids and url_destination update).
+// (parent, is_hub, slug or title changed → destination_ids and url_destination(_title) update).
 function tm_resync_destination_subtree($post_id) {
     if (get_post_type($post_id) !== 'destination') return;
 
@@ -115,17 +113,19 @@ add_filter('rest_experience_query', 'tm_rest_destination_filter', 10, 2);
 add_filter('rest_itinerary_query',  'tm_rest_destination_filter', 10, 2);
 add_filter('rest_post_query',       'tm_rest_destination_filter', 10, 2);
 
-// REST: expose url_destination as meta.url_destination (read-only).
+// REST: expose meta.url_destination and meta.url_destination_title (read-only).
 add_action('init', function () {
     foreach (TM_INDEXED_TYPES as $type) {
         // Meta only shows up in the REST API if the post type supports custom fields.
         add_post_type_support($type, 'custom-fields');
 
-        register_post_meta($type, 'url_destination', [
-            'type'          => 'string',
-            'single'        => true,
-            'show_in_rest'  => true,
-            'auth_callback' => '__return_false', // computed – nobody writes it via the API
-        ]);
+        foreach (['url_destination', 'url_destination_title'] as $key) {
+            register_post_meta($type, $key, [
+                'type'          => 'string',
+                'single'        => true,
+                'show_in_rest'  => true,
+                'auth_callback' => '__return_false', // computed – nobody writes it via the API
+            ]);
+        }
     }
 });

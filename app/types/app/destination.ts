@@ -14,11 +14,9 @@ export type Destination = {
   heroTags: { label: string }[];
   practicalInfo: PracticalInfo | null;
   travelStyles: TravelStyle[];
-  whichRegion:
-    | { label: string; destinations: WPItemRef[]; why: string }[]
-    | null;
+  whichRegion: RegionStyle[] | null;
   featuredSubdestinations: WPItemRef[];
-  picks: WPItemRef[];
+  picks: { label: string; item: WPItemRef }[];
   articleSections: ArticleSection[];
 };
 
@@ -52,4 +50,10 @@ export type ArticleSection = {
   manualArticles: WPItemRef[];
   initialItemsCount: number;
   loadMoreCount: number;
+};
+
+export type RegionStyle = {
+  label: string;
+  destinations: WPItemRef[];
+  why: string;
 };

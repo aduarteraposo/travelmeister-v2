@@ -1,4 +1,3 @@
-import { WPPost } from "@/app/types/wordpress/post";
 import { notFound } from "next/navigation";
 
 export const baseUrl = process.env.WORDPRESS_API_URL;

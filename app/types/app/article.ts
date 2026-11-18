@@ -16,15 +16,17 @@ export type ArticleOf<TItem, TOption = TItem> = {
   title: string;
   excerpt: string;
   content: string;
+  modifiedDate: Date | null;
   destination: WPItemRef | null;
   urlDestination: string;
+  urlDestinationTitle: string;
   heroImage: WPImage | null;
   articleCategory: Term | null;
   articleTemplate: ArticleTemplate;
   sections: Section<TItem, TOption>[];
-  quickPicks: QuickPick<TOption>[];
+  quickPicks: QuickPick<TItem>[];
   itinerary: Itinerary | false;
-  roomFeature: string;
+  roomFeature: WPTerm | null;
   hotelStyle: HotelStyle | null;
   sectionsBy: string | null;
   featuredRelatedArticles: WPItemRef[];
@@ -61,6 +63,7 @@ export const ARTICLE_TEMPLATES = [
   "feature",
   "where-to-stay",
   "proximity",
+  "itinerary",
 ] as const;
 export type ArticleTemplate = (typeof ARTICLE_TEMPLATES)[number];
 

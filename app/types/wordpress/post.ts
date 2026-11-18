@@ -21,8 +21,9 @@ export type WPPost = {
   content: {
     rendered: string;
   };
+  modified: string;
   article_category: number[];
-  meta: { url_destination: string };
+  meta: { url_destination: string; url_destination_title: string };
   acf: {
     primary_destination: WPItemRef | "";
     article_category: WPTerm;

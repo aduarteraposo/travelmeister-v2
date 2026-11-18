@@ -40,17 +40,17 @@ export default function TravelStyleTabs({
         {travelStyles.map((style, index) => (
           <button
             className={`p-1 md:px-4 cursor-pointer lg:text-lg`}
-            key={style.style.slug}
+            key={style.style?.slug}
             ref={(el) => {
               tabsRef.current[index] = el;
             }}
             role="tab"
-            id={`tab-${style.style.slug}`}
+            id={`tab-${style.style?.slug}`}
             aria-selected={activeTabIndex === index}
-            aria-controls={`panel-${style.style.slug}`}
+            aria-controls={`panel-${style.style?.slug}`}
             onClick={() => setActiveTabIndex(index)}
           >
-            {style.style.name}
+            {style.style?.name}
           </button>
         ))}
         <span
@@ -65,10 +65,10 @@ export default function TravelStyleTabs({
       <div className="grid [grid-template-areas:'stack']">
         {travelStyles.map((style, index) => (
           <div
-            key={style.style.slug}
-            id={`panel-${style.style.slug}`}
+            key={style.style?.slug}
+            id={`panel-${style.style?.slug}`}
             role="tabpanel"
-            aria-labelledby={`tab-${style.style.slug}`}
+            aria-labelledby={`tab-${style.style?.slug}`}
             className={`py-6 px-8 rounded-b-xl [grid-area:stack] transition-opacity duration-300 ${
               activeTabIndex === index
                 ? "opacity-100 visible"

@@ -4,6 +4,7 @@ import { WPItemRef } from "./post";
 
 export type WPItinerary = {
   primary_destination: WPItemRef;
+  meta: { url_destination: string; url_destination_title: string };
   duration_days: number;
   summary: string;
   hero_image: WPImage;

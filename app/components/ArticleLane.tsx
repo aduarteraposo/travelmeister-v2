@@ -1,8 +1,10 @@
 "use client";
 
 import { getNextArticlesOffset } from "../lib/pagination/getNextArticleOffset";
+import { getPostsByIds } from "../lib/wordpress/post";
 import { PaginatedArticlesResponse } from "../types/api/pagination";
 import { CleanArticle } from "../types/app/article";
+import { WPItemRef } from "../types/wordpress/post";
 import ArticleTeaser from "./ArticleTeaser";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 
