@@ -27,7 +27,7 @@ export default function HotelCardMedium({
         {hotel.editorTags && (
           <Tags
             tags={hotel.editorTags}
-            stayed={hotel.stayedHere}
+            stayed={typeof hotel.beenThere === "object"}
             count={2}
             size="medium"
           />

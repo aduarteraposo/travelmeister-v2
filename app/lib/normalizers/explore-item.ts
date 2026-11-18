@@ -16,7 +16,7 @@ export function placeToExploreItem(place: Place): ExploreItem {
           label: place.destination.post_title,
         }
       : null,
-    beenThere: place.stayedHere,
+    beenThere: typeof place.beenThere === "object" ? true : false,
     title: place.title,
     link:
       place.placeType === "hotel"
@@ -61,7 +61,7 @@ export function experienceToExploreItem(exp: Experience): ExploreItem {
           label: exp.destination.post_title,
         }
       : null,
-    beenThere: exp.doneIt,
+    beenThere: typeof exp.doneIt === "object" ? true : false,
     title: exp.title,
     link:
       exp.ctaLinks.length > 0 && exp.ctaLinks[0]

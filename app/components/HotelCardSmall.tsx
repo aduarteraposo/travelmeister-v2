@@ -24,7 +24,7 @@ export default function HotelCardSmall({
         {hotel.editorTags.length > 0 && (
           <Tags
             tags={hotel.editorTags}
-            stayed={hotel.stayedHere}
+            stayed={typeof hotel.beenThere === "object"}
             count={1}
             size="small"
           />

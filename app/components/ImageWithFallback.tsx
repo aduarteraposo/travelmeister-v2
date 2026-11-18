@@ -7,7 +7,7 @@ export default function ImageWithFallback({
   fallbackClasses,
 }: {
   image: WPImage | null | undefined | false;
-  imageClasses: string;
+  imageClasses?: string;
   fallbackClasses?: string;
 }) {
   return (
