@@ -5,12 +5,14 @@ import Tags from "../components/Tags";
 import TravelStyleTabs from "../components/TravelStyleTabs";
 import PracticalInfo from "../components/PracticalInfo";
 import Breadcrumbs from "../components/Breadcrumbs";
-import Recommendations from "../components/Recommendations";
 import ArticleSections from "../components/RelatedArticleSections";
 import { getDestinationPageData } from "../lib/page-data/destination-page";
 import SubDestinations from "../components/SubDestinations";
 import { getDestinationBySlug } from "../lib/wordpress/destination";
 import { htmlToPlainText, toMetaDescription } from "../lib/metadata";
+import WhichRegion from "../components/WhichRegion";
+import RoomsWorthTheTripSection from "../components/RoomsWorthTheTripSection";
+import DestinationPicks from "../components/DestinationPicks";
 
 type DestinationProps = {
   params: Promise<{
@@ -26,7 +28,6 @@ export async function generateMetadata({
   params,
 }: DestinationProps): Promise<Metadata> {
   const { destinationSlug } = await params;
-  // Same request as in the page, so Next.js reuses the response.
   const destination = await getDestinationBySlug(destinationSlug);
 
   return {
@@ -42,46 +43,65 @@ export async function generateMetadata({
 
 export default async function DestinationPage({ params }: DestinationProps) {
   const { destinationSlug } = await params;
-  const destination = await getDestinationPageData(destinationSlug);
+  const {
+    destination,
+    articlesById,
+    experiencesById,
+    placesById,
+    subdestinationsById,
+    labelsById,
+    roomsBlock,
+    picks,
+  } = await getDestinationPageData(destinationSlug);
 
   return (
     <>
       <header>
-        <Image
-          loading="eager"
-          alt={destination.acf.hero_image.alt}
-          src={destination.acf.hero_image.url}
-          width={destination.acf.hero_image.width}
-          height={destination.acf.hero_image.height}
-        />
+        {destination.heroImage && (
+          <Image
+            loading="eager"
+            alt={destination.heroImage.alt}
+            src={destination.heroImage.url}
+            width={destination.heroImage.width}
+            height={destination.heroImage.height}
+          />
+        )}
+
         <Breadcrumbs destination={destination} />
         <div className="text-center mb-8 mx-auto w-10/12">
           <h1 className="my-1 md:mb-6 text-7xl text-center font-outdoor">
-            {destination.title.rendered}
+            {destination.title}
           </h1>
-          <p>{destination.acf.hero_intro}</p>
-          <Tags tags={destination.acf.hero_tags} center />
+          <p>{destination.heroIntro}</p>
+          <Tags tags={destination.heroTags} center />
         </div>
       </header>
       <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
         Choose your style
       </h2>
-      <div className="lg:flex flex-row-reverse gap-4">
-        <PracticalInfo info={destination.acf.practical_info} />
-        <TravelStyleTabs travelStyles={destination.acf.travel_styles} />
-      </div>
+      {destination.practicalInfo && (
+        <PracticalInfo info={destination.practicalInfo} />
+      )}
+      {destination.travelStyles.length > 0 && (
+        <TravelStyleTabs travelStyles={destination.travelStyles} />
+      )}
+      {destination.whichRegion && destination.whichRegion.length > 0 && (
+        <WhichRegion styles={destination.whichRegion} />
+      )}
       <SubDestinations
         parentDestination={destination}
-        subdestinations={destination.acf.featured_subdestinations}
+        subdestinations={destination.featuredSubdestinations}
       />
-      <Recommendations
-        hotels={destination.acf.featured_hotels}
-        restaurants={destination.acf.featured_restaurants}
-        tours={destination.acf.featured_tours}
-        sights={destination.acf.featured_sights}
+      <RoomsWorthTheTripSection
+        destination={destination}
+        roomsBlock={roomsBlock}
+        labelsById={labelsById}
       />
+      {/* <Recommendations picks={destination.picks} /> */}
+      <DestinationPicks picks={picks} destinationId={destination.id} />
       <ArticleSections
-        sections={destination.acf.article_sections}
+        sections={destination.articleSections}
+        articlesById={articlesById}
         destinationId={destination.id}
       />
     </>
