@@ -3,7 +3,7 @@ import { Place } from "../types/app/place";
 import Tags from "./Tags";
 import Image from "next/image";
 import { FaLocationDot } from "react-icons/fa6";
-import HotelImage from "./HotelImage";
+import HotelImage from "./ImageWithFallback";
 import MapLinkAndBudget from "./MapLinkAndBudget";
 
 export default function HotelCardMedium({

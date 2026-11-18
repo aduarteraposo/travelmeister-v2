@@ -1,8 +1,8 @@
 import { Place } from "../types/app/place";
-import PlaceImageCarousel from "./PlaceImageCarousel";
+import PlaceImageCarousel from "./ImageCarousel";
 import Tags from "./Tags";
 import Link from "next/link";
-import HotelImage from "./HotelImage";
+import HotelImage from "./ImageWithFallback";
 import MapLinkAndBudget from "./MapLinkAndBudget";
 
 export default function HotelCardFull({
@@ -32,7 +32,7 @@ export default function HotelCardFull({
       {hotel.editorTags && (
         <Tags
           tags={hotel.editorTags}
-          stayed={hotel.stayedHere}
+          stayed={hotel.beenThere !== null}
           count={0}
           size="full"
         />

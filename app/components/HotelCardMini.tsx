@@ -2,7 +2,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { Place } from "../types/app/place";
 import Link from "next/link";
 import { getHotelHref } from "../lib/links";
-import HotelImage from "./HotelImage";
+import HotelImage from "./ImageWithFallback";
 
 export default function HotelCardMini({ hotel }: { hotel: Place }) {
   return (

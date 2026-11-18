@@ -3,7 +3,7 @@ import Image from "next/image";
 import { FaLocationDot } from "react-icons/fa6";
 
 import type { Place } from "../types/app/place";
-import PlaceImageCarousel from "./PlaceImageCarousel";
+import PlaceImageCarousel from "./ImageCarousel";
 import Tags from "./Tags";
 import { Entry } from "../types/app/article";
 import { Item } from "../types/app/item";
