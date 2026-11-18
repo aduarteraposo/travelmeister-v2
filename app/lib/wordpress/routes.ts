@@ -11,10 +11,13 @@ type DestinationRoutParams = {
 export async function getAllDestinationRouteParams(): Promise<
   DestinationRoutParams[]
 > {
-  const destinations = await wordpressFetchAll<WPDestination>("/destination", {
-    revalidate: REVALIDATE.day,
-    tags: ["destinations", "destination-routes"],
-  });
+  const destinations = await wordpressFetchAll<WPDestination>(
+    "/destination?per_page=100&_fields=slug",
+    {
+      revalidate: REVALIDATE.day,
+      tags: ["destinations", "destination-routes"],
+    }
+  );
 
   const destinationRouteParams = destinations.map((dest) => ({
     destinationSlug: dest.slug,

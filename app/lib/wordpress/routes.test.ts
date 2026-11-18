@@ -65,10 +65,16 @@ describe("getAllArticleRouteParams", () => {
     global.fetch = vi.fn();
     vi.mocked(global.fetch)
       .mockResolvedValueOnce(
-        wpResponse([{ slug: "article-1", meta: { url_destination: "paris" } }], 2)
+        wpResponse(
+          [{ slug: "article-1", meta: { url_destination: "paris" } }],
+          2
+        )
       )
       .mockResolvedValueOnce(
-        wpResponse([{ slug: "article-2", meta: { url_destination: "berlin" } }], 2)
+        wpResponse(
+          [{ slug: "article-2", meta: { url_destination: "berlin" } }],
+          2
+        )
       );
     // act
     const result = await getAllArticleRouteParams();
@@ -78,7 +84,10 @@ describe("getAllArticleRouteParams", () => {
       expect.stringContaining("&page=2"),
       expect.any(Object)
     );
-    expect(result.map((r) => r.articleSlug)).toEqual(["article-1", "article-2"]);
+    expect(result.map((r) => r.articleSlug)).toEqual([
+      "article-1",
+      "article-2",
+    ]);
   });
 
   it("throws if fetch response is not ok", async () => {

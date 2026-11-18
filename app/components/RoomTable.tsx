@@ -35,7 +35,7 @@ export default function RoomTable({ hotel }: { hotel: Place }) {
             >
               <ImageWithFallback
                 image={room.images?.[0]}
-                imageClasses="w-32 aspect-16/10 rounded-xl"
+                imageClasses="w-32 aspect-16/10 rounded-md"
                 fallbackClasses={`
                   ${index % 2 !== 0 ? "bg-gray-200" : "bg-gray-100"} text-xs`}
               />

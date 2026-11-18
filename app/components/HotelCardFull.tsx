@@ -1,9 +1,9 @@
 import { Place } from "../types/app/place";
-import PlaceImageCarousel from "./ImageCarousel";
+import ImageCarousel from "./ImageCarousel";
 import Tags from "./Tags";
 import Link from "next/link";
-import HotelImage from "./ImageWithFallback";
 import MapLinkAndBudget from "./MapLinkAndBudget";
+import ImageWithFallback from "./ImageWithFallback";
 
 export default function HotelCardFull({
   hotel,
@@ -25,9 +25,13 @@ export default function HotelCardFull({
         )}
       </h3>
       {hotel.images.length > 1 ? (
-        <PlaceImageCarousel images={hotel.images} />
+        <div className="h-48 md:h-80 lg:h-96">
+          <ImageCarousel images={hotel.images} />
+        </div>
       ) : (
-        hotel.images.length > 0 && <HotelImage image={hotel.images[0]} />
+        hotel.images.length > 0 && (
+          <ImageWithFallback image={hotel.images[0]} imageClasses="w-full" />
+        )
       )}
       {hotel.editorTags && (
         <Tags

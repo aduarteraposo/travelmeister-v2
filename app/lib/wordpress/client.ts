@@ -67,6 +67,7 @@ export async function wordpressFetchAll<T>(
   endpoint: string,
   { revalidate, tags, throwNotFound = false }: WordPressFetchOptions = {}
 ): Promise<T[]> {
+  const separator = endpoint.includes("?") ? "&" : "?";
   const res = await fetch(`${baseUrl}${endpoint}`, {
     next: {
       revalidate,
@@ -86,7 +87,7 @@ export async function wordpressFetchAll<T>(
   const endpoints: string[] = [];
 
   for (let i = 2; i <= totalPages; i++) {
-    endpoints.push(`${endpoint}&page=${i}`);
+    endpoints.push(`${endpoint}${separator}page=${i}`);
   }
 
   const restPages = await Promise.all(
