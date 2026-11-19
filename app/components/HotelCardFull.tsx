@@ -30,7 +30,10 @@ export default function HotelCardFull({
         </div>
       ) : (
         hotel.images.length > 0 && (
-          <ImageWithFallback image={hotel.images[0]} imageClasses="w-full" />
+          <ImageWithFallback
+            image={hotel.images[0]}
+            imageClasses="rounded-xl aspect-16/10 w-full"
+          />
         )
       )}
       {hotel.editorTags && (
