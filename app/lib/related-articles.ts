@@ -3,9 +3,12 @@ import { Destination } from "../types/app/destination";
 import { normalizeArticle } from "./normalizers/article";
 import { getRelatedCandidates } from "./wordpress/post";
 
+const RELATED_ARTICLES_LIMIT = 5;
+
 export async function getRelatedArticles(
   article: Article,
-  destination: Destination
+  destination: Destination,
+  limit = RELATED_ARTICLES_LIMIT
 ): Promise<CleanArticle[]> {
   const destinationId = destination.id;
   const categoryId = article.articleCategory?.id;
@@ -42,7 +45,7 @@ export async function getRelatedArticles(
     categoryId,
     parentDestinationId,
     hotelStyle
-  );
+  ).slice(0, limit);
 }
 
 export function rankArticles(

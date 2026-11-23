@@ -18,3 +18,12 @@ export type WPHomepage = {
     about_image: WPImage | false;
   };
 };
+
+// A normal WordPress page (About, Privacy, …): title and content are HTML.
+export type WPPage = {
+  id: number;
+  slug: string;
+  modified_gmt: string;
+  title: { rendered: string };
+  content: { rendered: string };
+};

@@ -49,7 +49,7 @@ export default async function Home() {
           caption={heroSection.image?.caption}
         />
       </section>
-      <section className="mb-16">
+      <section className="my-16">
         <ul className="flex flex-col md:flex-row justify-between gap-4">
           {trustPoints.map((p, i) => (
             <li key={i} className="bg-gray-100 rounded-xl p-4 flex-1">
@@ -59,7 +59,7 @@ export default async function Home() {
           ))}
         </ul>
       </section>
-      <section>
+      <section className="my-16">
         <h2 className="font-outdoor text-6xl mb-2">Destinations</h2>
         <div className="flex flex-col md:flex-row gap-4">
           {featuredDestinations.length > 0 && (
@@ -113,24 +113,26 @@ export default async function Home() {
         </div>
       </section>
       {roomsBlock.kind !== "none" && (
-        <section id="rooms">
+        <section id="rooms" className="my-16">
           <RoomsWorthTheTripSection
             roomsBlock={roomsBlock}
             labelsById={labelsById}
           />
         </section>
       )}
-      <section className="mb-16">
-        <h2 className="font-outdoor text-6xl mb-4">Popular Guides</h2>
-        <ul className="md:grid grid-cols-4 gap-6 justify-items-stretch">
-          {popularArticles.slice(0, 8).map((a) => (
-            <li key={a.slug}>
-              <ArticleTeaser article={a} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section className="flex flex-col md:flex-row items-center gap-6 border p-6 rounded-xl">
+      {popularArticles.length > 0 && (
+        <section className="my-16">
+          <h2 className="font-outdoor text-6xl mb-4">Popular Guides</h2>
+          <ul className="md:grid grid-cols-4 gap-6 justify-items-stretch">
+            {popularArticles.slice(0, 8).map((a) => (
+              <li key={a.slug}>
+                <ArticleTeaser article={a} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      <section className="my-16 flex flex-col md:flex-row items-center gap-6 border p-6 rounded-xl">
         <ImageWithFallback
           image={aboutSection.image}
           className="rounded-full aspect-square h-48 shrink-0"

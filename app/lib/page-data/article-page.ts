@@ -1,4 +1,3 @@
-import {} from "../normalizers/article";
 import { getDestinationById } from "../wordpress/destination";
 import { getPostBySlug } from "../wordpress/post";
 import { notFound } from "next/navigation";
@@ -39,7 +38,8 @@ export async function getArticlePageData(
   const sections: Section<Item, Place | Experience>[] = article.sections;
   const relatedArticles = await getRelatedArticles(
     article,
-    normalizedDestination
+    normalizedDestination,
+    5
   );
 
   return {

@@ -1,5 +1,5 @@
 import Breadcrumbs from "@/app/components/Breadcrumbs";
-import FilterContainer from "@/app/components/FilterContainer";
+import ArticleFilterContainer from "@/app/components/ArticleFilterContainer";
 import QuickPicks from "@/app/components/QuickPicks";
 import { getAllArticleRouteParams } from "@/app/lib/wordpress/routes";
 import Image from "next/image";
@@ -79,7 +79,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         {article.quickPicks.length > 0 && (
           <QuickPicks quickPicks={article.quickPicks} />
         )}
-        <FilterContainer
+        <ArticleFilterContainer
           display={{
             neighborhoodLabels,
             grouped: config.grouped,
