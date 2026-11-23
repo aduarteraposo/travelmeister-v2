@@ -18,7 +18,7 @@ export function normalizeArticle(post: WPPost): CleanArticle {
     title: post.title ? htmlToPlainText(post.title.rendered) : "",
     excerpt: post.excerpt ? htmlToPlainText(post.excerpt.rendered) : "",
     content: post.content ? post.content.rendered : "",
-    modifiedDate: post.modified ? new Date(post.modified) : null,
+    modifiedDate: post.modified_gmt ? new Date(post.modified_gmt) : null,
     destination:
       post.acf.primary_destination &&
       typeof post.acf.primary_destination === "object"
