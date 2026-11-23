@@ -113,7 +113,7 @@ add_filter('rest_experience_query', 'tm_rest_destination_filter', 10, 2);
 add_filter('rest_itinerary_query',  'tm_rest_destination_filter', 10, 2);
 add_filter('rest_post_query',       'tm_rest_destination_filter', 10, 2);
 
-// REST: expose meta.url_destination and meta.url_destination_title (read-only).
+// REST: expose meta.url_destination and meta.url_destination_title (computed, see auth_callback).
 add_action('init', function () {
     foreach (TM_INDEXED_TYPES as $type) {
         // Meta only shows up in the REST API if the post type supports custom fields.
@@ -124,7 +124,12 @@ add_action('init', function () {
                 'type'          => 'string',
                 'single'        => true,
                 'show_in_rest'  => true,
-                'auth_callback' => '__return_false', // computed – nobody writes it via the API
+                // Computed by tm_sync_destination_ids() on every save. The block editor sends all
+                // registered meta back when saving, so editors must be allowed to "write" it;
+                // whatever they send is overwritten by the sync right after (acf/save_post).
+                'auth_callback' => function ($allowed, $meta_key, $post_id) {
+                    return current_user_can('edit_post', $post_id);
+                },
             ]);
         }
     }

@@ -8,7 +8,6 @@ import { getArticlePageData } from "@/app/lib/page-data/article-page";
 import { getPostBySlug } from "@/app/lib/wordpress/post";
 import { htmlToPlainText, toMetaDescription } from "@/app/lib/metadata";
 import { ARTICLE_TYPES } from "@/app/lib/article-config";
-import sitemap from "@/app/sitemap";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -45,8 +44,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     relatedArticles,
   } = await getArticlePageData(urlDestinationSlug, articleSlug);
 
-  sitemap();
-
   const heroImage = article.heroImage;
   const config = ARTICLE_TYPES[article.articleTemplate];
   const neighborhoodLabels = article.sectionsBy !== "neighborhood";
@@ -79,7 +76,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           className="prose mb-16"
           dangerouslySetInnerHTML={{ __html: article.content }}
         ></div>
-        <QuickPicks quickPicks={article.quickPicks} />
+        {article.quickPicks.length > 0 && (
+          <QuickPicks quickPicks={article.quickPicks} />
+        )}
         <FilterContainer
           display={{
             neighborhoodLabels,

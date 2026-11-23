@@ -59,7 +59,6 @@ export const ARTICLE_TEMPLATES = [
   "long-tail",
   "style",
   "neighborhood",
-  "view",
   "feature",
   "where-to-stay",
   "proximity",

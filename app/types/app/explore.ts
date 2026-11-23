@@ -10,6 +10,7 @@ export type ExploreItem = {
   filters: Term[];
   beenThere: boolean;
   title: string;
+  text: string;
   link: { href: string; external: boolean; label: string } | null;
   image: WPImage | null;
 };

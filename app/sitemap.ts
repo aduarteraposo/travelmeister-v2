@@ -39,13 +39,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: `${h.lastModified}Z`,
   }));
 
-  console.log([
-    ...sitemapArticles,
-    ...sitemapDestinations,
-    ...sitemapHotels,
-    homepage,
-  ]);
-
   return [
     ...sitemapArticles,
     ...sitemapDestinations,

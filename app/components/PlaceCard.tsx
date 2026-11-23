@@ -8,6 +8,7 @@ import Tags from "./Tags";
 import { Entry } from "../types/app/article";
 import { Item } from "../types/app/item";
 import { Experience } from "../types/app/experience";
+import ImageWithFallback from "./ImageWithFallback";
 
 export default function PlaceCard({
   entry,
@@ -36,21 +37,14 @@ export default function PlaceCard({
       {data.images.length > 1 ? (
         <PlaceImageCarousel images={data.images} />
       ) : (
-        data.images.length > 0 && (
-          <>
-            <Image
-              src={data.images[0].url}
-              alt={data.images[0].alt}
-              width={data.images[0].width}
-              height={data.images[0].height}
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              {data.images[0].caption}
-            </p>
-          </>
-        )
+        <ImageWithFallback
+          image={data.images[0]}
+          className="aspect-video rounded-xl"
+        />
       )}
-      {place && <Tags tags={place.editorTags} size="full" stayed={false} />}
+      {place?.editorTags && place.editorTags.length > 0 && (
+        <Tags tags={place.editorTags} size="full" stayed={false} />
+      )}
       <p className="mb-4">{data.shortDescription}</p>
       <ul className="flex items-center gap-3 mb-4">
         <li className="flex items-center gap-1">
@@ -64,7 +58,7 @@ export default function PlaceCard({
             View on Map
           </Link>
         </li>
-        {place && (
+        {place?.budget && (
           <>
             <span>-</span>
             <li>{place.budget}</li>

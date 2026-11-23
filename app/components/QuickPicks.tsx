@@ -29,14 +29,15 @@ export default function QuickPicks({
               </div>
 
               <div className="md:basis-3/5 flex flex-col gap-1 text-center md:text-left">
-                <h3 className="flex flex-col gap-3 md:flex-row font-medium items-center text-lg">
+                <div className="flex flex-col gap-3 md:flex-row items-center">
                   {pick.label && (
-                    <span className="font-medium rounded-full py-1.5 px-4 bg-green-300 text-base">
-                      {pick.label}:{" "}
-                    </span>
+                    <p className="font-medium rounded-full py-1.5 px-4 bg-green-300">
+                      {pick.label}
+                    </p>
                   )}
-                  {pick.item.data.title}
-                </h3>
+                  <h3 className="font-semibold">{pick.item.data.title}</h3>
+                </div>
+
                 <p>{pick.reason}</p>
               </div>
               {pick.item.data.ctaLinks.length > 0 && (

@@ -1,3 +1,5 @@
+import { htmlToPlainText } from "../lib/metadata";
+
 export default function ChipRow<T extends string | number>({
   label,
   options,
@@ -45,7 +47,8 @@ export default function ChipRow<T extends string | number>({
                 selected === o.id ? "bg-green-300" : ""
               }`}
             >
-              {o.label} {typeof o.count === "number" && o.count}
+              {htmlToPlainText(o.label)}{" "}
+              {typeof o.count === "number" && o.count}
             </button>
           </li>
         ))}

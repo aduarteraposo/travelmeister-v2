@@ -32,7 +32,6 @@ export const ARTICLE_TYPES: Record<ArticleTemplate, ArticleConfig> = {
     comparison: false,
     grouped: true,
   },
-  view: { cardSize: "full", filters: true, comparison: true, grouped: false },
   feature: {
     cardSize: "full",
     filters: true,

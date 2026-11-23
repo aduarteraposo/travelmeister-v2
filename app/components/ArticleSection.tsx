@@ -33,7 +33,7 @@ export default function ArticleSection({
   return (
     <section key={section.title} className="first:mt-0 mt-28 last:mb-28 mb-0">
       {section.title.length > 0 && (
-        <h2 className="mb-4 md:mb-8 text-3xl">{section.title}</h2>
+        <h2 className="mb-4 md:mb-8 text-3xl font-semibold">{section.title}</h2>
       )}
       {section.introText.length > 0 && (
         <div

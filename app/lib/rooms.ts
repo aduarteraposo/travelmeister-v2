@@ -44,9 +44,7 @@ export async function getRoomsBlock(
   postsById: Record<number, WPPost>
 ): Promise<RoomsBlock> {
   const roomArticles = Object.values(postsById).filter(
-    (post) =>
-      post.acf.article_template === "list" ||
-      post.acf.article_template === "feature"
+    (post) => post.acf.article_template === "feature"
   );
 
   if (roomArticles.length === 0) return { kind: "none" };
