@@ -29,7 +29,7 @@ export default function SubDestinationTeaser({
               <Tags tags={destination.heroTags} center />
             )}
             <Link
-              href={`/${destination.slug}`}
+              href={`/${destination.slug}/explore`}
               className="font-medium underline underline-offset-4"
             >
               Explore {title}
