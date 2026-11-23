@@ -11,13 +11,13 @@ import CardText from "./card/CardText";
 import CardTitle from "./card/CardTitle";
 import ArticleCardSmall from "./ArticleCardSmall";
 
-export default async function RoomsWorthTheTripSection({
+export default async function RoomsWorthTheTripBlock({
   roomsBlock,
   destination,
   labelsById,
 }: {
   roomsBlock: RoomsBlock;
-  destination: Destination;
+  destination?: Destination;
   labelsById: Record<number, RoomFeature>;
 }) {
   if (roomsBlock.kind === "none") return null;
@@ -28,11 +28,11 @@ export default async function RoomsWorthTheTripSection({
     const label = getRoomLabel(article.roomFeature, labelsById);
 
     return (
-      <section className="bg-green-300 border rounded-lg pt-5 pb-6 md:py-10 px-6 my-16">
-        <h2 className="font-outdoor text-5xl mb-4">
-          Rooms worth the trip in {destination.title}
+      <div className="bg-green-300 rounded-lg pt-5 p-6 md:pt-6 my-16">
+        <h2 className="font-outdoor text-6xl mb-4">
+          Rooms worth the trip{destination ? ` in ${destination.title}` : ""}
         </h2>
-        <div className="bg-[rgba(255,255,255,.6)] rounded-lg">
+        <div className="bg-[rgba(255,255,255,.6)] rounded-xl">
           <ArticleCard article={article} eyebrow={label} />
         </div>
         {hotels.length > 0 && (
@@ -81,7 +81,7 @@ export default async function RoomsWorthTheTripSection({
             </ul>
           </>
         )}
-      </section>
+      </div>
     );
   }
 
@@ -89,11 +89,11 @@ export default async function RoomsWorthTheTripSection({
     const articles = roomsBlock.articles;
 
     return (
-      <section className="bg-green-300 border rounded-lg py-10 px-6 my-16">
+      <div className="bg-green-300 border rounded-lg py-10 px-6 my-16">
         <h2 className="font-outdoor text-5xl mb-4">
-          Rooms worth the trip in {destination.title}
+          Rooms worth the trip{destination ? ` in ${destination.title}` : ""}
         </h2>
-        <ul className="flex gap-4">
+        <ul className="flex flex-col md:flex-row gap-4">
           {articles.slice(0, 3).map((a) => (
             <li
               key={a.slug}
@@ -109,7 +109,7 @@ export default async function RoomsWorthTheTripSection({
             </li>
           ))}
         </ul>
-      </section>
+      </div>
     );
   }
 }

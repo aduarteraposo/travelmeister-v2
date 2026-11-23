@@ -36,7 +36,9 @@ export default function Filters({
 
   return (
     <ul
-      className="flex gap-3 mb-12 overflow-scroll [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      className={`${
+        fixed ? "sticky top-8 bg-white pt-10 pb-4 z-40" : ""
+      } flex gap-3 mb-12 overflow-scroll [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden`}
       ref={comparisonRef}
     >
       <li key="all">

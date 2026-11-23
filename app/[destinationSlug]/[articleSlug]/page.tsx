@@ -8,6 +8,7 @@ import { getArticlePageData } from "@/app/lib/page-data/article-page";
 import { getPostBySlug } from "@/app/lib/wordpress/post";
 import { htmlToPlainText, toMetaDescription } from "@/app/lib/metadata";
 import { ARTICLE_TYPES } from "@/app/lib/article-config";
+import sitemap from "@/app/sitemap";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -43,6 +44,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     sections,
     relatedArticles,
   } = await getArticlePageData(urlDestinationSlug, articleSlug);
+
+  sitemap();
 
   const heroImage = article.heroImage;
   const config = ARTICLE_TYPES[article.articleTemplate];

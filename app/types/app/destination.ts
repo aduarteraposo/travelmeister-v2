@@ -7,6 +7,7 @@ export type Destination = {
   slug: string;
   title: string;
   destinationType: Term | null;
+  pageLayout: "trip" | "hub";
   parentDestination: WPItemRef | null;
   heroImage: WPImage | null;
   heroIntro: string;

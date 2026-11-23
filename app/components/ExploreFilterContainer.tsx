@@ -32,49 +32,51 @@ export default function ExploreFilterContainer({
 
   return (
     <>
-      <ChipRow
-        options={tabOptions}
-        selected={state.tab}
-        selectAll={{
-          label: "All",
-          count: allTabsCount,
-        }}
-        onSelect={selectTab}
-      />
-      <ChipRow
-        label="Neighborhoods:"
-        options={areaOptions}
-        selectAll={{ label: `All of ${destinationName}` }}
-        selected={state.area}
-        onSelect={selectArea}
-      />
-      <ChipRow
-        label="Good for:"
-        options={filterOptions}
-        selected={state.filter}
-        selectAll={{ label: "Anything" }}
-        onSelect={selectFilter}
-      />
-      {state.tab && (
+      <div className="mb-12">
         <ChipRow
-          label="Type:"
-          options={subtypeOptions}
-          selected={state.subtype}
-          selectAll={{ label: "All" }}
-          onSelect={selectSubtype}
+          options={tabOptions}
+          selected={state.tab}
+          selectAll={{
+            label: "All",
+            count: allTabsCount,
+          }}
+          onSelect={selectTab}
         />
-      )}
-      <div>
-        <label className="flex items-center gap-2">
-          <Checkbox
-            checked={state.beenThereOnly}
-            onCheckedChange={toggleBeenThere}
+        <ChipRow
+          label="Neighborhoods:"
+          options={areaOptions}
+          selectAll={{ label: `All of ${destinationName}` }}
+          selected={state.area}
+          onSelect={selectArea}
+        />
+        <ChipRow
+          label="Good for:"
+          options={filterOptions}
+          selected={state.filter}
+          selectAll={{ label: "Anything" }}
+          onSelect={selectFilter}
+        />
+        {state.tab && (
+          <ChipRow
+            label="Type:"
+            options={subtypeOptions}
+            selected={state.subtype}
+            selectAll={{ label: "All" }}
+            onSelect={selectSubtype}
           />
-          Only places we stayed or visited and experiences we tried
-        </label>
+        )}
+        <div>
+          <label className="flex items-center gap-2">
+            <Checkbox
+              checked={state.beenThereOnly}
+              onCheckedChange={toggleBeenThere}
+            />
+            Only places we stayed or visited and experiences we tried
+          </label>
+        </div>
       </div>
       {filteredItems.length > 0 ? (
-        <ul className="grid grid-cols-4 gap-4">
+        <ul className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {filteredItems.map((item) => (
             <li key={item.id} className="border rounded-xl">
               <ExploreCard item={item} />

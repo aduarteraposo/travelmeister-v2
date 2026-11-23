@@ -11,7 +11,7 @@ import SubDestinations from "../components/SubDestinations";
 import { getDestinationBySlug } from "../lib/wordpress/destination";
 import { htmlToPlainText, toMetaDescription } from "../lib/metadata";
 import WhichRegion from "../components/WhichRegion";
-import RoomsWorthTheTripSection from "../components/RoomsWorthTheTripSection";
+import RoomsWorthTheTripBlock from "../components/RoomsWorthTheTripBlock";
 import DestinationPicks from "../components/DestinationPicks";
 
 type DestinationProps = {
@@ -76,29 +76,41 @@ export default async function DestinationPage({ params }: DestinationProps) {
           <Tags tags={destination.heroTags} center />
         </div>
       </header>
-      <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
-        Choose your style
-      </h2>
-      {destination.practicalInfo && (
+      {destination.practicalInfo && destination.pageLayout === "trip" && (
         <PracticalInfo info={destination.practicalInfo} />
       )}
-      {destination.travelStyles.length > 0 && (
-        <TravelStyleTabs travelStyles={destination.travelStyles} />
-      )}
-      {destination.whichRegion && destination.whichRegion.length > 0 && (
-        <WhichRegion styles={destination.whichRegion} />
-      )}
+
+      {destination.travelStyles.length > 0 &&
+        destination.pageLayout === "trip" && (
+          <>
+            <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
+              Choose your style
+            </h2>
+            <TravelStyleTabs travelStyles={destination.travelStyles} />
+          </>
+        )}
+      {destination.whichRegion &&
+        destination.whichRegion.length > 0 &&
+        destination.pageLayout === "hub" && (
+          <WhichRegion styles={destination.whichRegion} />
+        )}
       <SubDestinations
         parentDestination={destination}
         subdestinations={destination.featuredSubdestinations}
       />
-      <RoomsWorthTheTripSection
-        destination={destination}
-        roomsBlock={roomsBlock}
-        labelsById={labelsById}
-      />
+      {roomsBlock.kind !== "none" && (
+        <section>
+          <RoomsWorthTheTripBlock
+            destination={destination}
+            roomsBlock={roomsBlock}
+            labelsById={labelsById}
+          />
+        </section>
+      )}
       {/* <Recommendations picks={destination.picks} /> */}
-      <DestinationPicks picks={picks} destinationId={destination.id} />
+      {picks && destination.pageLayout === "trip" && (
+        <DestinationPicks picks={picks} destinationId={destination.id} />
+      )}
       <ArticleSections
         sections={destination.articleSections}
         articlesById={articlesById}

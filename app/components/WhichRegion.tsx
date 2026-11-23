@@ -7,7 +7,7 @@ export default function WhichRegion({ styles }: { styles: RegionStyle[] }) {
       {styles.map((style) => (
         <li
           key={style.label}
-          className="flex gap-12 px-6 py-4 not-last:border-b items-center"
+          className="flex flex-col md:flex-row gap-2 md:gap-12 px-6 py-4 not-last:border-b md:items-center"
         >
           <h4 className="font-bold">{style.label}</h4>
           <div className="text-sm">

@@ -12,12 +12,12 @@ function tm_first_id($v) {
     return (int) (is_array($v) ? ($v[0] ?? 0) : $v);
 }
 
-// URL hub for an item: the nearest destination in its chain with "is_hub" ticked (ACF true/false).
+// URL hub for an item: the nearest destination in its chain with "is_url_root" ticked (ACF true/false).
 // Kreuzberg (no hub) → Berlin (hub). A village in Asturias → Asturias.
 // Returns the destination ID, or 0 if no hub is found.
 function tm_url_destination_id(array $chain) {
     foreach ($chain as $destination_id) {
-        if (get_field('is_hub', $destination_id)) return $destination_id;
+        if (get_field('is_url_root', $destination_id)) return $destination_id;
     }
     return 0;
 }
@@ -74,7 +74,7 @@ function tm_destination_subtree($destination_id) {
 }
 
 // When a DESTINATION is saved, re-index everything beneath it
-// (parent, is_hub, slug or title changed → destination_ids and url_destination(_title) update).
+// (parent, is_url_root, slug or title changed → destination_ids and url_destination(_title) update).
 function tm_resync_destination_subtree($post_id) {
     if (get_post_type($post_id) !== 'destination') return;
 

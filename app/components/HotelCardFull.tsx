@@ -32,7 +32,7 @@ export default function HotelCardFull({
         hotel.images.length > 0 && (
           <ImageWithFallback
             image={hotel.images[0]}
-            imageClasses="rounded-xl aspect-16/10 w-full"
+            className="rounded-xl aspect-16/10 w-full"
           />
         )
       )}

@@ -44,14 +44,14 @@ export default function HotelComparisonSection({
     <>
       {hotelSelector}
       <PlaceComparisonTable visibleHotels={visiblePlaces} />
-      <SocialEmbeds
+      {/* <SocialEmbeds
         allHotels={allHotels}
         isVisible={isVisible}
         hotelSelector={hotelSelector}
         filters={filters}
         setFilter={setFilter}
         activeFilter={activeFilter}
-      />
+      /> */}
     </>
   );
 }

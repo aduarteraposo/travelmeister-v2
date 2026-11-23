@@ -27,7 +27,7 @@ export default function RoomCard({
         ) : (
           <ImageWithFallback
             image={room.images?.[0]}
-            imageClasses="rounded-xl w-full aspect-video"
+            className="rounded-xl w-full aspect-video"
           />
         )}
       </div>

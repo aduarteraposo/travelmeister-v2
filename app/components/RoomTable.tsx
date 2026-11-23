@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Place } from "../types/app/place";
 import {
   getRoomEvidence,
@@ -10,7 +9,7 @@ import ImageWithFallback from "./ImageWithFallback";
 
 export default function RoomTable({ hotel }: { hotel: Place }) {
   return (
-    <table className="text-sm">
+    <table className="text-sm w-full">
       <thead className="bg-black text-white">
         <tr className="text-left rounded-t-xl">
           <th className="px-4 py-3 rounded-tl-xl">Image</th>
@@ -35,7 +34,7 @@ export default function RoomTable({ hotel }: { hotel: Place }) {
             >
               <ImageWithFallback
                 image={room.images?.[0]}
-                imageClasses="w-32 aspect-16/10 rounded-md"
+                className="w-32 aspect-16/10 rounded-md"
                 fallbackClasses={`
                   ${index % 2 !== 0 ? "bg-gray-200" : "bg-gray-100"} text-xs`}
               />

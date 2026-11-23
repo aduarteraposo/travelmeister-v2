@@ -13,6 +13,7 @@ export function normalizeDestination(destination: WPDestination): Destination {
       acf.destination_type && typeof acf.destination_type === "object"
         ? toTerm(acf.destination_type)
         : null,
+    pageLayout: acf.page_layout ?? "trip",
     heroImage:
       acf.hero_image && typeof acf.hero_image === "object"
         ? acf.hero_image

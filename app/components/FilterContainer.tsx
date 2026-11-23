@@ -63,12 +63,13 @@ export default function FilterContainer({
     <>
       <div className="w-full grid grid-cols-1 lg:grid-cols-4 gap-12 items-start">
         <div className="lg:col-span-3">
-          <div>
+          <div className="relative">
             {display.showFilters && (
               <Filters
                 filters={availableFilters}
                 setFilter={setActiveFilter}
                 activeFilter={activeFilter}
+                fixed
               />
             )}
             <div>
@@ -106,7 +107,6 @@ export default function FilterContainer({
               filters={availableFilters}
               setFilter={setActiveFilter}
               activeFilter={activeFilter}
-              fixed={true}
             />
           )}
           <PlaceComparisonSection

@@ -16,11 +16,11 @@ export default function ChipRow<T extends string | number>({
   onSelect: (id: T | null) => void;
 }) {
   return (
-    <div className="flex mb-4 items-center">
+    <div className="flex flex-col md:flex-row mb-4 md:items-center">
       {label && <p className="font-medium mr-4">{label}</p>}
-      <ul className="flex gap-2">
+      <ul className="flex gap-2 overflow-auto scrollbar-none">
         {selectAll && (
-          <li key={selectAll.label}>
+          <li key={selectAll.label} className="shrink-0">
             <button
               className={`rounded-full border px-3 py-1.5 text-sm hover:border-gray-600 hover:cursor-pointer ${
                 selected === null ? "bg-green-300" : ""
@@ -36,7 +36,7 @@ export default function ChipRow<T extends string | number>({
           </li>
         )}
         {options.map((o) => (
-          <li key={o.id}>
+          <li key={o.id} className="shrink-0">
             <button
               onClick={() => onSelect(o.id)}
               disabled={o.count === 0}

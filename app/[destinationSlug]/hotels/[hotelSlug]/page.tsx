@@ -16,6 +16,7 @@ import { htmlToPlainText, toMetaDescription } from "@/app/lib/metadata";
 import { normalizePlace } from "@/app/lib/normalizers/place";
 import { getHotelHref } from "@/app/lib/links";
 import { getHotelDestinationString } from "@/app/lib/hotel";
+import ImageWithFallback from "@/app/components/ImageWithFallback";
 
 type HotelPageProps = {
   params: Promise<{ hotelSlug: string; destinationSlug: string }>;
@@ -69,12 +70,9 @@ export default async function HotelPage({ params }: HotelPageProps) {
           {hotel.images.length > 1 ? (
             <ImageCarousel images={hotel.images} controls="overlay" />
           ) : hotel.images.length > 0 ? (
-            <Image
+            <ImageWithFallback
+              image={hotel.images[0]}
               className="rounded-xl object-cover h-full"
-              src={hotel.images[0].url}
-              alt={hotel.images[0].alt}
-              width={hotel.images[0].width}
-              height={hotel.images[0].height}
             />
           ) : (
             <div className="w-full h-full rounded-xl bg-gray-100 flex justify-center items-center">
