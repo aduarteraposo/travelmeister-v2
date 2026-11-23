@@ -97,7 +97,7 @@ export default async function RoomsWorthTheTripBlock({
           {articles.slice(0, 3).map((a) => (
             <li
               key={a.slug}
-              className="bg-[rgba(255,255,255,.6)] rounded-lg w-72 md:w-auto flex-1"
+              className="bg-[rgba(255,255,255,.6)] rounded-lg w-full md:w-auto flex-1"
             >
               <ArticleCardSmall
                 article={a}

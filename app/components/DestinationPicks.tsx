@@ -24,7 +24,10 @@ export default function DestinationPicks({
       <ChipRow options={tabOptions} selected={state.tab} onSelect={selectTab} />
       <ul className="flex overflow-x-auto snap-x gap-4 md:grid md:grid-cols-3">
         {filteredItems.map((item) => (
-          <li key={item.id} className="border rounded-xl">
+          <li
+            key={item.id}
+            className="border rounded-xl w-72 shrink-0 md:w-auto"
+          >
             <ExploreCard item={item} />
           </li>
         ))}
