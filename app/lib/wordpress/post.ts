@@ -29,7 +29,7 @@ export async function getPostBySlug(slug: string): Promise<WPPost> {
 export async function getPostsByIds(ids: number[]): Promise<WPPost[]> {
   if (ids.length === 0) return [];
 
-  const endpoint = `/posts?include=${ids.toString()}&acf_format=standard&_embed`;
+  const endpoint = `/posts?include=${ids.toString()}&acf_format=standard&orderby=include`;
 
   const data = await wordpressFetch<WPPost[]>(endpoint, {
     revalidate: REVALIDATE.day,

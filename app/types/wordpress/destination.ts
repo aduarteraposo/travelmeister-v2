@@ -1,7 +1,6 @@
 import { WPImage } from "./media";
 import { WPTerm } from "./place";
-import { WPItemRef, WPPostReference } from "./post";
-import { WPArticleCategory } from "./taxonomy";
+import { WPItemRef } from "./post";
 
 export type WPDestinationReference = {
   ID: number;
@@ -11,8 +10,10 @@ export type WPDestination = {
   id: number;
   slug: string;
   title: { rendered: string };
+  modified_gmt: string;
   acf: {
     destination_type: WPTerm | false;
+    page_layout: "trip" | "hub";
     parent_destination: WPItemRef | false;
     hero_image: WPImage;
     hero_intro: string;

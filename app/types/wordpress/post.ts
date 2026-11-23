@@ -21,7 +21,7 @@ export type WPPost = {
   content: {
     rendered: string;
   };
-  modified: string;
+  modified_gmt: string;
   article_category: number[];
   meta: { url_destination: string; url_destination_title: string };
   acf: {

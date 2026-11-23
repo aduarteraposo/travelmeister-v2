@@ -1,13 +1,11 @@
-import { PlaceType, WPPlace } from "@/app/types/wordpress/place";
+import { WPPlace } from "@/app/types/wordpress/place";
 import { REVALIDATE, wordpressFetch, wordpressFetchAll } from "./client";
 
 export async function getPlacesByIds(ids: number[]): Promise<WPPlace[]> {
   if (ids.length === 0) return [];
 
   const data = await wordpressFetch<WPPlace[]>(
-    `/place?include=${ids.toString()}&acf_format=standard&per_page=${
-      ids.length
-    }`,
+    `/place?include=${ids.toString()}&acf_format=standard&orderby=include&per_page=100`,
     {
       revalidate: REVALIDATE.day,
       tags: [`places:ids:${ids.join(",")}`, "places"],

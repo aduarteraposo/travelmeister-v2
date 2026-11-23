@@ -9,6 +9,7 @@ export type WPPlace = {
   place_subtype: number[];
   place_filters: number[];
   travel_style: number[];
+  modified_gmt: string;
   meta: { url_destination: string; url_destination_title: string };
   acf: {
     primary_destination: WPItemRef | "";

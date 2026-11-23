@@ -2,9 +2,10 @@ import {
   WPDestination,
   WPDestinationType,
 } from "@/app/types/wordpress/destination";
-import { REVALIDATE, wordpressFetch } from "./client";
+import { REVALIDATE, wordpressFetch, wordpressFetchWithTotal } from "./client";
 import { Destination } from "@/app/types/app/destination";
 import { normalizeDestination } from "../normalizers/destination";
+import { WPPost } from "@/app/types/wordpress/post";
 
 export async function getDestinationBySlug(slug: string) {
   const data = await wordpressFetch<WPDestination[]>(
@@ -58,7 +59,7 @@ export async function getDestinationsByIds(
   if (ids.length === 0) return [];
 
   const data = await wordpressFetch<WPDestination[]>(
-    `/destination?include=${ids.toString()}&acf_format=standard`,
+    `/destination?include=${ids.toString()}&acf_format=standard&orderby=include`,
     {
       revalidate: REVALIDATE.day,
       tags: [`destinations:ids:${ids.join(",")}`, "destinations"],
@@ -82,4 +83,18 @@ export async function getDestinationsByType(typeId: number) {
   );
 
   return data;
+}
+
+export async function getPostNumberForDestination(
+  destinationId: number
+): Promise<number> {
+  const response = await wordpressFetchWithTotal<WPPost>(
+    `/posts?destination=${destinationId}&_fields=id`,
+    {
+      revalidate: REVALIDATE.day,
+      tags: ["articles", `articles:destination:${destinationId}`],
+    }
+  );
+
+  return response.total;
 }
