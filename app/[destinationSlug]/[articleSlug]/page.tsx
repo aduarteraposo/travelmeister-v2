@@ -8,6 +8,7 @@ import { getArticlePageData } from "@/app/lib/page-data/article-page";
 import { getPostBySlug } from "@/app/lib/wordpress/post";
 import { htmlToPlainText, toMetaDescription } from "@/app/lib/metadata";
 import { ARTICLE_TYPES } from "@/app/lib/article-config";
+import ImageWithFallback from "@/app/components/ImageWithFallback";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -51,15 +52,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <>
       <header className="mb-6 md:mb-8">
-        {heroImage && (
-          <Image
-            loading="eager"
-            src={heroImage.url}
-            alt={heroImage.alt}
-            width={heroImage.width}
-            height={heroImage.height}
-          />
-        )}
+        <ImageWithFallback image={heroImage} className="aspect-video" />
         <Breadcrumbs article={article} destination={destination} />
       </header>
       <div className="mx-auto">

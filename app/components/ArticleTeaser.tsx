@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { CleanArticle } from "../types/app/article";
 import { getArticleHref } from "../lib/links";
@@ -17,7 +16,9 @@ export default function ArticleTeaser({ article }: { article: CleanArticle }) {
           className="aspect-video object-cover rounded-xl mb-2"
         />
 
-        <h4 className="font-medium group-hover:underline">{article.title}</h4>
+        <h4 className="pl-0.5 font-medium group-hover:underline">
+          {article.title}
+        </h4>
       </article>
     </Link>
   );

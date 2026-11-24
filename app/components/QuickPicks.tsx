@@ -31,7 +31,7 @@ export default function QuickPicks({
               <div className="md:basis-3/5 flex flex-col gap-1 text-center md:text-left">
                 <div className="flex flex-col gap-3 md:flex-row items-center">
                   {pick.label && (
-                    <p className="font-medium rounded-full py-1.5 px-4 bg-green-300">
+                    <p className="font-outdoor text-3xl rounded-full py-1 px-4 bg-green-300">
                       {pick.label}
                     </p>
                   )}

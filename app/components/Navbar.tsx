@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 import NavbarItem from "./NavbarItem";
 
 const NAV_LINKS = [
-  { href: "/destinations", label: "Destinations" },
-  { href: "/organized-trips", label: "Organized Trips" },
-  { href: "/group-trips", label: "Group Trips" },
-  { href: "/itinerary-planner", label: "Itinerary Planner" },
+  // { href: "/destinations", label: "Destinations" },
+  { href: "/about", label: "About" },
+  // { href: "/destinations", label: "Destinations" },
+  // { href: "/organized-trips", label: "Organized Trips" },
+  // { href: "/group-trips", label: "Group Trips" },
+  // { href: "/itinerary-planner", label: "Itinerary Planner" },
 ];
 
 export default function Navbar() {

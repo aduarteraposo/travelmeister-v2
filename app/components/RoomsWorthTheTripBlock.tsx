@@ -29,7 +29,7 @@ export default async function RoomsWorthTheTripBlock({
 
     return (
       <div className="bg-green-300 rounded-lg pt-5 p-6 md:pt-6 my-16">
-        <h2 className="font-outdoor text-6xl mb-4">
+        <h2 className="font-outdoor text-6xl mb-5">
           Rooms worth the trip{destination ? ` in ${destination.title}` : ""}
         </h2>
         <div className="bg-[rgba(255,255,255,.6)] rounded-xl">
@@ -44,7 +44,7 @@ export default async function RoomsWorthTheTripBlock({
               {hotels.map((item) => (
                 <li
                   key={item.hotel.slug}
-                  className="bg-[rgba(255,255,255,.6)] min-w-66 flex-1 shrink-0 rounded-lg"
+                  className="bg-[rgba(255,255,255,.6)] min-w-66 flex-1 shrink-0 rounded-xl"
                 >
                   <Card layout="vertical">
                     <CardImage image={item.hotel.images[0] ?? null} />

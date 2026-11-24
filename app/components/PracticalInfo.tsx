@@ -29,14 +29,15 @@ export default function PracticalInfo({ info }: { info: PracticalInfo }) {
   ];
 
   return (
-    <div className="rounded-lg px-4 md:px-8 py-6 bg-green-300 mb-8">
-      <ul className="flex flex-col md:flex-row justify-evenly gap-4">
-        {infoArray.map((item) => (
-          <li key={item.key} className={`px-2 text-center flex-1`}>
-            <InfoPiece label={en_json[item.key]} value={item.value} />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className="flex flex-col md:flex-row gap-4 my-12">
+      {infoArray.map((item) => (
+        <li
+          key={item.key}
+          className="p-4 text-center flex-1 bg-green-300 rounded-xl"
+        >
+          <InfoPiece label={en_json[item.key]} value={item.value} />
+        </li>
+      ))}
+    </ul>
   );
 }

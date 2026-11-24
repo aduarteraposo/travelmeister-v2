@@ -13,6 +13,7 @@ import { htmlToPlainText, toMetaDescription } from "../lib/metadata";
 import WhichRegion from "../components/WhichRegion";
 import RoomsWorthTheTripBlock from "../components/RoomsWorthTheTripBlock";
 import DestinationPicks from "../components/DestinationPicks";
+import ImageWithFallback from "../components/ImageWithFallback";
 
 type DestinationProps = {
   params: Promise<{
@@ -57,15 +58,10 @@ export default async function DestinationPage({ params }: DestinationProps) {
   return (
     <>
       <header>
-        {destination.heroImage && (
-          <Image
-            loading="eager"
-            alt={destination.heroImage.alt}
-            src={destination.heroImage.url}
-            width={destination.heroImage.width}
-            height={destination.heroImage.height}
-          />
-        )}
+        <ImageWithFallback
+          image={destination.heroImage}
+          className="aspect-video"
+        />
 
         <Breadcrumbs destination={destination} />
         <div className="text-center mb-8 mx-auto w-10/12">
@@ -82,12 +78,12 @@ export default async function DestinationPage({ params }: DestinationProps) {
 
       {destination.travelStyles.length > 0 &&
         destination.pageLayout === "trip" && (
-          <>
+          <section>
             <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
               Choose your style
             </h2>
             <TravelStyleTabs travelStyles={destination.travelStyles} />
-          </>
+          </section>
         )}
       {destination.whichRegion &&
         destination.whichRegion.length > 0 &&

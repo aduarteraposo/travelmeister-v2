@@ -53,7 +53,7 @@ export default async function Home() {
         <ul className="flex flex-col md:flex-row justify-between gap-4">
           {trustPoints.map((p, i) => (
             <li key={i} className="bg-gray-100 rounded-xl p-4 flex-1">
-              <p className="font-semibold mb-2">{p.title}</p>
+              <p className="font-bold text-lg mb-2">{p.title}</p>
               <p>{p.text}</p>
             </li>
           ))}
@@ -123,7 +123,7 @@ export default async function Home() {
       {popularArticles.length > 0 && (
         <section className="my-16">
           <h2 className="font-outdoor text-6xl mb-4">Popular Guides</h2>
-          <ul className="md:grid grid-cols-4 gap-6 justify-items-stretch">
+          <ul className="md:grid grid-cols-4 gap-4 justify-items-stretch">
             {popularArticles.slice(0, 8).map((a) => (
               <li key={a.slug}>
                 <ArticleTeaser article={a} />
