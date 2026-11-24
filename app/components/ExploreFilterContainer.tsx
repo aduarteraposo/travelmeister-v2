@@ -42,13 +42,16 @@ export default function ExploreFilterContainer({
           }}
           onSelect={selectTab}
         />
-        <ChipRow
-          label="Neighborhoods:"
-          options={areaOptions}
-          selectAll={{ label: `All of ${destinationName}` }}
-          selected={state.area}
-          onSelect={selectArea}
-        />
+        {areaOptions.length > 0 && (
+          <ChipRow
+            label="Neighborhoods:"
+            options={areaOptions}
+            selectAll={{ label: `All of ${destinationName}` }}
+            selected={state.area}
+            onSelect={selectArea}
+          />
+        )}
+
         <ChipRow
           label="Good for:"
           options={filterOptions}
