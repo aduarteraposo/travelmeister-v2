@@ -4,6 +4,7 @@ import Tags from "./Tags";
 import Link from "next/link";
 import MapLinkAndBudget from "./MapLinkAndBudget";
 import ImageWithFallback from "./ImageWithFallback";
+import { getHotelHref } from "../lib/links";
 
 export default function HotelCardFull({
   hotel,
@@ -19,7 +20,7 @@ export default function HotelCardFull({
       <h3 className="flex flex-col-reverse gap-1 lg:gap-4 items-start lg:items-center lg:flex-row text-2xl font-bold mb-3">
         {hotel.title}
         {hotel?.badge && (
-          <span className="bg-green-300 py-1 px-3 rounded-full text-3xl flex-nowrap font-outdoor font-medium">
+          <span className="bg-green-300 py-1 px-4 rounded-full text-3xl flex-nowrap font-outdoor font-medium">
             {hotel.badge}
           </span>
         )}
@@ -54,16 +55,24 @@ export default function HotelCardFull({
       )}
 
       {hotel.ctaLinks?.length > 0 && (
-        <div className="mt-8 flex flex-wrap gap-3 md:gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           {hotel.ctaLinks?.map((link) => (
             <Link
-              className="bg-black text-white font-medium rounded-full py-2.5 px-6 w-full md:w-auto"
+              className="bg-black text-white font-medium rounded-full py-2 px-6 w-full md:w-auto text-center"
               key={link.label}
               href={link.url}
             >
               {link.label}
             </Link>
           ))}
+          {hotel.verdict && (
+            <Link
+              className="border border-black font-medium rounded-full py-2 px-6 w-full md:w-auto text-center"
+              href={getHotelHref(hotel)}
+            >
+              See details
+            </Link>
+          )}
         </div>
       )}
     </li>
