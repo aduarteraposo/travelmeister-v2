@@ -1,8 +1,12 @@
-import Link from "next/link";
 import type { QuickPick } from "../types/app/article";
-import Image from "next/image";
 import { Item } from "../types/app/item";
 import ImageWithFallback from "./ImageWithFallback";
+import LinkButton from "./LinkButton";
+import {
+  getExperienceLinks,
+  getPlaceLinks,
+  primaryLink,
+} from "../lib/item-links";
 
 export default function QuickPicks({
   quickPicks,
@@ -40,13 +44,16 @@ export default function QuickPicks({
 
                 <p>{pick.reason}</p>
               </div>
-              {pick.item.data.ctaLinks.length > 0 && (
-                <Link
-                  className="border border-black rounded-full py-2 px-4 min-w-30 text-center font-medium md:ml-auto md:mr-8 md:flex-1"
-                  href={pick.item.data.ctaLinks[0].url}
-                >
-                  {pick.ctaText}
-                </Link>
+              {pick.item.kind === "hotel" ||
+                (pick.item.kind === "place" && (
+                  <LinkButton
+                    link={primaryLink(getPlaceLinks(pick.item.data))}
+                  />
+                ))}
+              {pick.item.kind === "experience" && (
+                <LinkButton
+                  link={primaryLink(getExperienceLinks(pick.item.data))}
+                />
               )}
             </li>
           ) : (

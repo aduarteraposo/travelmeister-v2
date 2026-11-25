@@ -42,7 +42,10 @@ export async function getDestinationPageData(destinationSlug: string) {
     ...picksItemIds.placeIds,
   ];
 
-  const experienceIds: number[] = picksItemIds.experienceIds;
+  const experienceIds: number[] = [
+    ...picksItemIds.experienceIds,
+    ...travelStyleItemIds.experiences,
+  ];
 
   const subdestinationsIds: number[] = [
     ...destination.featuredSubdestinations.map(

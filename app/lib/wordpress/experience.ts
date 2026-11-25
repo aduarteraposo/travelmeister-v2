@@ -30,3 +30,15 @@ export function getExperienceSummariesByDestination(
     }
   );
 }
+
+export async function getExperienceBySlug(slug: string): Promise<WPExperience> {
+  const data = await wordpressFetch<WPExperience[]>(
+    `/experience?slug=${slug}&acf_format=standard`,
+    {
+      revalidate: REVALIDATE.day,
+      tags: [`experience:slug:${slug}`, "experiences"],
+    }
+  );
+
+  return data[0];
+}

@@ -1,8 +1,9 @@
 import { ExploreItem, ExploreTab } from "@/app/types/app/explore";
-import { getArticleHref, getExperienceHref, getHotelHref } from "../links";
+import { getArticleHref } from "../links";
 import { Place } from "@/app/types/app/place";
 import { Experience } from "@/app/types/app/experience";
 import { CleanArticle } from "@/app/types/app/article";
+import { getExperienceLinks, getPlaceLinks, primaryLink } from "../item-links";
 
 export function placeToExploreItem(place: Place): ExploreItem {
   const exploreItem: ExploreItem = {
@@ -19,12 +20,7 @@ export function placeToExploreItem(place: Place): ExploreItem {
     beenThere: typeof place.beenThere === "object" ? true : false,
     title: place.title,
     text: place.shortDescription,
-    link:
-      place.placeType === "hotel"
-        ? { href: getHotelHref(place), external: false, label: "See rooms" }
-        : place.mapLink
-        ? { href: place.mapLink, external: true, label: "Open in Maps" }
-        : null,
+    link: primaryLink(getPlaceLinks(place)),
     image: Array.isArray(place.images)
       ? place.images[0] && typeof place.images[0] === "object"
         ? place.images[0]
@@ -65,18 +61,7 @@ export function experienceToExploreItem(exp: Experience): ExploreItem {
     beenThere: typeof exp.doneIt === "object" ? true : false,
     title: exp.title,
     text: exp.shortDescription,
-    link:
-      exp.ctaLinks.length > 0 && exp.ctaLinks[0]
-        ? {
-            href: exp.ctaLinks[0].url,
-            external: true,
-            label: exp.ctaLinks[0].label,
-          }
-        : {
-            href: getExperienceHref(exp),
-            external: false,
-            label: "See the route",
-          },
+    link: primaryLink(getExperienceLinks(exp)),
     image: Array.isArray(exp.images)
       ? exp.images[0] && typeof exp.images[0] === "object"
         ? exp.images[0]
@@ -107,6 +92,7 @@ export function articleToExploreItem(article: CleanArticle): ExploreItem {
       href: getArticleHref(article),
       external: false,
       label: "Read article",
+      kind: "page",
     },
     image: article.heroImage,
     filters: [],

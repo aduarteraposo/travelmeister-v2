@@ -10,7 +10,7 @@ export default function ExperienceCard({
   experience: Experience;
 }) {
   return (
-    <li className="mb-28 last:mb-0">
+    <article className="mb-28 last:mb-0">
       <h3 className="flex flex-col-reverse gap-1 lg:gap-4 items-start lg:items-center lg:flex-row text-2xl font-bold mb-3">
         {htmlToPlainText(experience.title)}
       </h3>
@@ -52,6 +52,6 @@ export default function ExperienceCard({
             )
         )}
       </div>
-    </li>
+    </article>
   );
 }

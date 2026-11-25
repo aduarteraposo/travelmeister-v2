@@ -39,7 +39,16 @@ export default function ArticleCard({
       <CardImage image={article.heroImage} />
       <CardBody>
         <CardEyebrow>{eyebrow}</CardEyebrow>
-        <CardTitle href={getArticleHref(article)}>{article.title}</CardTitle>
+        <CardTitle
+          link={{
+            href: getArticleHref(article),
+            label: article.title,
+            external: false,
+            kind: "page",
+          }}
+        >
+          {article.title}
+        </CardTitle>
         <CardText>{article.excerpt}</CardText>
         <CardMeta items={cardMeta} />
       </CardBody>

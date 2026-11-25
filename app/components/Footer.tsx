@@ -8,7 +8,6 @@ export const FOOTER_LINKS = [
   { href: "/legal-notice", label: "Legal notice" },
 ] as const;
 
-// TODO: replace with the real contact address.
 const CONTACT_EMAIL = "hello@travelmeister.eu";
 
 export default function Footer() {
@@ -17,7 +16,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 py-12 flex flex-col md:flex-row gap-10 md:justify-between">
         <div className="max-w-sm">
           <Link href="/" className="font-semibold text-xl">
-            TravelMeister
+            Travelmeister
           </Link>
           <p className="mt-3 text-sm text-gray-300">
             Hotel rooms worth the trip, checked room by room by Alejandro and

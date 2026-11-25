@@ -40,7 +40,7 @@ export default function EntryCard({
     neighborhoodLabels && articleDestinationId !== item.data.destination?.ID;
 
   return (
-    <>
+    <li key={entry.key}>
       {entry.item?.kind === "place" && <PlaceCard entry={entry} />}
       {entry.item?.kind === "hotel" && (
         <HotelCard
@@ -53,6 +53,6 @@ export default function EntryCard({
       {entry.item?.kind === "experience" && (
         <ExperienceCard experience={entry.item.data} />
       )}
-    </>
+    </li>
   );
 }

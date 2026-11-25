@@ -3,6 +3,8 @@ import { REVALIDATE, wordpressFetch, wordpressFetchAll } from "./client";
 import { WPPost } from "@/app/types/wordpress/post";
 import { WPPlace } from "@/app/types/wordpress/place";
 import { WPHomepage } from "@/app/types/wordpress/pages";
+import { hasHotelPage } from "../pages-rules";
+import { normalizePlace } from "../normalizers/place";
 
 type DestinationRouteParams = {
   destinationSlug: string;
@@ -120,7 +122,7 @@ export async function getAllHotelRouteParams(): Promise<HotelRouteParams[]> {
       continue;
     }
 
-    if (!place.acf.verdict) {
+    if (!hasHotelPage(normalizePlace(place))) {
       console.warn(
         `Skipping place "${place.slug}" (id: ${place.id}): hotel hass no verdict (no page)`
       );

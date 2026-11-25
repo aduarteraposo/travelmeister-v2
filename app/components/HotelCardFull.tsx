@@ -16,7 +16,7 @@ export default function HotelCardFull({
   showNeighborhood: boolean;
 }) {
   return (
-    <li className="last:mb-0 mb-28">
+    <article className="last:mb-0 mb-28">
       <h3 className="flex flex-col-reverse gap-1 lg:gap-4 items-start lg:items-center lg:flex-row text-2xl font-bold mb-3">
         {hotel.title}
         {hotel?.badge && (
@@ -75,6 +75,6 @@ export default function HotelCardFull({
           )}
         </div>
       )}
-    </li>
+    </article>
   );
 }

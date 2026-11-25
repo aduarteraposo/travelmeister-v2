@@ -7,6 +7,7 @@ import CardTitle from "./card/CardTitle";
 import DotSeparated from "./DotSeparated";
 import CardBody from "./card/CardBody";
 import { htmlToPlainText } from "../lib/metadata";
+import LinkButton from "./LinkButton";
 
 export default function ExploreCard({ item }: { item: ExploreItem }) {
   const eyebrowItems = [item.subtype?.name, item.area?.label];
@@ -17,10 +18,9 @@ export default function ExploreCard({ item }: { item: ExploreItem }) {
         <CardEyebrow>
           {eyebrowItems.some(Boolean) && <DotSeparated items={eyebrowItems} />}
         </CardEyebrow>
-        <CardTitle href={item.link?.href}>
-          {htmlToPlainText(item.title)}
-        </CardTitle>
+        <CardTitle>{htmlToPlainText(item.title)}</CardTitle>
         <CardText lines={2}>{item.text}</CardText>
+        <LinkButton link={item.link} />
       </CardBody>
     </Card>
   );

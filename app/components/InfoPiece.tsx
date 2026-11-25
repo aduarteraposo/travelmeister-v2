@@ -7,7 +7,7 @@ export default function InfoPiece({
 }) {
   return (
     <dl>
-      <dt className="font-semibold text-lg mb-1">{label}</dt>
+      <dt className="font-semibold mb-1">{label}</dt>
       <dd>{value}</dd>
     </dl>
   );

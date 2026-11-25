@@ -11,8 +11,8 @@ export default function WhichRegion({ styles }: { styles: RegionStyle[] }) {
             key={style.label}
             className="flex flex-col md:flex-row gap-2 md:gap-12 px-6 py-4 not-last:border-b md:items-center"
           >
-            <h4 className="font-bold">{style.label}</h4>
-            <div className="text-sm">
+            <h4 className="md: w-1/5 font-bold">{style.label}</h4>
+            <div className="text-sm flex-1">
               <ul className="flex gap-4 mb-2">
                 {style.destinations.map((d) => (
                   <Link key={d.post_name} href={`/${d.post_name}`}>

@@ -1,5 +1,4 @@
 import { getAllDestinationRouteParams } from "@/app/lib/wordpress/routes";
-import Image from "next/image";
 import type { Metadata } from "next";
 import Tags from "../components/Tags";
 import TravelStyleTabs from "../components/TravelStyleTabs";
@@ -78,12 +77,11 @@ export default async function DestinationPage({ params }: DestinationProps) {
 
       {destination.travelStyles.length > 0 &&
         destination.pageLayout === "trip" && (
-          <section>
-            <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
-              Choose your style
-            </h2>
-            <TravelStyleTabs travelStyles={destination.travelStyles} />
-          </section>
+          <TravelStyleTabs
+            travelStyles={destination.travelStyles}
+            placesById={placesById}
+            experiencesById={experiencesById}
+          />
         )}
       {destination.whichRegion &&
         destination.whichRegion.length > 0 &&
@@ -93,6 +91,7 @@ export default async function DestinationPage({ params }: DestinationProps) {
       <SubDestinations
         parentDestination={destination}
         subdestinations={destination.featuredSubdestinations}
+        subdestinationsById={subdestinationsById}
       />
       {roomsBlock.kind !== "none" && (
         <section>

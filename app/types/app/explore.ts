@@ -1,6 +1,7 @@
 import { EXPLORE_TABS } from "@/app/lib/explore-tabs-config";
 import { Term } from "./place";
 import { WPImage } from "../wordpress/media";
+import { ItemLink } from "./link";
 
 export type ExploreItem = {
   id: number;
@@ -11,7 +12,7 @@ export type ExploreItem = {
   beenThere: boolean;
   title: string;
   text: string;
-  link: { href: string; external: boolean; label: string } | null;
+  link: ItemLink | null;
   image: WPImage | null;
 };
 

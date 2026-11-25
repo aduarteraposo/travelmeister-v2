@@ -10,6 +10,7 @@ import CardMeta from "./card/CardMeta";
 import CardText from "./card/CardText";
 import CardTitle from "./card/CardTitle";
 import ArticleCardSmall from "./ArticleCardSmall";
+import { getPlaceLinks, primaryLink } from "../lib/item-links";
 
 export default async function RoomsWorthTheTripBlock({
   roomsBlock,
@@ -50,7 +51,7 @@ export default async function RoomsWorthTheTripBlock({
                     <CardImage image={item.hotel.images[0] ?? null} />
                     <CardBody>
                       <CardEyebrow>{item.label}</CardEyebrow>
-                      <CardTitle href={getHotelHref(item.hotel)}>
+                      <CardTitle link={primaryLink(getPlaceLinks(item.hotel))}>
                         {item.hotel.title}
                       </CardTitle>
                       {item.hotel.rooms.find((r) => r.isPick) && (

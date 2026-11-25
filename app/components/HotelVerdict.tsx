@@ -1,6 +1,10 @@
+import { getPlaceLinks } from "../lib/item-links";
 import { Place } from "../types/app/place";
+import LinkButton from "./LinkButton";
 
 export default function HotelVerdict({ hotel }: { hotel: Place }) {
+  const links = getPlaceLinks(hotel);
+
   if (hotel.verdict || hotel.bestIf || hotel.notIdealIf) {
     return (
       <div className="lg:flex-1 rounded-xl p-6 flex-col md:flex-row lg:flex-col flex border md:items-center gap-6 md:gap-8 lg:gap-4">
@@ -21,15 +25,8 @@ export default function HotelVerdict({ hotel }: { hotel: Place }) {
             </p>
           )}
         </div>
-        {hotel.ctaLinks.length > 0 && (
-          <a
-            href={hotel.ctaLinks[0].url}
-            target="_blank"
-            rel="sponsored noopener"
-            className="lg:w-full rounded-full py-4 px-8 mb-1 bg-black text-white font-medium lg:mt-auto text-center shrink-0"
-          >
-            {hotel.ctaLinks[0].label}
-          </a>
+        {links.bookings && links.bookings.length > 0 && (
+          <LinkButton link={links.bookings[0]} className="mt-auto" />
         )}
       </div>
     );

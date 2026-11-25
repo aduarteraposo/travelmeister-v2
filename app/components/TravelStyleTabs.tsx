@@ -1,83 +1,101 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { TravelStyle } from "./../types/app/destination";
-import TabPanelContent from "./TabPanelContent";
+import TabPanelStay from "./TabPanelStay";
+import TabPanelDo from "./TabPanelDo";
+import TabPanelPlan from "./TabPanelPlan";
+import TabPanel from "./TabPanel";
+import TabPanelHeadline from "./TabPanelHeadline";
+import { Place } from "../types/app/place";
+import { Experience } from "../types/app/experience";
 
 export default function TravelStyleTabs({
   travelStyles,
+  placesById,
+  experiencesById,
 }: {
   travelStyles: TravelStyle[];
+  placesById: Record<number, Place>;
+  experiencesById: Record<number, Experience>;
 }) {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
-  const [activeTabPosition, setActiveTabPosition] = useState({
-    left: 0,
-    width: 0,
-  });
-
-  useEffect(() => {
-    const updatePosition = () => {
-      const activeTab = tabsRef.current[activeTabIndex];
-      if (!activeTab) {
-        return;
-      }
-
-      setActiveTabPosition({
-        left: activeTab.offsetLeft,
-        width: activeTab.offsetWidth,
-      });
-    };
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-
-    return () => removeEventListener("resize", updatePosition);
-  }, [activeTabIndex]);
+  const [activeTab, setActiveTab] = useState<string>(
+    travelStyles.length > 0
+      ? travelStyles[0].style
+        ? travelStyles[0].style.slug
+        : ""
+      : ""
+  );
 
   return (
-    <section className="border border-gray-300 rounded-xl flex flex-col">
-      <div className="flex gap-1 justify-center relative py-2 bg-black text-white rounded-t-xl -mx-px">
-        {travelStyles.map((style, index) => (
-          <button
-            className={`p-1 md:px-4 cursor-pointer lg:text-lg`}
-            key={style.style?.slug}
-            ref={(el) => {
-              tabsRef.current[index] = el;
-            }}
-            role="tab"
-            id={`tab-${style.style?.slug}`}
-            aria-selected={activeTabIndex === index}
-            aria-controls={`panel-${style.style?.slug}`}
-            onClick={() => setActiveTabIndex(index)}
-          >
-            {style.style?.name}
-          </button>
-        ))}
-        <span
-          className={`bg-green-300 h-1 absolute bottom-0 transition-all duration-200 ease-in-out`}
-          style={{
-            left: `${activeTabPosition.left}px`,
-            width: `${activeTabPosition.width}px`,
-          }}
-        ></span>
-      </div>
+    <section>
+      <h2 className="font-outdoor text-6xl mb-3">Choose your style</h2>
+      <ul className="flex gap-2 mb-3">
+        {travelStyles.flatMap(({ style }) =>
+          style
+            ? [
+                <li key={style.slug}>
+                  <button
+                    className={`rounded-full border px-3 py-1.5 font-medium cursor-pointer ${
+                      activeTab === style.slug ? "bg-green-300" : ""
+                    }`}
+                    role="tab"
+                    id={`tab-${style.slug}`}
+                    aria-selected={activeTab === style.slug}
+                    aria-controls={`panel-${style.slug}`}
+                    onClick={() => setActiveTab(style.slug)}
+                  >
+                    {style.name}
+                  </button>
+                </li>,
+              ]
+            : []
+        )}
+      </ul>
 
       <div className="grid [grid-template-areas:'stack']">
-        {travelStyles.map((style, index) => (
-          <div
-            key={style.style?.slug}
-            id={`panel-${style.style?.slug}`}
-            role="tabpanel"
-            aria-labelledby={`tab-${style.style?.slug}`}
-            className={`py-6 px-8 rounded-b-xl [grid-area:stack] transition-opacity duration-300 ${
-              activeTabIndex === index
-                ? "opacity-100 visible"
-                : "opacity-0 invisible"
-            }`}
-          >
-            <TabPanelContent style={style} />
-          </div>
-        ))}
+        {travelStyles.flatMap(
+          ({ style, summary, whereToStay, whatToDo, suggestedPlan }) =>
+            style ? (
+              <div
+                key={style.slug}
+                id={`panel-${style.slug}`}
+                role="tabpanel"
+                aria-labelledby={`tab-${style.slug}`}
+                className={`[grid-area:stack] transition-opacity duration-300 ${
+                  activeTab === style.slug
+                    ? "opacity-100 visible"
+                    : "opacity-0 invisible"
+                }`}
+              >
+                <p className="mb-3 p-4 rounded-xl border">{summary}</p>
+                <div className="flex flex-col md:flex-row gap-4">
+                  <TabPanel>
+                    <TabPanelHeadline>Where to stay</TabPanelHeadline>
+                    <TabPanelStay
+                      style={style}
+                      whereToStay={whereToStay}
+                      placesById={placesById}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <TabPanelHeadline>What to do</TabPanelHeadline>
+                    <TabPanelDo
+                      whatToDo={whatToDo}
+                      style={style}
+                      experiencesById={experiencesById}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <TabPanelHeadline>Suggested plan</TabPanelHeadline>
+                    <TabPanelPlan plan={suggestedPlan} style={style} />
+                  </TabPanel>
+                </div>
+              </div>
+            ) : (
+              []
+            )
+        )}
       </div>
     </section>
   );

@@ -7,9 +7,11 @@ import SubDestinationTeaser from "./SubDestinationTeaser";
 export default async function SubDestinations({
   subdestinations,
   parentDestination,
+  subdestinationsById,
 }: {
   subdestinations: WPItemRef[];
   parentDestination: Destination;
+  subdestinationsById: Record<number, Destination>;
 }) {
   const fetchedSubdestinations = await getDestinationsByIds(
     subdestinations.map((d) => d.ID)
@@ -19,7 +21,7 @@ export default async function SubDestinations({
   return (
     <section className="my-10">
       {
-        <h2 className="font-outdoor text-[3.375rem]/14 mb-2 text-gray-800">
+        <h2 className="font-outdoor text-[3.375rem]/14 mb-3 text-gray-800">
           {parentDestination.destinationType?.slug === "city"
             ? "Neighborhoods"
             : "Top Destinations"}

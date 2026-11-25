@@ -1,22 +1,21 @@
-import Link from "next/link";
+import { ItemLink } from "@/app/types/app/link";
 import { ReactNode } from "react";
+import MaybeLink from "../MaybeLink";
 
 export default function CardTitle({
-  href,
+  link,
   children,
 }: {
-  href: string | undefined;
+  link?: ItemLink | null;
   children: ReactNode;
 }) {
+  const titleLink = link ? link : null;
+
   return (
     <h4 className="font-semibold text-lg leading-tight mb-2">
-      {href ? (
-        <Link className="after:inset-0 after:absolute" href={href}>
-          {children}
-        </Link>
-      ) : (
-        <>{children}</>
-      )}
+      <MaybeLink className="after:inset-0 after:absolute" link={titleLink}>
+        {children}
+      </MaybeLink>
     </h4>
   );
 }

@@ -9,6 +9,7 @@ import {
   getHotelTrustItems,
 } from "../hotel";
 import { getHotelHref } from "../links";
+import { hasHotelPage } from "../pages-rules";
 
 export async function getHotelPageData(
   hotelSlug: string,
@@ -25,7 +26,7 @@ export async function getHotelPageData(
 
   const hotel = normalizePlace(wpHotel);
 
-  if (!hotel.verdict || hotel.placeType !== "hotel") {
+  if (!hasHotelPage(hotel) || hotel.placeType !== "hotel") {
     notFound();
   }
 

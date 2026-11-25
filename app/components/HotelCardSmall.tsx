@@ -5,6 +5,8 @@ import HotelImage from "./ImageWithFallback";
 import MapLinkAndBudget from "./MapLinkAndBudget";
 import { getHotelHref } from "../lib/links";
 import ImageWithFallback from "./ImageWithFallback";
+import MaybeLink from "./MaybeLink";
+import { getPlaceLinks, primaryLink, secondaryLink } from "../lib/item-links";
 
 export default function HotelCardSmall({
   hotel,
@@ -15,8 +17,10 @@ export default function HotelCardSmall({
   note?: string;
   showNeighborhood: boolean;
 }) {
+  const links = getPlaceLinks(hotel);
+
   return (
-    <li className="w-66 shrink-0 border rounded-xl mb-0">
+    <article className="w-66 shrink-0 border rounded-xl mb-0">
       <ImageWithFallback
         image={hotel.images[0]}
         className="rounded-t-xl aspect-video"
@@ -36,25 +40,16 @@ export default function HotelCardSmall({
         <p className="mb-4">{note ? note : hotel.shortDescription}</p>
         <MapLinkAndBudget hotel={hotel} showNeighborhood={showNeighborhood} />
         <div className="flex flex-col gap-4 mt-8">
-          {hotel.verdict && (
-            <Link
-              className="font-medium rounded-full py-2 px-6 border border-black text-center"
-              href={getHotelHref(hotel)}
-            >
-              See rooms
-            </Link>
-          )}
-          {hotel.ctaLinks?.length > 0 && (
-            <Link
-              className="bg-black text-white font-medium rounded-full py-2 px-6 text-center"
-              key={hotel.ctaLinks[0].label}
-              href={hotel.ctaLinks[0].url}
-            >
-              Check Prices
-            </Link>
+          <MaybeLink link={primaryLink(links)}>
+            {primaryLink(links)?.label}
+          </MaybeLink>
+          {secondaryLink(links) && (
+            <MaybeLink link={secondaryLink(links)}>
+              {secondaryLink(links)?.label}
+            </MaybeLink>
           )}
         </div>
       </div>
-    </li>
+    </article>
   );
 }

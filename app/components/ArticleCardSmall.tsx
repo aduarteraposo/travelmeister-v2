@@ -23,7 +23,16 @@ export default function ArticleCardSmall({
             <DotSeparated items={eyebrowItems} />
           </CardEyebrow>
         )}
-        <CardTitle href={getArticleHref(article)}>{article.title}</CardTitle>
+        <CardTitle
+          link={{
+            href: getArticleHref(article),
+            external: false,
+            label: "Read article",
+            kind: "page",
+          }}
+        >
+          {article.title}
+        </CardTitle>
       </CardBody>
     </Card>
   );
