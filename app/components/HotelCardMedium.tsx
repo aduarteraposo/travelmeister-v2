@@ -1,11 +1,10 @@
-import Link from "next/link";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import { Place } from "../types/app/place";
 import Tags from "./Tags";
 import MapLinkAndBudget from "./MapLinkAndBudget";
 import ImageWithFallback from "./ImageWithFallback";
-import { getHotelHref } from "../lib/links";
 import { getPlaceLinks, primaryLink, secondaryLink } from "../lib/item-links";
-import MaybeLink from "./MaybeLink";
+import LinkButton from "./LinkButton";
 
 export default function HotelCardMedium({
   hotel,
@@ -22,6 +21,7 @@ export default function HotelCardMedium({
     <article className="last:mb-0 md:flex border rounded-xl mb-12 gap-2">
       {
         <ImageWithFallback
+          sizes={IMAGE_SIZES.horizontalCard}
           image={hotel.images[0]}
           className="aspect-video md:aspect-auto md:w-2/5 shrink-0 rounded-t-xl md:rounded-l-xl md:rounded-tr-none"
         />
@@ -46,15 +46,12 @@ export default function HotelCardMedium({
             {hotel.vibe}
           </p>
         )}
-        <div className="flex flex-col md:flex-row items-center gap-4">
-          <MaybeLink link={primaryLink(links)}>
-            {primaryLink(links)?.label}
-          </MaybeLink>
-          {secondaryLink(links) && (
-            <MaybeLink link={secondaryLink(links)}>
-              {secondaryLink(links)?.label}
-            </MaybeLink>
-          )}
+        <div className="flex flex-col md:flex-row md:items-center gap-4">
+          <LinkButton
+            link={primaryLink(links)}
+            variant={links.page ? "secondary" : "primary"}
+          />
+          {secondaryLink(links) && <LinkButton link={secondaryLink(links)} />}
         </div>
       </div>
     </article>

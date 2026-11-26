@@ -5,6 +5,7 @@ import Filters from "./Filters";
 import { Place } from "../types/app/place";
 import { CleanArticle, Section } from "../types/app/article";
 import ArticleTeaser from "./ArticleTeaser";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import { getAvailableFilters, matchesFilter } from "../lib/filters";
 import { Experience } from "../types/app/experience";
 import { Item } from "../types/app/item";
@@ -88,7 +89,11 @@ export default function FilterContainer({
           <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
           <div className="h-full overflow-y-auto">
             {relatedArticles.map((article) => (
-              <ArticleTeaser key={article.slug} article={article} />
+              <ArticleTeaser
+                key={article.slug}
+                article={article}
+                imageSizes={IMAGE_SIZES.sidebar}
+              />
             ))}
           </div>
         </div>
@@ -122,7 +127,11 @@ export default function FilterContainer({
         <h3 className="text-5xl mb-2 font-outdoor">Related Articles</h3>
         <div>
           {relatedArticles.map((article) => (
-            <ArticleTeaser key={article.slug} article={article} />
+            <ArticleTeaser
+                key={article.slug}
+                article={article}
+                imageSizes={IMAGE_SIZES.sidebar}
+              />
           ))}
         </div>
       </div>

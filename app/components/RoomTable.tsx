@@ -1,4 +1,5 @@
 import { Place } from "../types/app/place";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import {
   getRoomEvidence,
   getRoomFeatures,
@@ -33,6 +34,7 @@ export default function RoomTable({ hotel }: { hotel: Place }) {
               }`}
             >
               <ImageWithFallback
+                sizes={IMAGE_SIZES.thumb}
                 image={room.images?.[0]}
                 className="w-32 aspect-16/10 rounded-md"
                 fallbackClasses={`

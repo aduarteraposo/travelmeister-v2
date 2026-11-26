@@ -1,4 +1,5 @@
 import { Experience } from "../types/app/experience";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import { FaLocationDot } from "react-icons/fa6";
 import Link from "next/link";
 import { htmlToPlainText } from "../lib/metadata";
@@ -15,6 +16,7 @@ export default function ExperienceCard({
         {htmlToPlainText(experience.title)}
       </h3>
       <ImageWithFallback
+        sizes={IMAGE_SIZES.articleColumn}
         image={experience.images[0]}
         className="aspect-video rounded-xl mb-4"
       />

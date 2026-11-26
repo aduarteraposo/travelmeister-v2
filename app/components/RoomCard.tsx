@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import { Room } from "../types/app/place";
 import ImageCarousel from "./ImageCarousel";
 import {
@@ -26,6 +26,7 @@ export default function RoomCard({
           </div>
         ) : (
           <ImageWithFallback
+            sizes={IMAGE_SIZES.half}
             image={room.images?.[0]}
             className="rounded-xl w-full aspect-video"
           />

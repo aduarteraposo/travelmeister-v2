@@ -15,18 +15,26 @@ export default function LinkButton({
   short,
   className = "",
   children,
+  size = "md",
 }: {
   link: ItemLink | null;
   variant?: keyof typeof VARIANTS;
   short?: boolean;
   className?: string;
   children?: ReactNode;
+  size?: "sm" | "md";
 }) {
   if (!link) return null;
   return (
     <MaybeLink
       link={link}
-      className={`inline-block rounded-full py-3 px-6 font-medium text-center ${VARIANTS[variant]} ${className}`}
+      className={`rounded-full font-medium text-center ${
+        size === "md"
+          ? "py-2.5 px-5"
+          : size === "sm"
+          ? "text-sm py-1.5 px-4"
+          : ""
+      } ${VARIANTS[variant]} ${className}`}
     >
       {children ?? (short ? SHORT_LABELS[link.kind] : link.label)}
     </MaybeLink>

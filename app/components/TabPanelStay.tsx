@@ -1,6 +1,3 @@
-import Link from "next/link";
-import { getHotelHref } from "../lib/links";
-import { hasHotelPage } from "../lib/pages-rules";
 import { TravelStyle } from "../types/app/destination";
 import { Place } from "../types/app/place";
 import HotelCardMini from "./HotelCardMini";

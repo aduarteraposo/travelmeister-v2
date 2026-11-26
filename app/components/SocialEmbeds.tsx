@@ -1,6 +1,6 @@
 "use client";
 
-import { Place, Term, WithSection } from "../types/app/place";
+import { Place, Term } from "../types/app/place";
 import { useInView } from "react-intersection-observer";
 import PlaceSocialEmbedCard from "./PlaceSocialEmbedCard";
 import Filters from "./Filters";

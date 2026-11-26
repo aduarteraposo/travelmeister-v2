@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { getPlaceAttributesArray } from "../lib/place/place-comparison";
-import type { Place, WithSection } from "../types/app/place";
+import type { Place } from "../types/app/place";
 import { useRef, useState } from "react";
 
 export default function PlaceComparisonTable({

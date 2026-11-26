@@ -31,7 +31,7 @@ export function getPlaceSummariesByDestination(
   destinationId: number
 ): Promise<WPPlace[]> {
   return wordpressFetchAll<WPPlace>(
-    `/place?destination=${destinationId}&acf_format=standard&per_page=100&_fields=id,slug,title,meta.url_destination,acf.primary_destination,acf.place_type,acf.place_subtype,acf.images,acf.map_link,acf.filters,acf.stayed_here`,
+    `/place?destination=${destinationId}&acf_format=standard&per_page=100&_fields=id,slug,title,meta.url_destination,acf`,
     {
       revalidate: REVALIDATE.day,
       tags: ["places", `places:destination:${destinationId}`],

@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { LabeledPlace } from "../types/app/place";
 import { WPItemRef } from "../types/wordpress/post";
 
 export default function Recommendations({ picks }: { picks: WPItemRef[] }) {

@@ -1,12 +1,10 @@
-import Link from "next/link";
 import { Place } from "../types/app/place";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import Tags from "./Tags";
-import HotelImage from "./ImageWithFallback";
 import MapLinkAndBudget from "./MapLinkAndBudget";
-import { getHotelHref } from "../lib/links";
 import ImageWithFallback from "./ImageWithFallback";
-import MaybeLink from "./MaybeLink";
 import { getPlaceLinks, primaryLink, secondaryLink } from "../lib/item-links";
+import LinkButton from "./LinkButton";
 
 export default function HotelCardSmall({
   hotel,
@@ -22,6 +20,7 @@ export default function HotelCardSmall({
   return (
     <article className="w-66 shrink-0 border rounded-xl mb-0">
       <ImageWithFallback
+        sizes={IMAGE_SIZES.card}
         image={hotel.images[0]}
         className="rounded-t-xl aspect-video"
       />
@@ -40,14 +39,11 @@ export default function HotelCardSmall({
         <p className="mb-4">{note ? note : hotel.shortDescription}</p>
         <MapLinkAndBudget hotel={hotel} showNeighborhood={showNeighborhood} />
         <div className="flex flex-col gap-4 mt-8">
-          <MaybeLink link={primaryLink(links)}>
-            {primaryLink(links)?.label}
-          </MaybeLink>
-          {secondaryLink(links) && (
-            <MaybeLink link={secondaryLink(links)}>
-              {secondaryLink(links)?.label}
-            </MaybeLink>
-          )}
+          <LinkButton
+            link={primaryLink(links)}
+            variant={links.page ? "secondary" : "primary"}
+          />
+          {secondaryLink(links) && <LinkButton link={secondaryLink(links)} />}
         </div>
       </div>
     </article>

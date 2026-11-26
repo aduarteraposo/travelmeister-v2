@@ -4,6 +4,7 @@ import { getNextArticlesOffset } from "../lib/pagination/getNextArticleOffset";
 import { PaginatedArticlesResponse } from "../types/api/pagination";
 import { CleanArticle } from "../types/app/article";
 import ArticleTeaser from "./ArticleTeaser";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 
 type ArticleLaneProps = {
@@ -87,7 +88,7 @@ export default function ArticleLane({
         {allArticles.map((article) => {
           return (
             <li key={article.slug} className="min-w-60">
-              <ArticleTeaser article={article} />
+              <ArticleTeaser article={article} imageSizes={IMAGE_SIZES.card} />
             </li>
           );
         })}

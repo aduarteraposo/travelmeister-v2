@@ -1,10 +1,11 @@
 import { Place } from "../types/app/place";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import ImageCarousel from "./ImageCarousel";
 import Tags from "./Tags";
-import Link from "next/link";
 import MapLinkAndBudget from "./MapLinkAndBudget";
 import ImageWithFallback from "./ImageWithFallback";
-import { getHotelHref } from "../lib/links";
+import LinkButton from "./LinkButton";
+import { getPlaceLinks, primaryLink, secondaryLink } from "../lib/item-links";
 
 export default function HotelCardFull({
   hotel,
@@ -15,6 +16,8 @@ export default function HotelCardFull({
   note: string;
   showNeighborhood: boolean;
 }) {
+  const links = getPlaceLinks(hotel);
+
   return (
     <article className="last:mb-0 mb-28">
       <h3 className="flex flex-col-reverse gap-1 lg:gap-4 items-start lg:items-center lg:flex-row text-2xl font-bold mb-3">
@@ -32,6 +35,7 @@ export default function HotelCardFull({
       ) : (
         hotel.images.length > 0 && (
           <ImageWithFallback
+            sizes={IMAGE_SIZES.articleColumn}
             image={hotel.images[0]}
             className="rounded-xl aspect-16/10 w-full"
           />
@@ -54,27 +58,13 @@ export default function HotelCardFull({
         </p>
       )}
 
-      {hotel.ctaLinks?.length > 0 && (
-        <div className="flex flex-col md:flex-row gap-4">
-          {hotel.ctaLinks?.map((link) => (
-            <Link
-              className="bg-black text-white font-medium rounded-full py-2 px-6 w-full md:w-auto text-center"
-              key={link.label}
-              href={link.url}
-            >
-              {link.label}
-            </Link>
-          ))}
-          {hotel.verdict && (
-            <Link
-              className="border border-black font-medium rounded-full py-2 px-6 w-full md:w-auto text-center"
-              href={getHotelHref(hotel)}
-            >
-              See details
-            </Link>
-          )}
-        </div>
-      )}
+      <div className="flex flex-col md:flex-row gap-4">
+        <LinkButton
+          link={primaryLink(links)}
+          variant={links.page ? "secondary" : "primary"}
+        />
+        {secondaryLink(links) && <LinkButton link={secondaryLink(links)} />}
+      </div>
     </article>
   );
 }

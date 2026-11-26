@@ -13,7 +13,10 @@ export default function CardTitle({
 
   return (
     <h4 className="font-semibold text-lg leading-tight mb-2">
-      <MaybeLink className="after:inset-0 after:absolute" link={titleLink}>
+      <MaybeLink
+        className={link ? "after:inset-0 after:absolute" : ""}
+        link={titleLink}
+      >
         {children}
       </MaybeLink>
     </h4>

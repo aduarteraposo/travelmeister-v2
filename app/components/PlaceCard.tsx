@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import { FaLocationDot } from "react-icons/fa6";
 
 import type { Place } from "../types/app/place";
@@ -38,6 +38,7 @@ export default function PlaceCard({
         <PlaceImageCarousel images={data.images} />
       ) : (
         <ImageWithFallback
+          sizes={IMAGE_SIZES.articleColumn}
           image={data.images[0]}
           className="aspect-video rounded-xl"
         />

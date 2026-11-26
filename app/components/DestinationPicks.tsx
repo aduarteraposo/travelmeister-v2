@@ -28,7 +28,10 @@ export default function DestinationPicks({
             key={item.id}
             className="border rounded-xl w-72 shrink-0 md:w-auto"
           >
-            <ExploreCard item={item} />
+            <ExploreCard
+              item={item}
+              imageSizes="(min-width: 1152px) 360px, (min-width: 768px) 33vw, 288px"
+            />
           </li>
         ))}
       </ul>

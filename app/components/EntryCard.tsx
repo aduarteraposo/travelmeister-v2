@@ -22,7 +22,7 @@ export default function EntryCard({
 
   if (!item) {
     return (
-      <li className="mb-28 last:mb-0">
+      <li>
         <h3 className="text-2xl font-bold">Test Title</h3>
         <p>{entry.editorialNote}</p>
         {cardSize === "full" && entry.options.length > 0 && (
@@ -40,7 +40,16 @@ export default function EntryCard({
     neighborhoodLabels && articleDestinationId !== item.data.destination?.ID;
 
   return (
-    <li key={entry.key}>
+    <li
+      key={entry.key}
+      className={
+        cardSize === "full"
+          ? "last:mb-0 mb-28"
+          : cardSize === "medium"
+          ? "last:mb-0 mb-16"
+          : ""
+      }
+    >
       {entry.item?.kind === "place" && <PlaceCard entry={entry} />}
       {entry.item?.kind === "hotel" && (
         <HotelCard

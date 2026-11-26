@@ -1,4 +1,5 @@
 import { getAllDestinationRouteParams } from "@/app/lib/wordpress/routes";
+import { IMAGE_SIZES } from "@/app/lib/image-sizes";
 import type { Metadata } from "next";
 import Tags from "../components/Tags";
 import TravelStyleTabs from "../components/TravelStyleTabs";
@@ -58,6 +59,8 @@ export default async function DestinationPage({ params }: DestinationProps) {
     <>
       <header>
         <ImageWithFallback
+          sizes={IMAGE_SIZES.full}
+          preload
           image={destination.heroImage}
           className="aspect-video"
         />

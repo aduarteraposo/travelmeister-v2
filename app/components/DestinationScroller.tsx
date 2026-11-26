@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import DestinationTeaser from "./DestinationTeaser";
 
 export default function DestinationScroller({
   children,

@@ -27,6 +27,7 @@ export default function QuickPicks({
             >
               <div className="w-full md:w-1/5">
                 <ImageWithFallback
+                  sizes={"(min-width: 768px) 224px, 100vw"}
                   className="aspect-3/2 w-full rounded-xl"
                   image={pick.item.data.images[0]}
                 />

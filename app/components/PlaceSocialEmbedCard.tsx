@@ -1,5 +1,5 @@
 import { TikTokEmbed } from "react-social-media-embed";
-import { Place, WithSection } from "../types/app/place";
+import { Place } from "../types/app/place";
 
 export default function PlaceSocialEmbedCard({ hotel }: { hotel: Place }) {
   return (

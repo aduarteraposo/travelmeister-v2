@@ -1,4 +1,3 @@
-import { getHotelHref } from "../lib/links";
 import { getRoomLabel, RoomFeature, RoomsBlock } from "../lib/rooms";
 import { Destination } from "../types/app/destination";
 import ArticleCard from "./ArticleCard";
@@ -11,6 +10,7 @@ import CardText from "./card/CardText";
 import CardTitle from "./card/CardTitle";
 import ArticleCardSmall from "./ArticleCardSmall";
 import { getPlaceLinks, primaryLink } from "../lib/item-links";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 
 export default async function RoomsWorthTheTripBlock({
   roomsBlock,
@@ -48,7 +48,10 @@ export default async function RoomsWorthTheTripBlock({
                   className="bg-[rgba(255,255,255,.6)] min-w-66 flex-1 shrink-0 rounded-xl"
                 >
                   <Card layout="vertical">
-                    <CardImage image={item.hotel.images[0] ?? null} />
+                    <CardImage
+                      image={item.hotel.images[0] ?? null}
+                      sizes={IMAGE_SIZES.grid3}
+                    />
                     <CardBody>
                       <CardEyebrow>{item.label}</CardEyebrow>
                       <CardTitle link={primaryLink(getPlaceLinks(item.hotel))}>

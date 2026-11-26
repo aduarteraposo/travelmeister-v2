@@ -1,4 +1,5 @@
 import Breadcrumbs from "@/app/components/Breadcrumbs";
+import { IMAGE_SIZES } from "@/app/lib/image-sizes";
 import ArticleFilterContainer from "@/app/components/ArticleFilterContainer";
 import QuickPicks from "@/app/components/QuickPicks";
 import { getAllArticleRouteParams } from "@/app/lib/wordpress/routes";
@@ -52,7 +53,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <>
       <header className="mb-6 md:mb-8">
-        <ImageWithFallback image={heroImage} className="aspect-video" />
+        <ImageWithFallback
+        sizes={IMAGE_SIZES.full}
+        preload image={heroImage} className="aspect-video" />
         <Breadcrumbs article={article} destination={destination} />
       </header>
       <div className="mx-auto">

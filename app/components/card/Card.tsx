@@ -9,8 +9,8 @@ export default function Card({
 }) {
   return (
     <article
-      className={`rounded-xl group relative ${
-        layout === "horizontal" ? "md:flex" : ""
+      className={`rounded-xl group relative h-full w-full flex flex-col ${
+        layout === "horizontal" ? "md:flex-row" : ""
       }`}
       data-layout={layout}
     >

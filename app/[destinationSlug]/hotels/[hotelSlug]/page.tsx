@@ -71,6 +71,8 @@ export default async function HotelPage({ params }: HotelPageProps) {
             <ImageCarousel images={hotel.images} controls="overlay" />
           ) : hotel.images.length > 0 ? (
             <ImageWithFallback
+              sizes={"(min-width: 1024px) 672px, 100vw"}
+              preload
               image={hotel.images[0]}
               className="rounded-xl object-cover h-full"
             />

@@ -2,6 +2,7 @@ import { Article } from "../types/app/article";
 import { getArticleHref } from "../lib/links";
 import Card from "./card/Card";
 import CardImage from "./card/CardImage";
+import { IMAGE_SIZES } from "../lib/image-sizes";
 import CardEyebrow from "./card/CardEyebrow";
 import CardTitle from "./card/CardTitle";
 import CardBody from "./card/CardBody";
@@ -11,9 +12,11 @@ import CardMeta from "./card/CardMeta";
 export default function ArticleCard({
   article,
   eyebrow,
+  imageSizes = IMAGE_SIZES.horizontalCard,
 }: {
   article: Article;
   eyebrow?: string | undefined;
+  imageSizes?: string;
 }) {
   const hotels = article.sections
     .flatMap((s) => s.entries)
@@ -36,7 +39,7 @@ export default function ArticleCard({
 
   return (
     <Card layout="horizontal">
-      <CardImage image={article.heroImage} />
+      <CardImage image={article.heroImage} sizes={imageSizes} />
       <CardBody>
         <CardEyebrow>{eyebrow}</CardEyebrow>
         <CardTitle
